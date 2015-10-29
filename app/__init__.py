@@ -1,1 +1,0 @@
-"""wxPython GUI for weaver."""
