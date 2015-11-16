@@ -12,8 +12,6 @@ if current_platform != 'windows':
 
 VERSION = 'v0.1'
 
-
-DDDD =9
 # REPO_URL = "https://raw.github.com/weecology/retriever/"
 # MASTER_BRANCH = REPO_URL + "master/"
 # REPOSITORY = MASTER_BRANCH if MASTER else REPO_URL + VERSION + "/"
@@ -26,8 +24,6 @@ DDDD =9
 
 HOME_DIR = os.path.abspath(os.path.expanduser('~/.weaver/'))
 config_path = os.path.abspath(os.path.join(HOME_DIR, 'connections.config'))
-# todo configure settings path , make opt argument
-settings_path = os.path.abspath(os.path.join(os.getcwd(),"manager/config/settings.json"))
 
 for dir in (HOME_DIR, os.path.join(HOME_DIR, 'raw_data'), os.path.join(HOME_DIR, 'scripts')):
     if not os.path.exists(dir):

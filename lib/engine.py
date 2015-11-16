@@ -39,7 +39,7 @@ class Engine():
     def create_joins(self):
         pass
 
-    def create_query(self):
+    def create_query(self,config):
         """
         returns the sql statement required to join the tables.
 
@@ -48,7 +48,7 @@ class Engine():
         """
 
         # read configurations from json settings file
-        with open(settings_path) as json_data_file:
+        with open(config) as json_data_file:
             data = json.load(json_data_file)
 
         unique_tables = set()  # avoid repetition on table processing
