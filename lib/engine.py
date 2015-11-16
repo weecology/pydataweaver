@@ -9,7 +9,7 @@ import json
 
 from weaver import DATA_SEARCH_PATHS, DATA_WRITE_PATH
 from weaver.lib.warning import Warning
-from weaver import settings_path
+
 
 # supper class of all databases ("mysql", "postgres", "sqlite", "msaccess", "csv", "download_only"l...
 
