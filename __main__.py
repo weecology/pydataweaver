@@ -89,7 +89,7 @@ def main():
 
             cconnection = engine_sqlarchemy.connect()
 
-            query = engine.create_query()
+            query = engine.create_query(args.__dict__["config"])
 
             # todos check if query fields contain keywords
             result = cconnection.execute(query)
