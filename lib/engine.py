@@ -11,8 +11,6 @@ from weaver import DATA_SEARCH_PATHS, DATA_WRITE_PATH
 from weaver.lib.warning import Warning
 
 
-# supper class of all databases ("mysql", "postgres", "sqlite", "msaccess", "csv", "download_only"l...
-
 class Engine():
     """A generic database system. Specific database platforms will inherit
     from this class."""
