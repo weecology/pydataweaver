@@ -1,7 +1,5 @@
 # weaver
 Future home of the Data Weaver
-[![Documentation Status](https://readthedocs.org/projects/weaver/badge/?version=latest)](http://weaver.readthedocs.org/en/latest/?badge=latest)
-
 |Build Status| |Coverage Status| |Documentation Status| |Downloads|
 |Latest Version| |Supported Python versions| |License|
 

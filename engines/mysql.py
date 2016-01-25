@@ -3,7 +3,7 @@ import json
 from sqlalchemy import *
 
 from weaver.lib.models import Engine  # , no_cleanup
-
+from weaver import settings_path
 
 
 class engine(Engine):

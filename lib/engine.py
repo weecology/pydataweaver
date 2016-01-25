@@ -9,7 +9,7 @@ import json
 
 from weaver import DATA_SEARCH_PATHS, DATA_WRITE_PATH
 from weaver.lib.warning import Warning
-
+from weaver import settings_path
 
 # supper class of all databases ("mysql", "postgres", "sqlite", "msaccess", "csv", "download_only"l...
 
@@ -39,7 +39,7 @@ class Engine():
     def create_joins(self):
         pass
 
-    def create_query(self,config):
+    def create_query(self):
         """
         returns the sql statement required to join the tables.
 
@@ -48,7 +48,7 @@ class Engine():
         """
 
         # read configurations from json settings file
-        with open(config) as json_data_file:
+        with open(settings_path) as json_data_file:
             data = json.load(json_data_file)
 
         unique_tables = set()  # avoid repetition on table processing
