@@ -11,16 +11,11 @@ if current_platform != 'windows':
     import pwd
 
 VERSION = 'v0.1'
-
-# REPO_URL = "https://raw.github.com/weecology/retriever/"
+MASTER = False
+COPYRIGHT = "Copyright (C) 2015 the Data Weaver contributors and the University of Florida"
+# REPO_URL = "https://raw.github.com/weecology/weaver/"
 # MASTER_BRANCH = REPO_URL + "master/"
 # REPOSITORY = MASTER_BRANCH if MASTER else REPO_URL + VERSION + "/"
-
-#===============================================================================
-# create the necessary directory structure for storing scripts/raw_data
-# in the ~/.weaver directory
-#===============================================================================
-
 
 HOME_DIR = os.path.abspath(os.path.expanduser('~/.weaver/'))
 config_path = os.path.abspath(os.path.join(HOME_DIR, 'connections.config'))
@@ -36,29 +31,25 @@ for dir in (HOME_DIR, os.path.join(HOME_DIR, 'raw_data'), os.path.join(HOME_DIR,
         except OSError:
             print "The weaver lacks permission to access the ~/.weaver/ directory."
             raise
-SCRIPT_SEARCH_PATHS =   [
-                         "./",
-                         "scripts",
-                         os.path.join(HOME_DIR, 'scripts/'),
-                         ]
-SCRIPT_WRITE_PATH =     SCRIPT_SEARCH_PATHS[-1]
-#===============================================================================
-# script to be removed if we can create a generic dataset reader
-#===============================================================================
 
+SCRIPT_SEARCH_PATHS = [
+    "./",
+    "scripts",
+    os.path.join(HOME_DIR, 'scripts/'),
+]
 
-DATA_SEARCH_PATHS =     [
-                         "./",
-                         "{dataset}",
-                         "raw_data/{dataset}",
-                         os.path.join(HOME_DIR, 'raw_data/{dataset}'),
-                         ]
-DATA_WRITE_PATH =       DATA_SEARCH_PATHS[-1]
+SCRIPT_WRITE_PATH = SCRIPT_SEARCH_PATHS[-1]
 
-#===============================================================================
+DATA_SEARCH_PATHS = [
+    "./",
+    "{dataset}",
+    "raw_data/{dataset}",
+    os.path.join(HOME_DIR, 'raw_data/{dataset}'),
+]
+
+DATA_WRITE_PATH = DATA_SEARCH_PATHS[-1]
+
 # create default data directory
-#===============================================================================
-
 isgui = len(sys.argv) == 1 or ((len(sys.argv) > 1 and sys.argv[1] == 'gui'))
 if current_platform == 'windows' and isgui:
     # The run path for installer based GUI on Windows is a system path.
@@ -66,7 +57,6 @@ if current_platform == 'windows' and isgui:
     DATA_DIR = os.path.join(os.path.expanduser('~'), 'Desktop')
 else:
     DATA_DIR = '.'
-
 
 
 def set_proxy():
@@ -78,5 +68,6 @@ def set_proxy():
                 for i in proxies:
                     os.environ[i] = os.environ[proxy]
                 break
+
 
 set_proxy()

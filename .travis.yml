@@ -1,0 +1,29 @@
+sudo: false
+language: python
+python:
+  - "2.7"
+addons:
+  postgresql: "9.1"
+
+services:
+  - postgresql
+install:
+  - pip install -r requirements.txt --use-mirrors
+  - python setup.py -q install
+  - pip install codecov
+  - pip install pytest-cov
+  - pip install pytest-xdist      
+
+
+# command to run test
+
+script:
+  - py.test test/ --cov=weaver
+
+## database setup
+#before_script:
+#   - mysql -e 'create database myapp_test;'
+#   - psql -c 'create database testdb;' -U postgres
+
+after_success:
+  - codecov

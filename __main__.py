@@ -1,7 +1,7 @@
 # Welcome to the WEAVER. This module......
 #
 #
-# Copyright (C) 2015 the Data Weaver contributors and the University of Florida
+# "Copyright (C) 2015 the Data Weaver contributors and the University of Florida"
 #
 # This module is part of weaver and is released under
 # the MIT License: http://www.opensource.org/licenses/mit-license.php

@@ -6,6 +6,7 @@ import warnings
 
 from __init__ import VERSION
 
+
 # Always prefer setuptools over distutils
 from codecs import open
 from os import path
@@ -15,9 +16,6 @@ from setuptools import setup
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-# with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-#     long_description = f.read()
-# 
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()    
     
@@ -43,6 +41,7 @@ def is_wxpython_installed():
     except ImportError:
         return False
 
+
 def clean_version(v):
     """Returns the CLean version number"""
     if v == 'master':
@@ -63,6 +62,7 @@ includes = [
             'psycopg2',
             'sqlite3',
             'sqlalchemy'
+            'gdal'
             ] + extra_includes
 
 excludes = [
@@ -80,7 +80,7 @@ excludes = [
             'pywin.dialogs', 'pywin.dialogs.list',
             'Tkconstants', 'Tkinter', 'tcl',
             ]
-#Check if python is installed
+# Check if python is installed
 wx_installed = is_wxpython_installed()
 if wx_installed is False:
     warnings.warn("""wxpython is not installed.
@@ -90,11 +90,7 @@ if wx_installed is False:
                   UserWarning
                   )
 
-#===============================================================================
-# setting up the main set up attributes
-#===============================================================================
 setup(
-      
 
     name='weaver',
     version=clean_version(VERSION),
@@ -103,27 +99,28 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='http://weecology.org/',
+    url='https://github.com/weecology/weaver',
 
     # Author details
-    author='Henry Senyondo',
-    author_email='Henry.senyondo@weecology.org ',
+    author='Ethan White, Henry Senyondo',
+    author_email='ethan@weecology.org',
 
     # Choose your license
     license='MIT',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
-    # classifiers=[],
+    classifiers=['Intended Audience :: Science/Research',
+               'License :: OSI Approved :: MIT License',
+               'Programming Language :: Python',
+               'Programming Language :: Python :: 2',],
 
     # What does your project relate to?
     keywords='data integration, ecological data',
 
-    # You can just specify the packages manually here if your project is
-    # simple. Or you can use find_packages().
-    # packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'sample']),
+    # packages=find_packages(exclude=['contrib', 'docs', 'test*', 'sample']),
     packages=packages,
     package_dir={
-              'weaver':''
+              'weaver': ''
               },
     entry_points={
         'console_scripts': [
