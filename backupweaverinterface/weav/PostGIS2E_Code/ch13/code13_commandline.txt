@@ -1,0 +1,14 @@
+PGPASSWORD=whatever
+PGDATABASE=postgis_in_action
+PGUSER=postgres
+PGPORT=5432
+PGHOST=localhost
+psql -d postgis_in_action -c "CREATE SCHEMA ch08_staging;"
+shp2pgsql -c -I -s 4326 -g geom mumbai.osm-line.dbf ch08_staging.osm_line | psql
+shp2pgsql -c -I -s 4326 -g geom mumbai.osm-point.dbf ch08_staging.osm_point | psql
+shp2pgsql -c -I -s 4326 -g geom mumbai.osm-polygon.dbf ch08_staging.osm_polygon | psql
+
+//<start id="code_describe_topo_tables_psql" />
+\d+ ch08.hydro
+\d+ ch08.roads
+//<end id="code_describe_topo_tables_psql" />

@@ -1,0 +1,49 @@
+//<start id="code_postgresql_conf" />
+listen_addresses = '*'    # what IP address(es) to listen on;
+						  # comma-separated list of addresses;
+						  # defaults to 'localhost', '*' = all
+						  # (change requires restart)
+//<end id="code_postgresql_conf" />
+
+//<start id="code_pg_hba_conf" />
+# TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
+
+# IPv4 local connections:
+host    all         all         127.0.0.1/32          trust
+# IPv6 local connections:
+#host   all         all         ::1/128               md5
+host    all         all         0.0.0.0/0             md5
+//<end id="code_pg_hba_conf" />
+
+
+# -- Listing: Common backup statements --
+//<start id="code_common_backup" />
+pg_dump -i -h localhost -p 5432 -U someuser           //<co id="co_code_common_backup_1" />
+[CA] -F c -b -v -f  "/pgbak/somedb.backup" somedb
+pg_dump -i -h someserver -p 5432 -U someuser -E latin1   //<co id="co_code_common_backup_2" />
+[CA] -F c -b -v -f "/pgbak/somedb.backup" somedb
+pg_dump -i -h someserver -p 5432 -U postgres        //<co id="co_code_common_backup_3" />
+[CA] -F p -o -v -n pgagent  -f "C:/pgagent.sql" postgres
+pg_dumpall -i -h someserver -p 5432 -U someuser -c -o   //<co id="co_code_common_backup_4" />
+[CA] -f "/pgbak/alldbs.sql"
+pg_dumpall -h localhost -p 5432 -U postgres   //<co id="co_code_common_backup_5" />
+[CA] --globals-only &gt; /pgbak/globals.sql
+pg_dump -h localhost -p 5432 -U postgres     //<co id="co_code_common_backup_6" />
+[CA] -F c -b -v  -f "/pgbak/work_poi.backup" -t "work.poi" somedb
+//<end id="code_common_backup" />
+
+# -- Listing: Common restore statements --
+//<start id="code_common_restore_statements" />
+psql -h localhost -p 5432 -U postgres  //<co id="co_code_common_restore_statements_1" />
+[CA] -c "CREATE DATABASE somedb"
+pg_restore -h localhost -p 5432 -U postgres
+[CA] --dbname=somedb --jobs=2 /pgbak/somedb.backup
+pg_restore --schema=us --dbname=somedb    //<co id="co_code_common_restore_statements_2" />
+[CA] -U postgres /pgbak/somedb.backup
+pg_restore --list /pgbak/somedb.backup    //<co id="co_code_common_restore_statements_3" />
+[CA] --file=/pgbak/somedb_list.txt
+psql -h localhost -p 5432 -U postgres -d postgres  //<co id="co_code_common_restore_statements_4" />
+[CA] -f /pgbak/globals.sql
+pg_restore -h localhost -p 5432 -U postgres     //<co id="co_code_common_restore_statements_5" />
+[CA] -t "work.poi" /pgbak/somedb.backup
+//<end id="code_common_restore_statements" />

@@ -1,0 +1,114 @@
+LAYER
+ NAME hospitals
+ TYPE POINT
+ STATUS ON
+ DUMP TRUE
+ INCLUDE "postgis.config"
+ EXTENT 221238 881125 246486 910582
+ DATA "geom from ch17.ma_hospitals using unique gid using srid=26986"
+ METADATA
+   wms_title "Massachusetts Hospitals"
+   wfs_title "Massachusetts Hospitals"
+   gml_include_items "all"
+   wfs_include_items "all"
+   ows_featureid "gid"
+   "wms_srs"   "EPSG:2249 EPSG:4269 EPSG:4326 EPSG:26986 EPSG:3785 EPSG:900913"
+ END
+
+ CLASS
+  SYMBOL 'circle'
+  EXPRESSION ('[trauma]' = 'Y') 
+  SIZE 10
+  COLOR 255 0 0
+ END
+  
+ CLASS 
+  SYMBOL 'circle'
+  EXPRESSION ('[trauma]' = 'N') 
+  COLOR 0 200 100
+  SIZE 10
+ END 
+END
+
+LAYER
+ NAME hospitals_anot
+ TYPE ANNOTATION
+ STATUS OFF
+ DUMP TRUE
+ INCLUDE "postgis.config"
+ DATA "geom from ch17.ma_hospitals using unique gid using srid=26986"
+ METADATA
+  ows_title "Massachusetts Hospitals"
+  gml_include_items "all"
+  wfs_include_items "all"
+  ows_featureid "gid"
+  "wms_srs"   "EPSG:2249 EPSG:4269 EPSG:4326 EPSG:26986 EPSG:3785 EPSG:900913"
+ END
+ LABELITEM shortname
+ CLASS
+  COLOR 255 0 0
+  LABEL
+   TYPE truetype
+   FONT boston
+   MINDISTANCE 50
+   POSITION AUTO
+   SIZE 10
+   COLOR 0 0 0
+  END
+ END
+END
+
+LAYER
+ NAME openspace
+ TYPE POLYGON
+ STATUS ON
+ DUMP TRUE
+ INCLUDE "postgis.config"
+ DATA "geom from ch17.ma_openspace using unique gid using srid=26986"
+ PROJECTION 
+   "init=epsg:26986"
+ END 
+ METADATA
+	 ows_title "Massachusetts OpenSpace"
+	 gml_include_items "all"
+	 ows_featureid "gid"
+	 "wms_srs"   "EPSG:2249 EPSG:4269 EPSG:4326 EPSG:26986 EPSG:3785 EPSG:900913"
+ END
+ OPACITY 70
+ CLASS
+  COLOR 153 0 102
+  OVERLAYCOLOR 102 102 0
+  OVERLAYOUTLINECOLOR 200 0 0 
+ END
+
+END
+
+LAYER
+ NAME major_roads
+ TYPE LINE
+ STATUS ON
+ DUMP TRUE
+ INCLUDE "postgis.config"
+ DATA "geom from ch17.ma_eotmajroads using unique gid using srid=26986"
+ PROJECTION 
+   "init=epsg:26986"
+ END 
+ LABELITEM "rt_number"
+ METADATA
+   ows_title "Massachusetts Major Roads"
+   gml_include_items "all"
+   ows_featureid "gid"
+ END
+ CLASS
+  COLOR 255 0 0
+  LABEL
+   TYPE truetype
+   FONT boston
+   MINDISTANCE 50
+   POSITION AUTO
+   ANGLE AUTO
+   SIZE 6
+   COLOR 0 0 0
+  END
+ END
+END

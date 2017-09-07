@@ -1,0 +1,209 @@
+## Start Listing: Using Wget to download batch of files
+cd /gisdata 
+wget http://www2.census.gov/geo/tiger/TIGER2012/ROADS/*_72*  --no-parent --relative --recursive --level=2 --accept=zip --mirror
+## End Listing
+
+## Start Informal Listing: loading US states
+shp2pgsql -s 4269 -g geom_4269 -I -W "latin1" "/path/to/tl_2012_us_state" staging.tl_2012_states | psql -h localhost -p 5432 -d postgis_in_action -U postgres
+## End Informal Listing
+
+## Start Informal Listing: Generating US states sql for later load
+shp2pgsql -s 4269 -g geom_4269 -I -W "latin1" "tl_2012_states" staging.tl_2012_states > tl_2012_states.sql
+## End Informal Listing
+
+//<start id="ogrinfo_gpx"/>
+ogrinfo 468761.gpx //<co id="co_ogrinfo_gpx_1"/>
+
+INFO: Open of '468761.gpx' using driver 'GPX' successful. //<co id="co_ogrinfo_gpx_2"/>
+1: waypoints (Point)
+2: routes (Line String)
+3: tracks (Multi Line String)
+4: route_points (Point)
+5: track_points (Point)
+//<end id="ogrinfo_gpx"/>
+
+#01 - command
+#02 - results
+
+//<start id="ogr2ogr_gpx_load" />
+## Start Listing: Loading data from GPX
+#1
+ogr2ogr -f "PostgreSQL"  PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" 468761.gpx -overwrite -lco GEOMETRY_NAME=geom -nln "staging.aus_biketrip_narangba"
+
+#2
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword"  468761.gpx -overwrite -lco GEOMETRY_NAME=geom -lco SCHEMA=staging tracks track_points
+## End Listing
+#1 Single table load
+#2 Multi table load
+
+##<start id="code_ogrinfo_personal_geo" />
+ogrinfo gadm_v0dot9.mdb -so -geom=YES gadm1	
+
+INFO: Open of 'gadm_v0dot9.mdb'      #1
+      using driver 'PGeo' successful.
+
+Layer name: gadm  #2
+Geometry: Unknown (any)
+Feature Count: 116996
+Extent: (-180.000015, -90.000000) - (179.999999, 83.627419)
+Layer SRS WKT:
+GEOGCS["GCS_WGS_1984",
+    DATUM["WGS_1984",
+        SPHEROID["WGS_1984",6378137.0,298.257223563]],
+    PRIMEM["Greenwich",0.0],
+    UNIT["Degree",0.0174532925199433]]
+OBJECTID: Integer (10.0)
+ISO: String (255.0)
+NAME_0: String (255.0)
+NAME_1: String (255.0)
+VARNAME_1: String (255.0)
+NL_NAME_1: String (255.0)
+:
+:
+ENGTYPE_5: String (255.0)
+VALIDFR_5: String (255.0)
+VALIDTO_5: String (255.0)
+Shape_Length: Real (0.0)
+Shape_Area: Real (0.0)
+## <end id="code_ogrinfo_personal_geo" />
+#1 command
+#2 results
+
+#<start id="code_ogr2ogr_personal_geo" />
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" gadm_v1.mdb -lco GEOMETRY_NAME=geom -where "ISO='USA'" -t_srs "EPSG:2163" -nln "us.admin_boundaries"  gadm1
+#<end id="code_ogr2ogr_personal_geo" />
+
+##<start id="code_ogr2ogr_load_mapinfo" />
+ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword"  "/gisdata/canada" -lco GEOMETRY_NAME=geom -lco SCHEMA=canada -a_srs "EPSG:4269"   //<co id="co_code_ogr2ogr_load_mapinfo_3" />
+##<end id="code_ogr2ogr_load_mapinfo" />
+
+//<start id="code_wget_osm_overpass_api" />
+## Start Listing: Download a bounding box area covering Arc
+wget --progress=dot:mega -O "arc.osm" "http://www.overpass-api.de/api/xapi?*[bbox=2.29,48.87,2.30,48.88][@meta]"
+## End Listing
+
+#Listing Load OSM xml file with osm2pgsql
+osm2pgsql -d postgis_in_action //<co id="co_code_load_arctriumphe_1" /> 
+ -H localhost //<co id="co_code_load_arctriumphe_2" /> 
+ -U postgres //<co id="co_code_load_arctriumphe_3" />  
+  -P 5432 //<co id="co_code_load_arctriumphe_4" />  
+ -S default.style --hstore //<co id="co_code_load_arctriumphe_5" /> 
+ arc.osm 
+ 
+#1 database name
+#2 host
+#3 user
+#4 port
+#5 style
+#6 tags
+
+//<start id="code_raster2pgsql_supported">
+raster2pgsql -G //<co id="co_code_raster2pgsql_supported_1" />
+
+Supported GDAL raster formats: //<co id="co_code_raster2pgsql_supported_2" />
+  Virtual Raster
+  GeoTIFF
+  National Imagery Transmission Format
+  :
+  Erdas Imagine Images (.img)
+  :
+  Arc/Info Binary Grid
+  Arc/Info ASCII Grid
+  GRASS ASCII Grid
+  SDTS Raster
+  DTED Elevation Raster
+  Portable Network Graphics
+  JPEG JFIF
+  :
+  Graphics Interchange Format (.gif)
+  :
+  SRTMHGT File Format
+  :
+  GRIdded Binary (.grb)
+  :
+  R Object Data Store
+  :
+  ASCII Gridded XYZ
+  ://<end id="code_raster2pgsql_supported" />
+  
+raster2pgsql -s 4326 -C N48E086.hgt  staging.n48e086 | psql -h localhost -U postgres -p 5432  -d postgis_in_action  
+
+## Loading single raster file
+##<start id="code_load_single_raster_file" />
+raster2pgsql -s 4326 -C usgs_srtm/N48E086.hgt staging.n48e086 | psql -h localhost -U postgres -p 5432 -d postgis_in_action
+##<end id="code_load_single_raster_file" />
+
+## Begin Listing: Loading multiple rasters
+export PGPORT=5432   
+export PGHOST=localhost
+export PGUSER=postgres
+export PGPASSWORD=mypassword
+export PGDATABASE=postgis_in_action
+
+raster2pgsql -s 4326 -C -F -t 100x100 usgs_srtm/*.hgt staging.usgs_srtm | psql
+
+## End Listing: Loading multiple rasters
+
+#1 environment variables for psql
+#2 set srid, constraints, file name
+#3 load into db
+
+## Begin Listing: Export PostGIS table and query to KML
+#1 Simple export
+ogr2ogr -f "KML" /gisdata/us_adminbd.kml PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" us.admin_boundaries -dsco NameField=name_2
+
+#2 Export of filtered set 
+ogr2ogr -f "KML"/gisdata/biketrip.kml PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" -dsco NameField=time -select "SELECT track_seg_point_id, ele, time" -where "time BETWEEN '2009-07-18 04:33-04' AND '2009-07-18 04:34-04'" staging.aus_biketrip_narangba
+
+#3 Export as multiple tables
+ogr2ogr -f "KML"  /gisdata/biketrail.kml PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" -dsco NameField=time staging.track_points staging.tracks
+## End Listing
+
+## Begin Listing: Export PostGIS table and query to MapInfo tab format
+#1 Export with transform
+ogr2ogr -f "MapInfo file" /gisdata/us_boundaries.tab PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" -t_srs "EPSG:4326" us.admin_boundaries
+
+#2 Export with filter
+ogr2ogr -f "MapInfo file" /gisdata/biketrip.tab PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" -select "SELECT track_seg_point_id, ele, time" -where "time BETWEEN '2009-07-18 04:33-04' AND '2009-07-18 04:34-04'" staging.aus_biketrip_narangba
+
+#3 Export multifile
+ogr2ogr -f "MapInfo file" /gisdata/tab_files PG:"host=localhost user=postgres port=5432 dbname=postgis_in_action password=mypassword" staging.track_points staging.tracks
+## End Listing
+
+##<start id="code_gdalinfo" />
+## if it was in the database we'd do this
+##gdalinfo "PG:host=localhost port=5432 dbname='postgis_in_action' user='postgres' password='mypassword' schema=staging table=n48e086"
+
+## if checking file before load
+gdalinfo N48E086.hgt
+
+## output ##
+Driver: SRTMHGT/SRTMHGT File Format <co id="co_code_gdalinfo_2" />
+Files: N48E086.hgt
+Size is 1201, 1201
+Coordinate System is:
+GEOGCS["WGS 84",
+    DATUM["WGS_1984",
+        SPHEROID["WGS 84",6378137,298.257223563,
+            AUTHORITY["EPSG","7030"]],
+        TOWGS84[0,0,0,0,0,0,0],
+        AUTHORITY["EPSG","6326"]],
+    PRIMEM["Greenwich",0,
+        AUTHORITY["EPSG","8901"]],
+    UNIT["degree",0.0174532925199433,
+        AUTHORITY["EPSG","9108"]],
+    AUTHORITY["EPSG","4326"]]
+Origin = (85.999583333333334,49.000416666666666)
+Pixel Size = (0.000833333333333,-0.000833333333333)
+Metadata:
+  AREA_OR_POINT=Point
+Corner Coordinates:
+Upper Left  (  85.9995833,  49.0004167) ( 85d59'58.50"E, 49d 0' 1.50"N)
+Lower Left  (  85.9995833,  47.9995833) ( 85d59'58.50"E, 47d59'58.50"N)
+Upper Right (  87.0004167,  49.0004167) ( 87d 0' 1.50"E, 49d 0' 1.50"N)
+Lower Right (  87.0004167,  47.9995833) ( 87d 0' 1.50"E, 47d59'58.50"N)
+Center      (  86.5000000,  48.5000000) ( 86d30' 0.00"E, 48d30' 0.00"N)
+Band 1 Block=1201x1 Type=Int16, ColorInterp=Undefined
+  NoData Value=-32768
+  Unit Type: m
+##<end id="code_gdalinfo" />

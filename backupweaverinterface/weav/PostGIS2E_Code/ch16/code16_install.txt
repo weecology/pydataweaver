@@ -1,0 +1,22 @@
+Windows stores the environment variables in the registry under HKEY_CURRENT_USER\Environment (for user environment variables) and HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SessionManager\Environment (system environment variables). See also kb Q 104011. 
+
+3 additional things you want to make sure you did otherwise it gives that error
+
+1) Make sure you add to your Environment variables path at end: Location of R for 3.02 and if you are running 64-bit and did (both 32/64) -- the location is usually:
+
+a) C:\Program Files\R\\R-3.0.2\bin\x64
+b) Make sure you added an R_HOME system environment variable which should look something like C:\\Program Files\\R\\R-3.0.2
+
+c) You'll need to restart your PostgreSQL service after you do all that.
+
+All this is more or less covered in the README.txt packaged with the binaries 
+
+Note: That these settings are stored in the registry so you can edit your registry directly by typing regedit 
+
+and going to: HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment
+
+2) Or just  to My Computer->System Variables
+Advanced (that's on windows 2003) for windows 7 follow these instructions:
+http://www.itechtalk.com/thread3595.html
+
+3) Restart your PostgreSQL service after

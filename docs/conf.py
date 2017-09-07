@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from weaver import VERSION, COPYRIGHT
 
 
@@ -20,7 +20,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Data Weaver'
+project = 'Data Weaver'
 copyright = COPYRIGHT
 
 version = release = VERSION

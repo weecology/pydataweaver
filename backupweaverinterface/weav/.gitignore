@@ -1,0 +1,6 @@
+*.pyc
+app/
+build/
+dist
+weav.egg-info
+PostGIS2E_Code

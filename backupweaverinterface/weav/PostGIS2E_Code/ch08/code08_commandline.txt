@@ -1,0 +1,31 @@
+#<start id="code_build_nation_script"/> 
+\t
+\a
+\o /gisdata/nationscript.sh
+SELECT loader_generate_nation_script('sh');
+\o
+#<end id="code_build_nation_script"/> 
+
+# <start id="code_build_nation_script_windows"/> 
+\t
+\a
+\o /gisdata/nationscript.bat
+SELECT loader_generate_nation_script('windows');
+\o
+# <end id="code_build_nation_script_windows"/>
+
+# <start id="code_build_state_script"/> 
+\t
+\a
+\o /gisdata/statescript.sh
+SELECT loader_generate_script(ARRAY['DC','CO'],'sh');
+\o
+# <end id="code_build_state_script"/> 
+
+# <start id="code_build_state_script_windows"/> 
+\t
+\a
+\o /gisdata/statescript.bat
+SELECT loader_generate_script(ARRAY['DC','CO'],'windows');
+\o
+# <end id="code_build_state_script_windows"/>

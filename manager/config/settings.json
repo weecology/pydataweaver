@@ -1,43 +1,73 @@
 {
-  "tablename- 1": {
-    "data_engine": "anyone:mysql/postgres/csv/sqlite/text",
-    "database_name": "name databse",
+  "mcdbcommunities": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
     "attributes_to_project": [
-          "attributes-i",
-          "attrites-n"
+          "abundance",
+          "initial_year",
+          "mass",
+          "presence_only",
+          "site_id",
+          "species_id"
+
     ]
   },
-  "tablename-2": {
-    "data_engine": "anyone:mysql/postgres/csv/sqlite/text",
-    "database_name": "name databse",
+  "mcdbspecies": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
     "attributes_to_project": [
-         "attributes-i",
-          "attrites-n"
-    ]
-
- },
-  "tablename-3": {
-    "data_engine": "anyone:mysql/postgres/csv/sqlite/text",
-    "database_name": "name databse",
-    "attributes_to_project": [
-          "attributes-i",
-
-          "attrites-n"
+          "family",
+          "genus",
+          "species",
+          "species_id"
     ]
   },
-"tablename-n": {
-    "data_engine": "anyone:mysql/postgres/csv/sqlite/text",
-    "database_name": "name databse",
+  "species": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
     "attributes_to_project": [
-          "attributes-i",
+            "afr_mo",
+            "family",
+            "genus",
+            "gestation_mo",
+            "litters_year",
+            "litter_size",
+            "mass_g",
+            "max_life_mo",
+            "newborn_g",
+            "refs",
+            "species",
+            "sporder",
+            "weaning_mo",
+            "wean_mass_g"
+    ]
 
-          "attrites-n"
+  },
+    "mom": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+        "comb_mass_g",
+        "continent",
+        "family",
+        "genus",
+        "log_mass_g",
+        "reference",
+        "species",
+        "sporder",
+        "status"
     ]
   },
+
+
+
 "tables" : [
-                {"join": ["tablename-1","tablename-2"],"join_on" :["attributes-i"] },
-                {"join": ["tablename-3","tablename-2"],"join_on" :["attributes-i"]},
-                {"join": ["tablename-n","tablename- n-i"],"join_on" :["attributes-i"] }
+                {"join": ["mcdbcommunities","mcdbspecies"],"join_on" :["species_id"] },
+                {"join": ["mom","mcdbspecies"],"join_on" :["species","genus"]},
+                {"join": ["mcdbspecies","species"],"join_on" :["species","genus"] }
+
+
      ],
+
 "resulttablename":"result"
 }

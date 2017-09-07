@@ -1,0 +1,3 @@
+CONFIG PROJ_LIB "C:/mapserv/bin/proj/SHARE"  
+SYMBOLSET "symbols/postgis_in_action.sym"
+FONTSET "fonts/fonts.list"

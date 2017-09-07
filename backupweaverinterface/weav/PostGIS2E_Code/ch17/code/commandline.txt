@@ -1,0 +1,3 @@
+#http://www.mass.gov/anf/research-and-tech/it-serv-and-support/application-serv/office-of-geographic-information-massgis/datalayers/noaacharts.html
+gdal_translate -of JPEG noaa_13270_1.sid noaa_13270_1.jpg
+raster2pgsql -I -e -F -C -Y -s 26986 -t 500x500  noaa/*.jpg ch17.noaa | psql -U postgres -d postgis_in_action

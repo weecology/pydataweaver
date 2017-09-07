@@ -61,7 +61,7 @@ def choose_engine(opts, choice=True):
      choose an engine based on the options provided
     """
     # check if we have a requested engine
-    if "engine" in opts.keys():
+    if "engine" in list(opts.keys()):
         # get the name of the engine
         engine_name = opts["engine"]
     elif opts["command"] == "download":
@@ -87,7 +87,7 @@ def choose_engine(opts, choice=True):
                     # engine.opts['password'] = getpass.getpass(
                     #     'enter password for user: ' + engine.opts["user"] + " on " + engine.name)
 
-                    print('enter password for user: '+engine.opts["user"]+" on "+engine.name)
+                    print(('enter password for user: '+engine.opts["user"]+" on "+engine.name))
                     engine.opts['password'] = sys.stdin.readline().rstrip()   #used during development else use getpass
 
     return engine

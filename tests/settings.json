@@ -1,0 +1,46 @@
+{
+  "employee": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+        "EMPNO",
+        "ENAME",
+
+
+        "REGION"
+    ]
+  },
+  "job": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+        "EMPNO",
+        "jobtitle"
+    ]
+  },
+  "joboffice": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+        "EMPNO as empno",
+        "jobtitle",
+        "location"
+    ]
+  },
+    "jobdescription": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+          "EMPNO",
+          "description "
+    ]
+  },
+
+"tables" : [
+                {"join": ["employee","job"],"join_on" :["EMPNO"],"rename":{"species":"SPECIESID"}},
+                {"join": ["joboffice","job"],"join_on" :["EMPNO,jobtitle"]},
+                {"join": ["jobdescription","joboffice"],"join_on" :["EMPNO"]}
+     ],
+
+"resulttablename":"result"
+}

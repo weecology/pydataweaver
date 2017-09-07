@@ -1,0 +1,5 @@
+//<start id="code_append_raster" />
+raster2pgsql -e -R -a C:/pics/adbadge_tall.png ch07.bag_o_rasters 
+ | psql -U postgres -d postgis_in_action -h localhost -p 5432
+//<end id="code_append_raster" />
+

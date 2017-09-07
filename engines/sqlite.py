@@ -35,7 +35,7 @@ class engine(Engine):
              sqlalchemy_url_string = var = self.name.lower() + '://'
         else:
             sqlalchemy_url_string = self.name.lower() + '://' + self.sqlite_path + '.db'
-        print sqlalchemy_url_string
+        print (sqlalchemy_url_string)
         return sqlalchemy_url_string
 
     def db_connect(self):

@@ -1,0 +1,47 @@
+MAP 
+# Start of map file
+  # DEBUG value can be between [0-5] for Mapserver 5.
+  #DEBUG 5 
+  #ERROR_FILE denotes file to redirect errors
+  ## e.g C:/mapserv/logs/error_file.log
+  #ERROR_FILE "/mapserv/logs/error_file.log"  
+# Define the outputformats your map will support. 
+#&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities
+#http://www.postgis.us/mapserv/mapserv.exe?map=E:/Inetpub/PostGISUS/Demos/edition_2/chapter_17/postgis_in_action.map&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&layers=hospitals,hospitals_anot&FORMAT=png&SRS=EPSG:26986&BBOX=42454,811706,52454,959158&WIDTH=500&HEIGHT=500
+#http://www.postgis.us/mapservbin/mapserv.exe?map=E:/Inetpub/postgisus/demos/chapter_11/postgis_in_action.map&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&layers=hospitals&FORMAT=png&SRS=EPSG:26986&BBOX=42454,811706,328616,959158&WIDTH=500&HEIGHT=500
+ #http://localhost/mapserv/cgi-bin/mapserv.exe?map=/mapserv/maps/postgis_in_action.map&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&layers=hospitals&FORMAT=png&SRS=EPSG:26986&BBOX=42454,811706,328616,959158&WIDTH=500&HEIGHT=500
+ #http://localhost/mapserv/mapserv.exe?map=C:/projects/sample/postgisus/demos/chapter_11/postgis_in_action.map&REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1&layers=hospitals&SRS=EPSG:26986&BBOX=42454,811710,43400,811750&FORMAT=png&WIDTH=200&HEIGHT=200
+ #http://localhost/mapserv/cgi-bin/mapserv.exe?map=/mapserv/maps/postgis_in_action.map&LAYERS=hospitals&TRANSPARENT=true&FORMAT=image%2Fgif&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&EXCEPTIONS=application%2Fvnd.ogc.se_inimage&SRS=EPSG%3A26986&BBOX=221238.26953125,881124.927734375,246486.71484375,910581.447265625&WIDTH=900&HEIGHT=1050
+  ###: Overall map attributes go in this section
+  ## : http://mapserver.osgeo.org/mapfile/mapObj
+  # Location of your Proj directory needed for projection
+  # for windows "C:/mapserv/scripts/proj/" 
+  INCLUDE "config.inc.map"
+  NAME "POSTGIS_IN_ACTION_2"  #name to give your map service
+  # This is the extent of your map in the 
+  # default projection of your map
+  #EPSG:26986 - massachusetts NAD 83 State Plane meters
+  EXTENT 221238 881125 246486 910582
+  #EXTENT -71.1914825439453 42.2277870178223 -70.9867935180664 42.396858215332 #EPSG:4326
+
+  UNITS meters
+  PROJECTION 
+   "init=epsg:26986"
+  END   
+  WEB
+    MINSCALEDENOM 100
+    MAXSCALEDENOM 100000
+
+    METADATA
+      "ows_title" "PostGIS in Action 2nd Chapter 17"
+      "ows_onlineresource" "http://www.postgis.us/demos/edition_2/chapter_17/Map.ashx?"
+      "ows_enable_request"   "*"
+      "wms_version" "1.3.0"
+      "wms_srs"   "EPSG:26986 EPSG:2249 EPSG:4269 EPSG:4326 EPSG:3857 EPSG:900913"
+      "wfs_version" "1.1.0"
+      "wfs_srs"   "EPSG:26986 EPSG:2249 EPSG:4269 EPSG:4326 EPSG:3857 EPSG:900913"
+    END
+  END #End Web
+  INCLUDE "layers.inc.map"
+END # Map File
+

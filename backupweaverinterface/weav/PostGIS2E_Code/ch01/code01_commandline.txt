@@ -1,0 +1,25 @@
+#loading fastfoods data using psql
+//<start id="code_copy_psql_restaurants_staging" />
+\copy ch01.restaurants_staging 
+ FROM '/data/restaurants.csv' DELIMITER as ',';
+//<end id="code_copy_psql_restaurants_staging" />
+#Load
+//<start id="code_shp2pgsql_load_roads" />
+shp2pgsql -s 4269 -g geom -I /data/roadtrl020.shp ch01.roads 
+| psql -h localhost -U postgres -p 5432 -d postgis_in_action
+//<end id="code_shp2pgsql_load_roads" />
+
+#Load and transform
+//<start id="code_shp2pgsql_load_transform_roads" />
+shp2pgsql -s 4269:2163 -g geom //<lineArrow />
+ -I /data/roadtrl020.shp ch01.highways_staging 
+//<lineArrow />
+| psql -h localhost -U postgres -p 5432 -d postgis_in_action
+//<end id="code_shp2pgsql_load_transform_roads" />
+
+#Load into geography
+//<start id="code_shp2pgsql_load_roads_geog" />
+shp2pgsql -G -g geog /data/roadtrl020.shp ch01.highways_geog | 
+//<lineArrow />
+ psql -h localhost -U postgres -p 5432 -d postgis_in_action
+//<end id="code_shp2pgsql_load_roads_geog" />

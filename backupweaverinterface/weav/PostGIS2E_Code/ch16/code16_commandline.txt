@@ -1,0 +1,9 @@
+load file
+
+load("C:/Temp/places.RData")
+
+list contents of file
+ls()
+
+view a data structure of file in R
+summary(places_mega)

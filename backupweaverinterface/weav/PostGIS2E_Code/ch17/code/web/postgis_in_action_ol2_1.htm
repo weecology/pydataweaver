@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <style>
+      .map {
+        height: 600px;
+        width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" href="http://openlayers.org/api/2.13.1/theme/default/style.css" type="text/css">
+    <title>OpenLayers 2.13</title>
+  </head>
+  <body>
+    <h2>PostGIS in Action 2ed: OpenLayers 2.13</h2>
+    <div id="map" class="map"></div> <!-- <co id="co_ol2_map1_1" /> -->
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        map = new OpenLayers.Map("map", {
+            projection: new OpenLayers.Projection("EPSG:3857"), /**<co id="co_ol2_map1_2" /> **/
+        });
+        var l1 = new OpenLayers.Layer.OSM("OSM Map");
+      
+        var l2 = new OpenLayers.Layer.WMS("Open Space / Major Roads", 'Map.ashx',
+          { 'LAYERS': 'major_roads,openspace',
+              'styles': "", 'FORMAT': "image/png", 'transparent': true
+          },
+        { 'isBaseLayer': false, 'visibility': true, 'buffer': 1, 'singleTile': false,
+          'attribution': 'MassGIS data' }); 
+  
+        map.addLayers([l1,l2]);
+    
+        var ls = new OpenLayers.Control.LayerSwitcher(); /**<co id="co_ol2_map1_3" /> **/
+        map.addControl(ls); /**<co id="co_ol2_map1_4" /> **/ /**add our layer switcher to available controls **/
+        ls.maximizeControl();  /**<co id="co_ol2_map1_5" /> **/ /** initialize layer switcher so its maximized - this has to be done after its added to map / not before **/
+    
+        /** reproject our point to projection of map and zoom to location **/
+        var lonLat = new OpenLayers.LonLat(-71.0636, 42.3581).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); 
+        map.setCenter(lonLat, 15);
+    
+    </script>
+  </body>
+</html>

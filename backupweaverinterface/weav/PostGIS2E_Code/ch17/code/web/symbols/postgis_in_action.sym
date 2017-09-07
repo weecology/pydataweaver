@@ -1,0 +1,22 @@
+SYMBOLSET
+  SYMBOL
+    NAME "circle"
+    TYPE ellipse
+    FILLED true
+    POINTS
+      1 1
+    END
+  END
+
+  SYMBOL
+    NAME "cross"
+    TYPE vector
+    POINTS
+      2.0 0.0
+      2.0 4.0
+      -99 -99
+      0.0 2.0
+      4.0 2.0
+    END
+  END
+END

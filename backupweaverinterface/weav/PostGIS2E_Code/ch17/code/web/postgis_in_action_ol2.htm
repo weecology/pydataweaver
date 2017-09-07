@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  
+    <style>
+      .map {
+        height: 600px;
+        width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" href="http://openlayers.org/api/2.13.1/theme/default/style.css" type="text/css">
+    <title>OpenLayers 2.13</title>
+  </head>
+  <body>
+    <h2>PostGIS in Action 2ed: OpenLayers 2.13</h2>
+ 
+          <div id="map" class="map"></div>
+     
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        map = new OpenLayers.Map("map", {
+            projection: new OpenLayers.Projection("EPSG:3857"), /**web mercator the only one offered by tile servers like google and osm **/
+            displayProjection: new OpenLayers.Projection("EPSG:4326") /** the coordinate our mouse position will show **/
+        });
+        var l1 = new OpenLayers.Layer.OSM("Standard Map");
+
+
+		var l2 = new OpenLayers.Layer.WMS("Open Space", 'Map.ashx',
+		    { 'LAYERS': 'major_roads,openspace',
+		        'styles': "", 'FORMAT': "image/png", 'transparent': true, 'attribution': 'MassGIS data'
+		    },
+			{ 'isBaseLayer': false, 'visibility': false, 'buffer': 1, 'singleTile': false });
+
+		var l3 = new OpenLayers.Layer.WMS("NOAA", 'PGMap.ashx',
+		    { 'LAYERS': 'noaa', 'SCHEMA': 'ch17',
+		        'styles': "", 'FORMAT': "image/png"
+		    },
+		 { 'isBaseLayer': true, 'visibility': false, 'buffer': 1
+                 , 'singleTile': false }); 
+	
+		map.addLayers([l1,l2, l3]);
+
+		var ls = new OpenLayers.Control.LayerSwitcher();
+		map.addControl(ls); /**add our layer switcher to available controls **/
+		ls.maximizeControl(); /** initialize layer switcher so its maximized - this has to be done after its added to map / not before **/
+
+		/** reproject our point to projection of map and zoom to location **/
+		var lonLat = new OpenLayers.LonLat(-71.0636, 42.3581).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+		map.setCenter(lonLat, 15);
+	  
+    </script>
+  </body>
+</html>

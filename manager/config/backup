@@ -1,0 +1,48 @@
+{
+  "mammal_counts": {
+    "data_engine": "mysql",
+    "database_name": "xtestdb",
+    "attributes_to_project": [
+      "xgenus",
+      "xspecies",
+      "xyear",
+      "xplot_id"
+    ]
+  },
+  "species": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+      "genus",
+      "species",
+      "year",
+      "plot_id"
+    ]
+  },
+  "anim_count": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+      "genus",
+      "species",
+      "year",
+      "plot_id"
+    ]
+  },
+    "food_type": {
+    "data_engine": "mysql",
+    "database_name": "testdb",
+    "attributes_to_project": [
+      "genus",
+      "species",
+      "year",
+      "plot_id"
+    ]
+  },
+
+"tables" : [
+                {"join": ["mammal_counts","species"],"join_on" :["species","genus"],"rename":{"species":"SPECIESID"}},
+                {"join": ["anim_count","species"],"join_on" :["species=type"]},
+                {"join": ["species","food_type"],"join_on" :["species"]}
+     ]
+}

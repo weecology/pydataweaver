@@ -1,0 +1,10 @@
+//<start id="code_load_worldclim_raster" />
+raster2pgsql -s 4326 -I -C -M alt/*.bil -F -t 256x256 ch12.alt 
+ | psql
+raster2pgsql -s 4326 -I -C -M tmean/*.bil -F -t 256x256 
+ ch12.tmean | psql
+raster2pgsql -s 4326 -I -C -M prec/*.bil -F -t 256x256 ch12.prec 
+ | psql
+raster2pgsql -s 26904 -I -C -M kauai/*.bil -t 200x200 ch12.kauai 
+ | psql
+//<end id="code_load_worldclim_raster" />
