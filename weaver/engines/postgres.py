@@ -1,0 +1,163 @@
+import os
+
+from weaver.lib.defaults import ENCODING
+from weaver.lib.models import Engine
+
+class engine(Engine):
+    """Engine instance for PostgreSQL."""
+
+    name = "PostgreSQL"
+    abbreviation = "postgres"
+    datatypes = {
+        "auto": "serial",
+        "int": "integer",
+        "bigint": "bigint",
+        "double": "double precision",
+        "decimal": "decimal",
+        "char": "varchar",
+        "bool": "boolean",
+    }
+    Subtype = {
+        "geometry":
+            {"point": "POINT",
+             "pointz": "POINT Z",
+             "pointm": "POINT M",
+             "pointzm": "POINT ZM",
+
+             "linestring": "LINESTRING",
+             "linestringz": "LINESTRING Z",
+             "linestringm": "LINESTRING M",
+             "linestringzm": "LINESTRING ZM",
+
+             "polygon": "POLYGON",
+             "polygonz": "POLYGON Z",
+             "polygonm": "POLYGON M",
+             "polygonzm": "POLYGON ZM"
+             },
+        "geometry_collection":
+            {"multipoint": "MULTIPOINT",
+             "multipointz": "MULTIPOINT Z",
+             "multipointm": "MULTIPOINT M",
+             "multipointzm": "MULTIPOINT ZM",
+
+             "multilinestring": "MULTILINESTRING",
+             "linestringz": "MULTILINESTRING Z",
+             "linestringm": "MULTILINESTRING M",
+             "linestringzm": "MULTILINESTRING ZM",
+
+             "multipolygon": "MULTIPOLYGON",
+             "multipolygonz": "MULTIPOLYGON Z",
+             "multipolygonm": "MULTIPOLYGON M",
+             "multipolygonzm": "MULTIPOLYGON ZM"
+             }
+    }
+    max_int = 2147483647
+    placeholder = "%s"
+    required_opts = [("user",
+                      "Enter your PostgreSQL username",
+                      "postgres"),
+                     ("password",
+                      "Enter your password",
+                      ""),
+                     ("host",
+                      "Enter your PostgreSQL host",
+                      "localhost"),
+                     ("port",
+                      "Enter your PostgreSQL port",
+                      5432),
+                     ("database",
+                      "Enter your PostgreSQL database name",
+                      "postgres"),
+                     ("database_name",
+                      "Format of schema name",
+                      "{db}"),
+                     ("table_name",
+                      "Format of table name",
+                      "{db}.{table}"),
+                     ]
+
+    def get_insert_subtype(self, subtype_value, modiffier):
+        """Returns a Subtype  for creating an insert statement
+
+        CREATE TABLE exam.my_points (
+            id serial PRIMARY KEY,
+            p geometry(POINT),
+            pz geometry(POINTZ),
+            pm geometry(POINTM),
+            pzm geometry(POINTZM),
+            p_srid geometry(POINT,4269)
+        );
+        INSERT INTO exam.my_points (p, pz, pm, pzm, p_srid)
+        VALUES (
+            ST_GeomFromText('POINT(1 -1)'),
+            ST_GeomFromText('POINT Z(1 -1 1)'),
+            ST_GeomFromText('POINT M(1 -1 1)'),
+            ST_GeomFromText('POINT ZM(1 -1 1 1)'),
+            ST_GeomFromText('POINT(1 -1)',4269)
+        """
+        return self.Subtype[subtype_value][modiffier].replace(" ", "")
+
+    def create_db_statement(self):
+        """In PostgreSQL, the equivalent of a SQL database is a schema.
+
+        CREATE SCHEMA table_name;
+        """
+        return Engine.create_db_statement(self).replace("DATABASE", "SCHEMA")
+
+    def create_db(self):
+        """Create Engine database."""
+        try:
+            Engine.create_db(self)
+        except:
+            self.connection.rollback()
+            pass
+
+    def create_table(self):
+        """PostgreSQL needs to commit operations individually."""
+        Engine.create_table(self)
+        self.connection.commit()
+
+    def drop_statement(self, objecttype, objectname):
+        """In PostgreSQL, the equivalent of a SQL database is a schema."""
+        statement = Engine.drop_statement(self, objecttype, objectname)
+        statement += " CASCADE;"
+        return statement.replace(" DATABASE ", " SCHEMA ")
+
+    def insert_statement(self, values):
+        """Return SQL statement to insert a set of values."""
+        statement = Engine.insert_statement(self, values)
+        if isinstance(statement, bytes):
+            statement = statement.decode("utf-8", "ignore")
+        return statement
+
+    def table_exists(self, dbname, tablename):
+        """Check to see if the given table exists."""
+        if not hasattr(self, 'existing_table_names'):
+            self.cursor.execute(
+                "SELECT schemaname, tablename FROM pg_tables WHERE schemaname NOT LIKE 'pg_%';")
+            self.existing_table_names = set()
+            for schema, table in self.cursor:
+                self.existing_table_names.add((schema.lower(), table.lower()))
+        return (dbname.lower(), tablename.lower()) in self.existing_table_names
+
+
+
+    def get_connection(self):
+        """
+        Get db connection.
+        Please update the encoding lookup table if the required encoding is not present.
+        """
+        import psycopg2 as dbapi
+        self.get_input()
+        conn = dbapi.connect(host=self.opts["host"],
+                             port=int(self.opts["port"]),
+                             user=self.opts["user"],
+                             password=self.opts["password"],
+                             database=self.opts["database"])
+        encoding = ENCODING.lower()
+        if self.script.encoding:
+            encoding = self.script.encoding.lower()
+        encoding_lookup = {'iso-8859-1': 'Latin1', 'latin-1': 'Latin1', 'utf-8': 'UTF8'}
+        db_encoding = encoding_lookup.get(encoding)
+        conn.set_client_encoding(db_encoding)
+        return conn

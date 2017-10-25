@@ -1,0 +1,102 @@
+{
+  "result": {
+    "dataset": "db_name",
+    "table": "dynamics",
+    "fields": []
+  },
+  "main_file":{
+      "dataset": "mammal_community_db",
+      "table": "sites",
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+  },
+
+  "tables": [
+    {
+      "dataset": "mammal_community_db",
+      "table": "sites",
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+    },
+    {
+      "dataset": "mammal-community-db",
+      "table": "species",
+      "fields": [
+        "species_id",
+        "family",
+        "genus",
+        "species",
+        "species_level"
+      ]
+    },
+    {
+      "dataset": "mammal-masses",
+      "table": "mammalmasses",
+      "fields": [
+        "comb_mass_g",
+        "continent",
+        "family",
+        "genus",
+        "log_mass_g",
+        "reference",
+        "species",
+        "sporder",
+        "status"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "tables": "mammal_community_db.species",
+      "join_on": "mammal_community_db.species_id="
+    },
+    {
+      "tables": [
+        "mammal-masses.mammalmasses",
+        "mammal_community_db.species"
+      ],
+      "join_on": [
+        "species",
+        "genus"
+      ]
+    }
+  ]
+}

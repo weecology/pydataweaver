@@ -1,0 +1,9 @@
+*.pyc
+dist/
+build/
+sqlite.db*
+weaver.egg-info
+*.DS_Store*
+.cache/*
+*__pycache__*
+docs\_build
