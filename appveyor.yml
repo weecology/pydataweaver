@@ -59,9 +59,9 @@ build_script:
   - mysql -e "create database sqlectron;" --user=root
   - mysql -e "CREATE USER 'travis'@'localhost';GRANT ALL PRIVILEGES ON *.* TO 'travis'@'localhost';GRANT FILE ON *.* TO 'travis'@'localhost';" -uroot
   - dir
-  - cd C:\projects\weaver
-  - "python setup.py install"
-  - echo "Installed weaver:"
+#  - cd C:\projects\weaver
+#  - "python setup.py install"
+#  - echo "Installed weaver:"
 
 test_script:
   - ls
