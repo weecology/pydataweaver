@@ -10,256 +10,47 @@ from functools import reduce
 from weaver.lib.cleanup import *
 
 
-class TableMain(object):
+class Dataset(object):
     """Refactor table moddule since raster, vector and tabular data
 
     all have some common table features
     """
-    def __init__(self, name=None, url=None):
+    def __init__(self, name=None):
         self.name = name
-        self.url = url
 
 
-class Table(object):
+class TabularDataset(Dataset):
     """Information about a database table."""
 
-    def __init__(self, name=None, url=None, pk=True,
-                 contains_pk=False, delimiter=None,
-                 header_rows=1, column_names_row=1,
-                 fixed_width=False,
-                 record_id=0,
-                 columns=[],
-                 replace_columns=[],
-                 missingValues=None,
-                 cleaned_columns=False, **kwargs):
+    def __init__(self, name=None,
+                 fields=[],
+                 table_type="tabular",
+                 database_name=None,
+                 **kwargs):
 
         self.name = name
-        self.url = url
-        self.pk = pk
-        self.contains_pk = contains_pk
-        self.delimiter = delimiter
-        self.header_rows = header_rows
-        self.column_names_row = column_names_row
-        self.fixed_width = fixed_width
-        self.record_id = record_id
-        self.columns = columns
-        self.replace_columns = replace_columns
-        self.missingValues = missingValues
-        self.cleaned_columns = cleaned_columns
+        self.fields = fields
+        self.table_type = table_type
+        self.database_name = database_name
 
         for key in kwargs:
-            if hasattr(self, key):
-                self.key = kwargs[key]
+            if hasattr(self, key) and not self.__getattribute__(key):
+                setattr(self, key, kwargs[key])
             else:
                 setattr(self, key, kwargs[key])
 
-        if hasattr(self, 'schema'):
-            self.add_schema()
-        if hasattr(self, 'dialect'):
-            self.add_dialect()
-
-        TableMain.__init__(self, self.name, self.url)
-
-    def add_dialect(self):
-        for key, val in self.dialect.items():
-            if key == "missingValues":
-                if self.dialect["missingValues"]:
-                    self.missingValues = self.dialect["missingValues"]
-            elif key == "delimiter":
-                self.delimiter = str(self.dialect["delimiter"])
-            else:
-                setattr(self, key, self.dialect[key])
-
-    def add_schema(self):
-        spec_data_types = {
-            # Dict to map retriever and frictionless data types.
-            # spec types not defined, default to char
-            "integer": "int",
-            "object": "bigint",
-            "number": "double",
-            "string": "char",
-            "boolean": "bool",
-            "year": "int",
-            # Retriever specific data types
-            "auto": "auto",
-            "int": "int",
-            "bigint": "bigint",
-            "double": "double",
-            "decimal": "decimal",
-            "char": "char",
-            "bool": "bool",
-            "skip": "skip"
-        }
-
-        for key in self.schema:
-            if key == "fields":
-                column_list = []
-                for obj in self.schema["fields"]:
-                    type = None
-                    if str(obj["type"]).startswith("pk-") or str(obj["type"]).startswith("ct-"):
-                        type = obj["type"]
-                    else:
-                        type = spec_data_types.get(obj["type"],"char")
-
-                    if "size" in obj:
-                        column_list.append((obj["name"],
-                                            (type,
-                                             obj["size"])))
-                    else:
-                        column_list.append((obj["name"],
-                                            (type,)))
-                self.columns = column_list
-            elif key == "ct_column":
-                setattr(self, key, "'" + self.schema[key] + "'")
-            else:
-                setattr(self, key, self.schema[key])
-
-    def auto_get_columns(self, header):
-        """Get column names from the header row.
-
-        Identifies the column names from the header row.
-        Replaces database keywords with alternatives.
-        Replaces special characters and spaces.
-        """
-        columns = [self.clean_column_name(x) for x in header]
-        column_values = {x: [] for x in columns if x}
-        self.cleaned_columns = True
-        return [[x, None] for x in columns if x], column_values
-
-    def clean_column_name(self, column_name):
-        """Clean column names using the expected sql guidelines
-        remove leading whitespaces, replace sql key words, etc.
-        """
-        column_name = column_name.lower().strip().replace("\n", "")
-        replace_columns = {old.lower(): new.lower()
-                           for old, new in self.replace_columns}
-        column_name = str(replace_columns.get(column_name, column_name).strip())
-        replace = [
-            ("%", "percent"),
-            ("&", "and"),
-            ("\xb0", "degrees"),
-            ("^", "_power_"),
-            ("<", "_lthn_"),
-            (">", "_gthn_"),
-        ]
-        replace += [(x, '') for x in (")", "?", "#", ";" "\n", "\r", '"', "'")]
-        replace += [(x, '_') for x in (" ", "(", "/", ".", "+", "-", "*", ":", "[", "]")]
-
-        column_name = reduce(lambda x, y: x.replace(*y), replace, column_name)
-
-        while "__" in column_name:
-            column_name = column_name.replace("__", "_")
-        column_name = column_name.lstrip("0123456789_").rstrip("_")
-        replace_dict = {
-            "group": "grp",
-            "order": "ordered",
-            "check": "checked",
-            "references": "refs",
-            "long": "lon",
-            "column": "columns",
-            "cursor": "cursors",
-            "delete": "deleted",
-            "insert": "inserted",
-            "join": "joins",
-            "select": "selects",
-            "table": "tables",
-            "update": "updates",
-            "date": "record_date",
-            "index": "indices"
-        }
-        for x in (")", "\n", "\r", '"', "'"):
-            replace_dict[x] = ''
-        for x in (" ", "(", "/", ".", "-"):
-            replace_dict[x] = '_'
-        if column_name in replace_dict:
-            column_name = replace_dict[column_name]
-        return column_name
-
-    def combine_on_delimiter(self, line_as_list):
-        """Combine a list of values into a line of csv data."""
-        dialect = csv.excel
-        dialect.escapechar = "\\"
-        if sys.version_info >= (3, 0):
-            writer_file = io.StringIO()
-        else:
-            writer_file = io.BytesIO()
-        writer = csv.writer(writer_file, dialect=dialect, delimiter=self.delimiter)
-        writer.writerow(line_as_list)
-        return writer_file.getvalue()
-
-    def values_from_line(self, line):
-        linevalues = []
-        if self.columns[0][1][0] == 'pk-auto':
-            column = 1
-        else:
-            column = 0
-
-        for value in line:
-            try:
-                this_column = self.columns[column][1][0]
-
-                # If data type is "skip" ignore the value
-                if this_column == "skip":
-                    pass
-                elif this_column == "combine":
-                    # If "combine" append value to end of previous column
-                    linevalues[-1] += " " + value
-                else:
-                    # Otherwise, add new value
-                    linevalues.append(value)
-            except:
-                # too many values for columns; ignore
-                pass
-            column += 1
-
-        # make sure we have enough values by padding with None
-        keys = self.get_insert_columns(join=False, create=False)
-        if len(linevalues) < len(keys):
-            linevalues.extend([None for _ in range(len(keys) - len(linevalues))])
-
-        return linevalues
-
-    def get_insert_columns(self, join=True, create=False):
-        """Get column names for insert statements.
-
-        `create` should be set to `True` if the returned values are going to be used
-        for creating a new table. It includes the `pk_auto` column if present. This
-        column is not included by default because it is not used when generating
-        insert statements for database management systems.
-        """
-        columns = []
-        if not self.cleaned_columns:
-            column_names = list(self.columns)
-            self.columns[:] = []
-            self.columns = [(self.clean_column_name(name[0]), name[1]) for name in column_names]
-            self.cleaned_columns = True
-        for item in self.columns:
-            if not create and item[1][0] == 'pk-auto':
-                # don't include this columns if create=False
-                continue
-            thistype = item[1][0]
-            if (thistype != "skip") and (thistype != "combine"):
-                columns.append(item[0])
-        if join:
-            return ", ".join(columns)
-        else:
-            return columns
-
-    def get_column_datatypes(self):
-        """Get set of column names for insert statements."""
-        columns = []
-        for item in self.get_insert_columns(False):
-            for column in self.columns:
-                if item == column[0]:
-                    columns.append(column[1][0])
-
-        return columns
+        Dataset.__init__(self, self.name)
 
 
-class TableRaster(TableMain):
+class RasterDataset(Dataset):
     """Raster table implementation"""
-    def __init__(self, **kwargs):
+    def __init__(self, name=None,
+                 fields=[],
+                 table_type="raster",
+                 database_name=None,
+                 **kwargs):
         self.name = None
+        self.table_type = table_type
         self.group = None
         self.relative_path = 0
         self.resolution = None
@@ -268,19 +59,24 @@ class TableRaster(TableMain):
         self.noDataValue = None
         self.geoTransform = None
         self.parameter = None
+        self.fields = fields
+        self.database_name=database_name
         self.extent = None
+
         for key in kwargs:
-            if hasattr(self, key):
-                self.key = kwargs[key]
+            if hasattr(self, key) and not self.__getattribute__(key):
+                setattr(self, key, kwargs[key])
             else:
                 setattr(self, key, kwargs[key])
+        Dataset.__init__(self, self.name)
 
 
-class TableVector(TableMain):
+class VectorDataset(Dataset):
     """Vector table implementation"""
 
     def __init__(self, name=None, **kwargs):
         self.name = name
+        self.table_type = "vector"
         self.pk = None
         self.contains_pk = False
         self.feature_count = 0
@@ -291,42 +87,16 @@ class TableVector(TableMain):
         self.saptialref = None
 
         for key in kwargs:
-            if hasattr(self, key):
-                self.key = kwargs[key]
+            if hasattr(self, key) and not self.__getattribute__(key):
+                setattr(self, key, kwargs[key])
             else:
                 setattr(self, key, kwargs[key])
 
-    def create_table_statement(self):
-        """Return create table statment for vector data"""
-        self.name = False
-
-    def drop_vetor_data_tabe(self):
-        """Drop the table for vector data
-
-        NOTE: This may require dropping the foreign keys cascaded
-        """
-        self.name = False
-
-    def insert_to_table(self):
-        """This function is used to insert to table"""
-        self.name = False
-
-    def extract_table(self):
-        """Select a set of data from the table"""
-        self.name = False
-
-    def to_raster(self):
-        """Convert vector to Raster"""
-
-        self.name = False
-
-    def project_to_wgs1984(self, package_proj = None):
-        if not package_proj:
-            self.name = False
+        Dataset.__init__(self, self.name)
 
 
 myTables = {
-    "vector": TableVector,
-    "raster": TableRaster,
-    "tabular": Table,
+    "vector": VectorDataset,
+    "raster": RasterDataset,
+    "tabular": TabularDataset,
 }

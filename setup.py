@@ -57,6 +57,7 @@ includes = [
                'pymysql',
                'psycopg2',
                'sqlite3',
+                # 'sqlalchemy'
            ] + extra_includes
 
 excludes = [
@@ -100,7 +101,41 @@ setup(name='weaver',
           'argcomplete'
       ],
 
+      # py2app flags
+      app=['__main__.py'],
       data_files=[('', ['CITATION'])],
       setup_requires=[],
       )
 
+# # windows doesn't have bash. No point in using bash-completion
+# if current_platform != "windows":
+#     # if platform is OS X use "~/.bash_profile"
+#     if current_platform == "darwin":
+#         bash_file = "~/.bash_profile"
+#     # if platform is Linux use "~/.bashrc
+#     elif current_platform == "linux":
+#         bash_file = "~/.bashrc"
+#     # else write and discard
+#     else:
+#         bash_file = "/dev/null"
+#
+#     argcomplete_command = 'eval "$(register-python-argcomplete weaver)"'
+#     with open(os.path.expanduser(bash_file), "a+") as bashrc:
+#         bashrc.seek(0)
+#         # register weaver for arg-completion if not already registered
+#         # whenever a new shell is spawned
+#         if argcomplete_command not in bashrc.read():
+#             bashrc.write(argcomplete_command + "\n")
+#             bashrc.close()
+#     os.system("activate-global-python-argcomplete")
+#     # register for the current shell
+#     os.system(argcomplete_command)
+
+# try:
+#     from weaver.compile import compile
+#     from weaver.lib.repository import check_for_updates
+#
+#     compile()
+#     check_for_updates(False)
+# except:
+#     pass

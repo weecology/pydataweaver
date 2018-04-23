@@ -1,9 +1,9 @@
-"""Data Weaver
+"""Data weaver
 
-This package contains a framework for Integrating Data.
-The package supports both tabular and spatial data
+This package contains a framework for integrating datasets
+
 """
-from weaver.lib.tools import set_proxy, create_home_dir
+from weaver.lib.engine_tools import set_proxy, create_home_dir
 from .lib import *
 
 create_home_dir()

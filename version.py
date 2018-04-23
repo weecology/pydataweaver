@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import os
 
 from weaver.lib.defaults import VERSION
-from weaver.lib.tools import get_module_version
+from weaver.lib.engine_tools import get_module_version
 
 
 def write_version_file(scripts):

@@ -16,7 +16,10 @@ from os.path import join, isfile, getmtime, exists, abspath
 from pkg_resources import parse_version
 
 from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, VERSION, ENCODING, SCRIPT_WRITE_PATH
-import retriever as rt
+# from weaver.lib.compile import compile_json
+from retriever.lib.load_json import read_json
+
+
 
 def MODULE_LIST(force_compile=False):
     """Load scripts from scripts directory and return list of modules."""
@@ -26,8 +29,10 @@ def MODULE_LIST(force_compile=False):
 
 
 def SCRIPT_LIST(force_compile=False):
+    import retriever as rt
     # return [module.SCRIPT for module in MODULE_LIST(force_compile)]
     return rt.datasets()
+
 
 def get_script(dataset):
     """Return the script for a named dataset."""

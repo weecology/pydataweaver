@@ -115,17 +115,25 @@ class BasicTextTemplate(Script):
         # make file name mandatory for simplicity
 
         for i_table, table_obj in self.tables.items():
-            pass
-            #install here in the retriever
-            #extract in the weaver
 
-class HtmlTableTemplate(Script):
-    """Script template for parsing data in HTML tables."""
+            url = table_obj.url
+            if hasattr(self, "archived"):
+                files = [table_obj.path]
+                zips = self.archived
+                self.engine.download_files_from_archive(url=url,
+                                                        filenames=files,
+                                                        filetype=zips)
 
-    pass
+                self.engine.auto_create_table(table_obj, filename=table_obj.path)
+                self.engine.insert_data_from_file(self.engine.format_filename(table_obj.path))
+                self.tables[i_table].record_id = 0
+            else:
+                self.engine.auto_create_table(table_obj, url=url)
+                self.engine.insert_data_from_url(url)
+                self.tables[i_table].record_id = 0
+
 
 
 TEMPLATES = {
     "default": BasicTextTemplate,
-    "html_table": HtmlTableTemplate
 }

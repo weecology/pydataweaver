@@ -5,8 +5,8 @@ import os
 
 from weaver.engines import choose_engine
 from weaver.lib.defaults import DATA_DIR
-
-from weaver.lib.tools import name_matches
+from weaver.lib.scripts import SCRIPT_LIST
+from weaver.lib.engine_tools import name_matches
 
 
 def _install(args, use_cache, debug, compile):
@@ -14,26 +14,26 @@ def _install(args, use_cache, debug, compile):
     engine = choose_engine(args)
     engine.use_cache = use_cache
 
-    script_list = [] #lets get the script list
+    script_list = SCRIPT_LIST(force_compile=True)
     scripts = name_matches(script_list, args['dataset'])
     if scripts:
         for script in scripts:
-            print("=> Integrating", script.name)
+            print("=> Installing", script.name)
             try:
-                # run process with config file
-                 pass
+                script.download(engine, debug=debug)
+                script.engine.final_cleanup()
             except Exception as e:
                 print(e)
                 if debug:
                     raise
     else:
-        message = "The dataset \"{}\" isn't available." \
-                  "install dataset using  the Retriever. " \
-                  "".format(args['dataset'])
+        message = "The dataset \"{}\" isn't available in the Retriever. " \
+                  "Run weaver.datasets()to list the currently available " \
+                  "datasets".format(args['dataset'])
         raise ValueError(message)
 
 
-def join_postgres(dataset, user='postgres', password='',
+def install_postgres(dataset, user='postgres', password='',
                      host='localhost', port=5432, database='postgres',
                      database_name=None, table_name=None,
                      compile=False, debug=False, quiet=False, use_cache=True):
@@ -62,7 +62,7 @@ def join_postgres(dataset, user='postgres', password='',
     _install(args, use_cache, debug, compile)
 
 
-def join_sqlite(dataset, file=None, table_name=None,
+def install_sqlite(dataset, file=None, table_name=None,
                    compile=False, debug=False, quiet=False, use_cache=True):
     """Install scripts in sqlite."""
     if not table_name:

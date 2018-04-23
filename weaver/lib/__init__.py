@@ -1,13 +1,17 @@
-"""lib contains the core weaver modules."""
+"""retriever.lib contains the core Data Retriever modules."""
 
 from .datasets import datasets
-
-from .install import join_postgres
-from .install import join_sqlite
+from .datasets import dataset_names
+from .download import download
+from .install import install_postgres
+from .install import install_sqlite
 from .repository import check_for_updates
-from .tools import reset_weaver
+from .engine_tools import reset_retriever
 
 __all__ = [
+    # 'install_postgres',
+    # 'install_sqlite',
+    # from updates
     'datasets',
     'dataset_names',
 ]

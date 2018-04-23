@@ -26,7 +26,7 @@ def _download_from_repository(filepath, newpath, repo=REPOSITORY):
 def check_for_updates(quite=True):
     """Check for updates to scripts.
 
-    This updates the HOME_DIR scripts directory with the latest json files
+    This updates the HOME_DIR scripts directory with the latest script versions
     """
     try:
         # open version.txt for current release branch and get script versions
@@ -82,23 +82,23 @@ def check_for_updates(quite=True):
     if not quite:
         print("\nThe weaver is up-to-date")
 
-
-def _update_progressbar(progress):
-    """Show progressbar.
-
-    Takes a number between 0 and 1 to indicate progress from 0 to 100%.
-    And set the bar_length according to the console size
-    """
-    try:
-        rows, columns = os.popen('stty size', 'r').read().split()
-        bar_length = int(columns) - 35
-        if not bar_length > 1:
-            bar_length = 20
-    except:
-        # Default value if determination of console size fails
-        bar_length = 20
-    block = int(round(bar_length * progress))
-    text = "\rDownload Progress: [{0}] {1:.2f}%".format(
-        "#" * block + "-" * (bar_length - block), progress * 100)
-    sys.stdout.write(text)
-    sys.stdout.flush()
+# removed from here
+# def _update_progressbar(progress):
+#     """Show progressbar.
+#
+#     Takes a number between 0 and 1 to indicate progress from 0 to 100%.
+#     And set the bar_length according to the console size
+#     """
+#     try:
+#         rows, columns = os.popen('stty size', 'r').read().split()
+#         bar_length = int(columns) - 35
+#         if not bar_length > 1:
+#             bar_length = 20
+#     except:
+#         # Default value if determination of console size fails
+#         bar_length = 20
+#     block = int(round(bar_length * progress))
+#     text = "\rDownload Progress: [{0}] {1:.2f}%".format(
+#         "#" * block + "-" * (bar_length - block), progress * 100)
+#     sys.stdout.write(text)
+#     sys.stdout.flush()
