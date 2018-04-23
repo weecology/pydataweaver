@@ -20,8 +20,10 @@ import csv
 import re
 import time
 from urllib.request import urlretrieve
-from weaver.lib.scripts import open_fr, open_fw, open_csvw
+from retriever.lib.tools import open_fr, open_fw, open_csvw
+# from weaver.lib.scripts import open_fr, open_fw, open_csvw
 from weaver.lib.defaults import DATA_SEARCH_PATHS, DATA_WRITE_PATH
+from weaver.lib.cleanup import no_cleanup
 from weaver.lib.warning import Warning
 
 
@@ -685,24 +687,24 @@ class Engine(object):
         return self.opts["table_name"].format(db=dbname, table=name)
 
     def to_csv(self):
-        # Due to Cyclic imports we can not move this import to the top
-        from retriever.lib.tools import sort_csv
-        for _ in list(self.script.urls.keys()):
-            table_name = self.table_name()
-            csv_file_output = os.path.normpath(table_name + '.csv')
-            csv_file = open_fw(csv_file_output)
-            csv_writer = open_csvw(csv_file)
-            self.get_cursor()
-            self.set_engine_encoding()
-            self.cursor.execute("SELECT * FROM  {};".format(table_name))
-            row = self.cursor.fetchone()
-            colnames = [u'{}'.format(tuple_i[0]) for tuple_i in self.cursor.description]
-            csv_writer.writerow(colnames)
-            while row is not None:
-                csv_writer.writerow(row)
-                row = self.cursor.fetchone()
-            csv_file.close()
-            sort_csv(csv_file_output)
+        # # Due to Cyclic imports we can not move this import to the top
+        # from retriever.lib.tools import sort_csv
+        # for _ in list(self.script.urls.keys()):
+        #     table_name = self.table_name()
+        #     csv_file_output = os.path.normpath(table_name + '.csv')
+        #     csv_file = open_fw(csv_file_output)
+        #     csv_writer = open_csvw(csv_file)
+        #     self.get_cursor()
+        #     self.set_engine_encoding()
+        #     self.cursor.execute("SELECT * FROM  {};".format(table_name))
+        #     row = self.cursor.fetchone()
+        #     colnames = [u'{}'.format(tuple_i[0]) for tuple_i in self.cursor.description]
+        #     csv_writer.writerow(colnames)
+        #     while row is not None:
+        #         csv_writer.writerow(row)
+        #         row = self.cursor.fetchone()
+        #     csv_file.close()
+        #     sort_csv(csv_file_output)
         self.disconnect()
 
     def warning(self, warning):
@@ -804,3 +806,37 @@ def reporthook(count, block_size, total_size):
         elif 1000000000 >= progress_size / 1000000000:
             sys.stdout.write("\r%d  GB" % (progress_size / 1000000000))
             sys.stdout.flush()
+
+
+# def create_table_statement(self):
+#     """Return create table statment for vector data"""
+#     self.name = False
+#
+#
+# def drop_vetor_data_tabe(self):
+#     """Drop the table for vector data
+#
+#     NOTE: This may require dropping the foreign keys cascaded
+#     """
+#     self.name = False
+#
+#
+# def insert_to_table(self):
+#     """This function is used to insert to table"""
+#     self.name = False
+#
+#
+# def extract_table(self):
+#     """Select a set of data from the table"""
+#     self.name = False
+#
+#
+# def to_raster(self):
+#     """Convert vector to Raster"""
+#
+#     self.name = False
+#
+#
+# def project_to_wgs1984(self, package_proj=None):
+#     if not package_proj:
+#         self.name = False

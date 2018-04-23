@@ -1,10 +1,14 @@
-# weaver
+<img src="https://github.com/henrykironde/Logos/blob/master/resource/Weaver_logo.png?raw=true" alt="logo" width="320">
 
+[![Build Status](https://api.travis-ci.org/weecology/weaver.svg?branch=master)](https://travis-ci.org/weecology/weaver)
+[![Build status (windows)](https://ci.appveyor.com/api/projects/status/x9a6ol3dl5mf2wr7/branch/master?svg=true)](https://ci.appveyor.com/project/ethanwhite/weaver/branch/master)
+[![Documentation Status](https://readthedocs.org/projects/weaver/badge/?version=latest)](http://weaver.readthedocs.io/en/latest/?badge=latest)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/weaver/master/LICENSE)
+[![Join the chat at https://gitter.im/weecology/weaver](https://badges.gitter.im/weecology/weaver.svg)](https://gitter.im/weecology/retriever?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/henrykironde/weaverhenry.svg?branch=master)](https://travis-ci.org/henrykironde/weaverhenry)
-[![Documentation Status](https://readthedocs.org/projects/weaverhenry/badge/?version=latest)](http://weaverhenry.readthedocs.org/en/latest/?badge=latest)
-[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/retriever/master/LICENSE)
+# The Data Weaver Project
 
+This is the [Data weaver](http://www.dataweaver.io/)
 The Data weaver offers robust data integration of data sets.
 Data sets are always stored in various forms and these could be Spacial data in raster or vector forms or tabular data (numbers and text) in plain text like csv, tsv, txt
  
@@ -21,7 +25,6 @@ This package depends on the following packages:
      xlrd>=0.7
      PyMySQL>=0.4
      psycopg2>=2.0
-     sqlalchemy
      gdal
 
 They can be installed using ``pip``.

@@ -1,0 +1,12 @@
+*.pyc
+dist/
+build/
+docs\_build
+sqlite.db*
+weaver.egg-info
+apidocs
+.DS_Store
+.cache/*
+scripts/*.py
+.idea
+*__pycache__*

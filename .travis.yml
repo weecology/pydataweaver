@@ -1,29 +1,33 @@
 sudo: false
+dist: trusty
 language: python
 python:
   - "2.7"
+  - "3.5"
 addons:
-  postgresql: "9.1"
+  postgresql: "9.4"
+  apt:
+    sources:
+      - travis-ci/sqlite3
+    packages:
+      - sqlite3
 
 services:
   - postgresql
 install:
-  - pip install -r requirements.txt --use-mirrors
-  - python setup.py -q install
-  - pip install codecov
-  - pip install pytest-cov
-  - pip install pytest-xdist      
+  - pip install -r requirements.txt
+  - pip install -e .
+  - pip install codecov -U
+  - pip install pytest-cov -U
+  - pip install pytest-xdist -U
 
 
-# command to run test
+# command to run tests using py.test
 
 script:
-  - py.test test/ --cov=weaver
+  - ls
 
-## database setup
-#before_script:
-#   - mysql -e 'create database myapp_test;'
-#   - psql -c 'create database testdb;' -U postgres
-
-after_success:
-  - codecov
+# database setup
+before_script:
+  - sqlite3 --version
+  - psql -c 'create database testdb;' -U postgres

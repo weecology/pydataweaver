@@ -4,36 +4,33 @@
     "table": "dynamics",
     "fields": []
   },
-  "main_file":{
-      "dataset": "mammal_community_db",
-      "table": "sites",
-      "fields": [
-        "site_id",
-        "reference_id",
-        "location",
-        "country",
-        "state",
-        "latitude",
-        "longitude",
-        "uncertainty_radius",
-        "elevation_low",
-        "elevation_high",
-        "habitat_description",
-        "habitat_code",
-        "abundance_data_present",
-        "abundance_data_format",
-        "spatial_extent",
-        "study_duration",
-        "time_series",
-        "n_years",
-        "notes"
-      ]
+  "main_file": {
+    "table_type":"raster",
+    "database_name": "mammal-masses",
+    "table_name": "mammalmasses",
+    "fields": [
+      "comb_mass_g",
+      "continent",
+      "family",
+      "genus",
+      "log_mass_g",
+      "reference",
+      "species",
+      "sporder",
+      "status"
+    ],
+    "extent": {
+      "xMax": 1312106.717272291,
+      "xMin": 313361,
+      "yMax": 5220491.203125,
+      "yMin": 3933878.610472609
+    }
   },
-
   "tables": [
     {
-      "dataset": "mammal_community_db",
-      "table": "sites",
+      "database_name": "mammal_community_db",
+      "table_name": "sites",
+      "table_type":"tabular",
       "fields": [
         "site_id",
         "reference_id",
@@ -57,8 +54,9 @@
       ]
     },
     {
-      "dataset": "mammal-community-db",
-      "table": "species",
+      "database_name": "mammal_community_db",
+      "table_name": "species",
+      "table_type":"tabular",
       "fields": [
         "species_id",
         "family",
@@ -68,8 +66,9 @@
       ]
     },
     {
-      "dataset": "mammal-masses",
-      "table": "mammalmasses",
+      "database": "mammal-masses",
+      "table_name": "mammalmasses",
+      "table_type":"tabular",
       "fields": [
         "comb_mass_g",
         "continent",
@@ -85,8 +84,13 @@
   ],
   "join": [
     {
-      "tables": "mammal_community_db.species",
-      "join_on": "mammal_community_db.species_id="
+      "tables": [
+        "mammal_community_db.communities",
+        "mammal_community_db.species"
+      ],
+      "join_on": [
+        "species_id"
+      ]
     },
     {
       "tables": [
