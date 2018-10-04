@@ -1,6 +1,6 @@
-"""Data Retriever Tools
+"""Data Weaver Tools
 
-This module contains miscellaneous classes and functions used in Retriever
+This module contains miscellaneous classes and functions used in Weaver
 scripts.
 
 """
@@ -51,20 +51,38 @@ def create_home_dir():
 
 
 def name_matches(scripts, arg):
+    """Check for a match of the script in available scripts
+
+    if all, return the entire script list
+    if the exact script is available, return that script
+    if no exact script name detected, match the argument with keywords
+    title and name of all scripts and return the closest matches
+    """
+    arg = arg.strip().lower()
     matches = []
+
+    if not arg:
+        raise ValueError("No dataset name specified")
+
+    if arg == 'all':
+        return scripts
+
     for script in scripts:
-        if arg.lower() == script.name.lower():
+        if arg == script.name.lower():
             return [script]
-        max_ratio = max([difflib.SequenceMatcher(None, arg.lower(), factor).ratio() for factor in
-                         (script.name.lower(), script.title.lower(), script.filename.lower())] +
-                        [difflib.SequenceMatcher(None, arg.lower(), factor).ratio() for factor in
-                         [keyword.strip().lower() for keywordset in script.keywords for keyword in keywordset]]
-                        )
-        if arg.lower() == 'all':
-            max_ratio = 1.0
-        matches.append((script, max_ratio))
-    matches = [m for m in sorted(matches, key=lambda m: m[1], reverse=True) if m[1] > 0.6]
-    return [match[0] for match in matches]
+
+    for script in scripts:
+        script_match_ratio = difflib.SequenceMatcher(None, script.name, arg).ratio()
+        if script_match_ratio > .53:
+            matches.append((script.name, script_match_ratio))
+
+    matches.sort(key=lambda x: -x[1])
+
+    print("\nThe dataset \"{}\" "
+          "isn't currently available in the weaver.".format(arg))
+    if matches:
+        print("Did you mean:"
+              " \n\t{}".format("\n\t".join([i[0] for i in matches])))
 
 
 def final_cleanup(engine):
@@ -75,7 +93,7 @@ def final_cleanup(engine):
 config_path = os.path.join(HOME_DIR, 'connections.config')
 
 
-def reset_retriever(scope="all"):
+def reset_retriever(scope="all", ask_permission=True):
     """Remove stored information on scripts, data, and connections."""
     warning_messages = {
         'all': "\nThis will remove existing scripts, cached data, and information on database connections. \nSpecifically it will remove the scripts and raw_data folders and the connections.config file in {}. \nDo you want to proceed? (y/N)\n",
@@ -85,15 +103,20 @@ def reset_retriever(scope="all"):
 
     path = os.path.normpath(HOME_DIR)
     warn_msg = warning_messages[scope].format(path)
-    confirm = input(warn_msg)
-    while not (confirm.lower() in ['y', 'n', '']):
-        print("Please enter either y or n.")
-        confirm = input()
+    if ask_permission:
+        confirm = input(warn_msg)
+        while not (confirm.lower() in ['y', 'n', '']):
+            print("Please enter either y or n.")
+            confirm = input()
+    else:
+        confirm = 'y'
     if confirm.lower() == 'y':
         if scope in ['data', 'all']:
-            shutil.rmtree(os.path.join(path, 'raw_data'))
+            if os.path.exists(os.path.join(path, 'raw_data')):
+                shutil.rmtree(os.path.join(path, 'raw_data'))
         if scope in ['scripts', 'all']:
-            shutil.rmtree(os.path.join(path, 'scripts'))
+            if os.path.exists(os.path.join(path, 'scripts')):
+                shutil.rmtree(os.path.join(path, 'scripts'))
 
 
 def json2csv(input_file, output_file=None, header_values=None):
