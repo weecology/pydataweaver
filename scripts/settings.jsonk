@@ -1,0 +1,78 @@
+{
+  "mammal_community_db.communities": {
+    "database_name": "mammal_community_db",
+    "attributes_to_project": [
+      "site_id",
+      "initial_year",
+      "species_id",
+      "presence_only",
+      "abundance",
+      "mass"
+    ]
+  },
+  "mammal_community_db.sites": {
+    "database_name": "mammal_community_db",
+    "attributes_to_project": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+    ]
+  },
+  "mammal_community_db.species": {
+    "database_name": "mammal_community_db",
+    "attributes_to_project": [
+        "species_id",
+        "family",
+        "genus",
+        "species",
+        "species_level"
+    ]
+  },
+  "mammal_masses.mammalmasses": {
+    "database_name": "mammal_masses",
+    "attributes_to_project": [
+        "comb_mass_g",
+        "continent",
+        "family",
+        "genus",
+        "log_mass_g",
+        "reference",
+        "species",
+        "sporder",
+        "status"
+    ]
+  },
+"tables" : [
+                {
+                  "join": "mammal_community_db.species",
+                  "on": "communities.species_id = species.species_id as species_id",
+                  "join_on":["species_id"],
+                  "AS":"new species_id"
+                }
+
+
+     ],
+"tables" : [
+                {"join": ["species","mcdbspecies"],"join_on" :["species_id"] },
+                {"join": ["mom","mcdbspecies"],"join_on" :["species","genus"]},
+                {"join": ["mcdbspecies","species"],"join_on" :["species","genus"] }
+
+     ],
+"resulttablename":"result"
+}

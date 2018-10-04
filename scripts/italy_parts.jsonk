@@ -1,0 +1,131 @@
+{
+  "name": "italy-parts",
+  "description": "Integrated data set of body mass information for all mammals data collected from the mammal=community_db",
+  "citation": [
+    {
+      " ": "lll",
+      " ": "kkk."
+    }
+  ],
+  "keywords": [
+    "masses",
+    "size",
+    "global-scale"
+  ],
+  "retriever datasets": [
+    "mammal-community-db",
+    "mammal-masses"
+  ],
+  "licenses":
+    {
+      "hist": [
+        "CC0-1.0"
+      ],
+      "mamtgg": []
+    },
+  "result": {
+    "dataset": "mmmm-name",
+    "table": "mics",
+    "fields": []
+  },
+  "main_file": {
+    "path": "AAAA",
+    "database_name": "mammal-masses",
+    "table_name": "mammalmasses",
+    "table_type":"raster",
+    "fields": [
+      "comb_mass_g",
+      "continent",
+      "family",
+      "genus",
+      "log_mass_g",
+      "reference",
+      "species",
+      "sporder",
+      "status"
+    ],
+    "extent": {
+      "xMax": 1312106.717272291,
+      "xMin": 313361,
+      "yMax": 5220491.203125,
+      "yMin": 3933878.610472609
+    }
+  },
+  "tables": [
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "sites",
+      "table_type":"tabular",
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+    },
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "species",
+      "table_type":"tabular",
+      "fields": [
+        "species_id",
+        "family",
+        "genus",
+        "species",
+        "species_level"
+      ]
+    },
+    {
+      "database": "mammal-masses",
+      "table_name": "mammalmasses",
+      "table_type":"tabular",
+      "fields": [
+        "comb_mass_g",
+        "continent",
+        "family",
+        "genus",
+        "log_mass_g",
+        "reference",
+        "species",
+        "sporder",
+        "status"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "tables": [
+        "mammal_community_db.communities",
+        "mammal_community_db.species"
+      ],
+      "join_on": [
+        "species_id"
+      ]
+    },
+    {
+      "tables": [
+        "mammal-masses.mammalmasses",
+        "mammal_community_db.species"
+      ],
+      "join_on": [
+        "species",
+        "genus"
+      ]
+    }
+  ]
+}
