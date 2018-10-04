@@ -1,18 +1,16 @@
 from __future__ import absolute_import
-import platform
 
 import os
-
-# Setuptools are preferred over distutils
+import platform
 from codecs import open
-from setuptools import setup
+
 from pkg_resources import parse_version
 from setuptools import setup, find_packages
 
 current_platform = platform.system().lower()
 extra_includes = []
 
-__version__ = '1.0.0'
+__version__ = 'v1.0.dev'
 with open(os.path.join("weaver", "_version.py"), "w") as version_file:
     version_file.write("__version__ = " + "'" + __version__ + "'\n")
     version_file.close()
@@ -25,7 +23,6 @@ def clean_version(v):
 # Get the long description from the README file
 with open('README.md', encoding='utf-8') as f:
     long_description = f.read()
-
 
 if current_platform == "darwin":
     try:
@@ -43,7 +40,6 @@ elif current_platform == "windows":
     extra_includes = ['pyodbc', 'inspect']
     sys.path.append("C:\\Windows\\winsxs\\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.21022.8_none_bcb86ed6ac711f91")
 
-
 packages = [
     'weaver.lib',
     'weaver.engines',
@@ -57,7 +53,6 @@ includes = [
                'pymysql',
                'psycopg2',
                'sqlite3',
-                # 'sqlalchemy'
            ] + extra_includes
 
 excludes = [
@@ -80,7 +75,6 @@ setup(name='weaver',
       classifiers=['Intended Audience :: Science/Research',
                    'License :: OSI Approved :: MIT License',
                    'Programming Language :: Python',
-                   'Programming Language :: Python :: 2',
                    'Programming Language :: Python :: 3', ],
       packages=find_packages(
           exclude=['hooks',
@@ -88,7 +82,7 @@ setup(name='weaver',
                    'tests',
                    'scripts',
                    'docker',
-                   ".cache" ]),
+                   ".cache"]),
 
       entry_points={
           'console_scripts': [
@@ -107,35 +101,35 @@ setup(name='weaver',
       setup_requires=[],
       )
 
-# # windows doesn't have bash. No point in using bash-completion
-# if current_platform != "windows":
-#     # if platform is OS X use "~/.bash_profile"
-#     if current_platform == "darwin":
-#         bash_file = "~/.bash_profile"
-#     # if platform is Linux use "~/.bashrc
-#     elif current_platform == "linux":
-#         bash_file = "~/.bashrc"
-#     # else write and discard
-#     else:
-#         bash_file = "/dev/null"
-#
-#     argcomplete_command = 'eval "$(register-python-argcomplete weaver)"'
-#     with open(os.path.expanduser(bash_file), "a+") as bashrc:
-#         bashrc.seek(0)
-#         # register weaver for arg-completion if not already registered
-#         # whenever a new shell is spawned
-#         if argcomplete_command not in bashrc.read():
-#             bashrc.write(argcomplete_command + "\n")
-#             bashrc.close()
-#     os.system("activate-global-python-argcomplete")
-#     # register for the current shell
-#     os.system(argcomplete_command)
+# windows doesn't have bash. No point in using bash-completion
+if current_platform != "windows":
+    # if platform is OS X use "~/.bash_profile"
+    if current_platform == "darwin":
+        bash_file = "~/.bash_profile"
+    # if platform is Linux use "~/.bashrc
+    elif current_platform == "linux":
+        bash_file = "~/.bashrc"
+    # else write and discard
+    else:
+        bash_file = "/dev/null"
 
-# try:
-#     from weaver.compile import compile
-#     from weaver.lib.repository import check_for_updates
-#
-#     compile()
-#     check_for_updates(False)
-# except:
-#     pass
+    argcomplete_command = 'eval "$(register-python-argcomplete weaver)"'
+    with open(os.path.expanduser(bash_file), "a+") as bashrc:
+        bashrc.seek(0)
+        # register weaver for arg-completion if not already registered
+        # when a new shell is spawned
+        if argcomplete_command not in bashrc.read():
+            bashrc.write(argcomplete_command + "\n")
+            bashrc.close()
+    os.system("activate-global-python-argcomplete")
+    # register for the current shell
+    os.system(argcomplete_command)
+
+try:
+    from weaver.compile import compile
+    from weaver.lib.repository import check_for_updates
+
+    compile()
+    check_for_updates(False)
+except:
+    pass
