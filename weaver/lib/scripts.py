@@ -4,15 +4,12 @@ from future import standard_library
 
 standard_library.install_aliases()
 import csv
-import imp
 import io
 import os
 import sys
 from os.path import join, exists
 
-from pkg_resources import parse_version
-
-from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, VERSION, ENCODING, SCRIPT_WRITE_PATH
+from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, ENCODING, SCRIPT_WRITE_PATH
 from weaver.lib.load_json import read_json
 
 global_script_list = {}
@@ -35,42 +32,12 @@ def reload_scripts():
                 read_script = read_json(join(search_path, script_name))
 
                 if read_script and read_script.name.lower() not in loaded_scripts:
-                    # if not check_retriever_minimum_version(read_script):
-                    #     continue
                     setattr(read_script, "_file", os.path.join(search_path, script))
                     setattr(read_script, "_name", script_name)
                     modules.append(read_script)
                     loaded_files.append(script_name)
                     loaded_scripts.append(read_script.name.lower())
 
-        # # files = [file for file in os.listdir(search_path)
-        # #          if file[-3:] == ".py" and file[0] != "_" and
-        # #          ('#retriever' in
-        # #           ' '.join(open(join(search_path, file), 'r').readlines()[:2]).lower())
-        # #          ]
-        #
-        # for script in files:
-        #     script_name = '.'.join(script.split('.')[:-1])
-        #     if script_name not in loaded_files:
-        #         loaded_files.append(script_name)
-        #         file, pathname, desc = imp.find_module(script_name, [search_path])
-        #         try:
-        #             new_module = imp.load_module(script_name, file, pathname, desc)
-        #             if hasattr(new_module.SCRIPT, "retriever_minimum_version"):
-        #                 # a script with retriever_minimum_version should be loaded
-        #                 # only if its compliant with the version of the retriever
-        #                 if not check_retriever_minimum_version(new_module.SCRIPT):
-        #                     continue
-        #             # if the script wasn't found in an early search path
-        #             # make sure it works and then add it
-        #             new_module.SCRIPT.download
-        #             setattr(new_module.SCRIPT, "_file", os.path.join(search_path, script))
-        #             setattr(new_module.SCRIPT, "_name", script_name)
-        #             modules.append(new_module.SCRIPT)
-        #         except Exception as e:
-        #             sys.stderr.write("Failed to load script: {} ({})\n"
-        #                              "Exception: {} \n"
-        #                              .format(script_name, search_path, str(e)))
     return modules
 
 
