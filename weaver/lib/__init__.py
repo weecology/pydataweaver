@@ -7,8 +7,8 @@ from .repository import check_for_updates
 from .engine_tools import reset_retriever
 
 __all__ = [
-    # 'install_postgres',
-    # 'install_sqlite',
+    'install_postgres',
+    'install_sqlite',
     'datasets',
     'dataset_names',
 ]
