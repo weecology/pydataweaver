@@ -14,7 +14,7 @@
     "size",
     "global-scale"
   ],
-  "name": "mammal_community_masses",
+  "name": "KKmammal-community-masses",
   "licenses": [
     {
       "name": "CC0-1.0"
@@ -96,6 +96,7 @@
         "abundance",
         "mass"
       ],
+      "join_on":
       "join_fields": [
         "species_id"
       ]

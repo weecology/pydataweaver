@@ -112,25 +112,26 @@ class BasicTextTemplate(Script):
         """Defines the download processes for scripts that utilize the default
         pre processing steps provided by the retriever."""
         Script.download(self, engine, debug)
+        print ( "now we need to do the join, mind  you we have created the result table")
         # make file name mandatory for simplicity
-
-        for i_table, table_obj in self.tables.items():
-
-            url = table_obj.url
-            if hasattr(self, "archived"):
-                files = [table_obj.path]
-                zips = self.archived
-                self.engine.download_files_from_archive(url=url,
-                                                        filenames=files,
-                                                        filetype=zips)
-
-                self.engine.auto_create_table(table_obj, filename=table_obj.path)
-                self.engine.insert_data_from_file(self.engine.format_filename(table_obj.path))
-                self.tables[i_table].record_id = 0
-            else:
-                self.engine.auto_create_table(table_obj, url=url)
-                self.engine.insert_data_from_url(url)
-                self.tables[i_table].record_id = 0
+        #
+        # for i_table, table_obj in self.tables.items():
+        #
+        #     url = table_obj.url
+        #     if hasattr(self, "archived"):
+        #         files = [table_obj.path]
+        #         zips = self.archived
+        #         self.engine.download_files_from_archive(url=url,
+        #                                                 filenames=files,
+        #                                                 filetype=zips)
+        #
+        #         self.engine.auto_create_table(table_obj, filename=table_obj.path)
+        #         self.engine.insert_data_from_file(self.engine.format_filename(table_obj.path))
+        #         self.tables[i_table].record_id = 0
+        #     else:
+        #         self.engine.auto_create_table(table_obj, url=url)
+        #         self.engine.insert_data_from_url(url)
+        #         self.tables[i_table].record_id = 0
 
 
 

@@ -61,14 +61,10 @@
 "tables" : [
                 {
                   "join": "mammal_community_db.species",
-                  "on": {"communities.species_id = species.species_id as species_id"
-
-
-                  }
-                  "join_on":["species_id"]
-                  "AS":
-                },
-
+                  "on": "communities.species_id = species.species_id as species_id",
+                  "join_on":["species_id"],
+                  "AS":"new species_id"
+                }
 
 
      ],

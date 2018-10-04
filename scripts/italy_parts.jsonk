@@ -1,13 +1,38 @@
 {
+  "name": "italy-parts",
+  "description": "Integrated data set of body mass information for all mammals data collected from the mammal=community_db",
+  "citation": [
+    {
+      " ": "lll",
+      " ": "kkk."
+    }
+  ],
+  "keywords": [
+    "masses",
+    "size",
+    "global-scale"
+  ],
+  "retriever datasets": [
+    "mammal-community-db",
+    "mammal-masses"
+  ],
+  "licenses":
+    {
+      "hist": [
+        "CC0-1.0"
+      ],
+      "mamtgg": []
+    },
   "result": {
-    "dataset": "db_name",
-    "table": "dynamics",
+    "dataset": "mmmm-name",
+    "table": "mics",
     "fields": []
   },
   "main_file": {
-    "table_type":"raster",
+    "path": "AAAA",
     "database_name": "mammal-masses",
     "table_name": "mammalmasses",
+    "table_type":"raster",
     "fields": [
       "comb_mass_g",
       "continent",

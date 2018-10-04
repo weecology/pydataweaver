@@ -4,34 +4,50 @@ from future import standard_library
 
 standard_library.install_aliases()
 import csv
-import imp
 import io
 import os
 import sys
-import urllib.request
-import urllib.parse
-import urllib.error
-from os.path import join, isfile, getmtime, exists, abspath
+from os.path import join, exists
 
-from pkg_resources import parse_version
+from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, ENCODING, SCRIPT_WRITE_PATH
+from weaver.lib.load_json import read_json
 
-from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, VERSION, ENCODING, SCRIPT_WRITE_PATH
-# from weaver.lib.compile import compile_json
-from retriever.lib.load_json import read_json
+global_script_list = {}
 
 
-
-def MODULE_LIST(force_compile=False):
+def reload_scripts():
     """Load scripts from scripts directory and return list of modules."""
     modules = []
+    loaded_files = []
+    loaded_scripts = []
+    if not os.path.isdir(SCRIPT_WRITE_PATH):
+        os.makedirs(SCRIPT_WRITE_PATH)
 
-    return rt.datasets()
+    for search_path in [search_path for search_path in SCRIPT_SEARCH_PATHS if exists(search_path)]:
+        data_packages = [file_i for file_i in os.listdir(search_path) if file_i.endswith(".json")]
+
+        for script in data_packages:
+            script_name = '.'.join(script.split('.')[:-1])
+            if script_name not in loaded_files:
+                read_script = read_json(join(search_path, script_name))
+
+                if read_script and read_script.name.lower() not in loaded_scripts:
+                    setattr(read_script, "_file", os.path.join(search_path, script))
+                    setattr(read_script, "_name", script_name)
+                    modules.append(read_script)
+                    loaded_files.append(script_name)
+                    loaded_scripts.append(read_script.name.lower())
+
+    return modules
 
 
-def SCRIPT_LIST(force_compile=False):
-    import retriever as rt
-    # return [module.SCRIPT for module in MODULE_LIST(force_compile)]
-    return rt.datasets()
+def SCRIPT_LIST():
+    """Return Loaded scripts.
+
+    Ensure that only one instance of SCRIPTS is created."""
+    if global_script_list:
+        return global_script_list.get_scripts()
+    return reload_scripts()
 
 
 def get_script(dataset):
@@ -82,18 +98,32 @@ def open_csvw(csv_file, encode=True):
     """Open a csv writer forcing the use of Linux line endings on Windows.
 
     Also sets dialect to 'excel' and escape characters to '\\'
-
     """
     if os.name == 'nt':
-        csv_writer = csv.writer(csv_file, dialect='excel', escapechar='\\', lineterminator='\n')
+        csv_writer = csv.writer(csv_file, dialect='excel',
+                                escapechar='\\', lineterminator='\n')
     else:
         csv_writer = csv.writer(csv_file, dialect='excel', escapechar='\\')
     return csv_writer
 
 
 def to_str(object, object_encoding=sys.stdout):
+    """Convert a Python3 object to a string as in Python2.
+
+    Strings in Python3 are bytes.
+    """
     if sys.version_info >= (3, 0, 0):
         enc = object_encoding.encoding
         return str(object).encode(enc, errors='backslashreplace').decode("latin-1")
-    else:
-        return object
+    return object
+
+
+class StoredScripts:
+    def __init__(self):
+        self._shared_scripts = SCRIPT_LIST()
+
+    def get_scripts(self):
+        return self._shared_scripts
+
+
+global_script_list = StoredScripts()
