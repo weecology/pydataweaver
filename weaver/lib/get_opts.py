@@ -29,6 +29,7 @@ ls_parser = subparsers.add_parser('ls', help='display a list all available datas
 citation_parser = subparsers.add_parser('citation', help='view citation')
 license_parser = subparsers.add_parser('license', help='view dataset licenses')
 install_parser = subparsers.add_parser('join', help='integrate datasets using the configuration file')
+update_parser = subparsers.add_parser('update', help='download updated versions of scripts')
 # install_parser.add_argument('config', help='join configuration file', nargs='?', default=None)
 # file_join_parser = subparsers.add_parser('filejoin', help='integrate datasets using the configuration file')
 
