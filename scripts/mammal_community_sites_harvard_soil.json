@@ -1,0 +1,94 @@
+{
+  "name": "mammal-community-sites-harvard-soil",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "mammal-masses": "Felisa A. Smith, S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M. Kaufman, Tamar Dayan, Pablo A. Marquet, James H. Brown, and John P. Haskell. 2003. Body mass of late Quaternary mammals. Ecology 84:3403.",
+      "mammal-community-db": "Katherine M. Thibault, Sarah R. Supp, Mikaelle Giffin, Ethan P. White, and S. K. Morgan Ernest. 2011. Species composition and abundance of mammalian communities. Ecology 92:2316."
+    }
+  ],
+  "description": "Integrated dataset of mammal communities and harvard-soil",
+  "retriever-datasets": [
+    "mammal-community-db",
+    "mammal-masses"
+  ],
+  "keywords": [
+    "mammals",
+    "masses",
+    "size",
+    "global-scale"
+  ],
+  "licenses":
+    {
+      "mammal-community-db": ["CC0-1.0"],
+      "mammal-masses": ["CC0-1.0"]
+    },
+  "result": {
+    "dataset": "mammal-community-sites-harvard-soil",
+    "table": "sites-soils",
+    "fields": []
+  },
+  "main_file": {
+    "path": "mammal_community_db.sites",
+    "database_name": "mammal_community_db",
+    "table_name": "sites",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+    "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "harvard_forest",
+      "table_name": "soils",
+      "table_type": "vector",
+      "fields": [
+        "gid",
+        "type_",
+        "notes",
+        "simmons_so",
+        "mesic_soil",
+        "drainage_c",
+        "geom"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "harvard_forest.soils",
+      "table_type": "vector",
+       "fields_to_use": [
+         "type_",
+          "notes",
+          "simmons_so",
+          "mesic_soil",
+          "drainage_c",
+          "geom"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_community_db.sites": ["latitude", "longitude"],
+        "harvard_forest.soils": ["geom"]
+      }
+    }
+  ]
+}

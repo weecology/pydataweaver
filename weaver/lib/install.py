@@ -17,17 +17,19 @@ def _install(args, use_cache, debug, compile):
     script_list = SCRIPT_LIST(force_compile=True)
     scripts = name_matches(script_list, args['dataset'])
     if scripts:
-        for script in scripts:
-            print("=> Installing", script.name)
+        for dataset in scripts:
+            print("=> Integrating", dataset.name)
             try:
-                script.download(engine, debug=debug)
-                script.engine.final_cleanup()
+                dataset.integrate(engine, debug=debug)
+                dataset.engine.final_cleanup()
+            except KeyboardInterrupt:
+                pass
             except Exception as e:
                 print(e)
                 if debug:
                     raise
     else:
-        message = "The dataset \"{}\" isn't available in the Retriever. " \
+        message = "The dataset \"{}\" isn't available in the weaver. " \
                   "Run weaver.datasets()to list the currently available " \
                   "datasets".format(args['dataset'])
         raise ValueError(message)

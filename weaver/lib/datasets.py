@@ -1,26 +1,36 @@
 from weaver.lib.scripts import SCRIPT_LIST, get_script
 
 
-def datasets(arg_keyword=None):
+def datasets(keywords=None, licenses=None):
     """Return list of all available datasets."""
     script_list = SCRIPT_LIST()
 
-    all_scripts = []
+    if not keywords and not licenses:
+        return sorted(script_list, key=lambda s: s.name.lower())
 
+    result_scripts = set()
+    if licenses:
+        licenses = [l.lower() for l in licenses]
     for script in script_list:
         if script.name:
-            if arg_keyword:
-                keywords = script.title + ',' + script.name
+            if licenses:
+                # get a list of all licenses in lower case present in the scripts
+                script_license = [lc.lower for lc in sum(script.licenses.values(), [])]
+
+                if script_license and set(script_license).intersection(set(licenses)):
+                    result_scripts.add(script)
+                    continue
+            if keywords:
+                script_keywords = script.title + ' ' + script.name
                 if script.keywords:
-                    keywords = keywords + ',' + ','.join(script.keywords)
-                if keywords.lower().find(arg_keyword.lower()) != -1:
-                    all_scripts.append(script)
-            else:
-                all_scripts.append(script)
+                    script_keywords = script_keywords + ' ' + '-'.join(script.keywords)
+                script_keywords = script_keywords.lower()
+                for k in keywords:
+                    if script_keywords.find(k.lower()) != -1:
+                        result_scripts.add(script)
+                        break
 
-    all_scripts = sorted(all_scripts, key=lambda s: s.name.lower())
-
-    return all_scripts
+    return sorted(list(result_scripts), key=lambda s: s.name.lower())
 
 
 def dataset_names():
@@ -36,4 +46,12 @@ def dataset_names():
 
 def license(dataset):
     """Get the license for a dataset."""
-    return get_script(dataset).licenses[0]['name']
+    return get_script(dataset).licenses
+
+def dataset_licenses():
+    """Return set with all available licenses."""
+    script_license =[]
+    for script in SCRIPT_LIST():
+        temp_list =[lc.lower for lc in sum(script.licenses.values(), [])]
+        script_license.append(temp_list)
+    return set(license_values)

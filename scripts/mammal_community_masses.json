@@ -1,0 +1,157 @@
+{
+  "name": "mammal-community-masses",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "mammal-masses": "Felisa A. Smith, S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M. Kaufman, Tamar Dayan, Pablo A. Marquet, James H. Brown, and John P. Haskell. 2003. Body mass of late Quaternary mammals. Ecology 84:3403.",
+      "mammal-community-db": "Katherine M. Thibault, Sarah R. Supp, Mikaelle Giffin, Ethan P. White, and S. K. Morgan Ernest. 2011. Species composition and abundance of mammalian communities. Ecology 92:2316."
+    }
+  ],
+  "description": "Integrated dataset of mammal body mass and mammal communities",
+  "retriever-datasets": [
+    "mammal-community-db",
+    "mammal-masses"
+  ],
+  "keywords": [
+    "mammals",
+    "masses",
+    "size",
+    "global-scale"
+  ],
+  "licenses":
+    {
+      "mammal-community-db": ["CC0-1.0"],
+      "mammal-masses": ["CC0-1.0"]
+    },
+  "result": {
+    "dataset": "mammal-community-masses",
+    "table": "masses",
+    "fields": []
+  },
+  "main_file": {
+    "path": "mammal_community_db.communities",
+    "database_name": "mammal_community_db",
+    "table_name": "communities",
+    "table_type": "tabular",
+      "fields": [
+        "site_id",
+        "initial_year",
+        "species_id",
+        "presence_only",
+        "abundance",
+        "mass"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "communities",
+      "table_type": "tabular",
+      "fields": [
+        "site_id",
+        "initial_year",
+        "species_id",
+        "presence_only",
+        "abundance",
+        "mass"
+      ]
+    },
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+    },
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "species",
+      "table_type": "tabular",
+      "fields": [
+        "species_id",
+        "family",
+        "genus",
+        "species",
+        "species_level"
+      ]
+    },
+    {
+      "database_name": "mammal-masses",
+      "table_name": "mammalmasses",
+      "table_type": "tabular",
+      "fields": [
+        "record_id",
+        "continent",
+        "status",
+        "sporder",
+        "family",
+        "genus",
+        "species",
+        "log_mass_g",
+        "comb_mass_g",
+        "reference"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "mammal_community_db.sites",
+       "fields_to_use": [
+         "site_id",
+         "reference_id",
+         "location",
+         "country",
+         "state",
+         "latitude",
+         "longitude",
+         "uncertainty_radius",
+         "elevation_low",
+         "elevation_high",
+         "habitat_description",
+         "habitat_code",
+         "abundance_data_present",
+         "abundance_data_format",
+         "spatial_extent"
+       ],
+      "join_ocn": {
+        "common_field": ["site_id"],
+        "mammal_community_db.communities": ["site_id"],
+        "mammal_community_db.sites": ["site_id"]
+      }
+    },
+    {
+       "table": "mammal_community_db.species",
+       "fields_to_use": [
+        "species_id",
+        "family",
+        "genus",
+        "species",
+        "species_level"
+      ],
+      "join_ocn": {
+        "common_field": ["species_id"],
+        "mammal_community_db.communities": ["species_id"],
+        "mammal_community_db.species": ["species_id"]
+      }
+    }
+  ]
+}

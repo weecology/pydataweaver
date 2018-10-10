@@ -1,0 +1,143 @@
+{
+  "name": "mammal-diet-mammal-life-history",
+  "version": "1.0.0",
+  "description": "Integrated data set of mammal-life-hist and mammal-diet",
+  "citation": [
+    {
+      "mammal-life-hist": "S. K. Morgan Ernest. 2003. Life history characteristics of placental non-volant mammals. Ecology 84:3402.",
+      "mammal-diet": "Kissling WD, Dalby L, Flojgaard C, Lenoir J, Sandel B, Sandom C, Trojelsgaard K, Svenning J-C (2014) Establishing macroecological trait datasets:digitalization, extrapolation, and validation of diet preferences in terrestrial mammals worldwide. Ecology and Evolution, online in advance of print. doi:10.1002/ece3.1136"
+    }
+  ],
+  "keywords": [
+    "mammals",
+    "life history",
+    "diet"
+  ],
+  "retriever-datasets": [
+    "mammal-life-hist",
+    "mammal-diet"
+  ],
+  "licenses":
+    {
+      "mammal-life-hist": [
+        "CC0-1.0"
+      ],
+      "mammal-diet": []
+    },
+  "result": {
+    "dataset": "mammal-diet-mammal-life-history",
+    "table": "diet_history",
+    "fields": []
+  },
+  "main_file": {
+    "path": "mammal_life_hist.species",
+    "database_name": "mammal_life_hist",
+    "table_name": "species",
+    "table_type": "tabular",
+    "fields": []
+  },
+  "tables": [
+    {
+      "database_name": "mammal_life_hist",
+      "table_name": "species",
+      "table_type": "tabular",
+      "fields": [
+        "ordered",
+        "family",
+        "genus",
+        "species",
+        "mass_g",
+        "gestation_mo",
+        "newborn_g",
+        "weaning_mo",
+        "wean_mass_g",
+        "afr_mo",
+        "max_life_mo",
+        "litter_size",
+        "litters_year",
+        "refs"
+      ]
+    },
+    {
+      "database_name": "mammal_diet",
+      "table_name": "diet",
+      "table_type": "tabular",
+      "fields": [
+        "taxonid",
+        "taxonorder",
+        "family",
+        "genus",
+        "species",
+        "animal",
+        "vertebrate",
+        "mammal",
+        "bird",
+        "herptile",
+        "fish",
+        "invertebrate",
+        "plant",
+        "seed",
+        "fruit",
+        "nectar",
+        "root",
+        "leaf",
+        "woody",
+        "herbaceous",
+        "other",
+        "taxonomicnote",
+        "fillcode",
+        "trophiclevel",
+        "mammaleater",
+        "insectivore",
+        "frugivore",
+        "granivore",
+        "folivore",
+        "datasource"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "mammal_diet.diet",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "taxonid",
+        "taxonorder",
+        "family",
+        "genus",
+        "species",
+        "animal",
+        "vertebrate",
+        "mammal",
+        "bird",
+        "herptile",
+        "fish",
+        "invertebrate",
+        "plant",
+        "seed",
+        "fruit",
+        "nectar",
+        "root",
+        "leaf",
+        "woody",
+        "herbaceous",
+        "other",
+        "taxonomicnote",
+        "fillcode",
+        "trophiclevel",
+        "mammaleater",
+        "insectivore",
+        "frugivore",
+        "granivore",
+        "folivore",
+        "datasource"
+      ],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_life_hist.species": ["species", "genus"],
+        "mammal_diet.diet": ["species", "genus"]
+      }
+
+    }
+  ]
+}
