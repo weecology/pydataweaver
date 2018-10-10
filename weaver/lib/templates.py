@@ -4,11 +4,9 @@ functions available for inheritance by the scripts or datasets.
 """
 from __future__ import print_function
 
-import shutil
-
-from weaver.lib.models import *
 from weaver.engines import choose_engine
-from weaver.lib.defaults import DATA_DIR
+from weaver.lib.models import *
+from weaver.lib.process import make_sql
 
 
 class Script(object):
@@ -50,8 +48,8 @@ class Script(object):
             desc += "\n" + self.reference_url()
         return desc
 
-    def download(self, engine=None, debug=False):
-        """Generic function to prepare for installation or download."""
+    def integrate(self, engine=None, debug=False):
+        """Generic function to prepare for integration."""
         self.engine = self.checkengine(engine)
         self.engine.debug = debug
         self.engine.db_name = self.name
@@ -108,30 +106,35 @@ class BasicTextTemplate(Script):
         for key in kwargs:
             setattr(self, key, kwargs[key])
 
-    def download(self, engine=None, debug=False, ):
-        """Defines the download processes for scripts that utilize the default
-        pre processing steps provided by the retriever."""
-        Script.download(self, engine, debug)
-        # make file name mandatory for simplicity
+    def integrate(self, engine=None, debug=False, ):
+        """Create the SQL query to be sent to the Engine
 
-        for i_table, table_obj in self.tables.items():
-
-            url = table_obj.url
-            if hasattr(self, "archived"):
-                files = [table_obj.path]
-                zips = self.archived
-                self.engine.download_files_from_archive(url=url,
-                                                        filenames=files,
-                                                        filetype=zips)
-
-                self.engine.auto_create_table(table_obj, filename=table_obj.path)
-                self.engine.insert_data_from_file(self.engine.format_filename(table_obj.path))
-                self.tables[i_table].record_id = 0
-            else:
-                self.engine.auto_create_table(table_obj, url=url)
-                self.engine.insert_data_from_url(url)
-                self.tables[i_table].record_id = 0
-
+        Uses the scripts' integrate function to prepare the engine
+        and it creates the database to store the result.
+        """
+        Script.integrate(self, engine, debug)
+        sql_statement = make_sql(self)
+        result_db = engine.database_name()
+        result_table = self.result["table"]
+        db_table_name = "{db_name}.{table_name}".format(db_name=result_db, table_name=result_table)
+        drop_query = self.engine.drop_statement("TABLE", db_table_name)
+        join_query = sql_statement.format(result_dbi=result_db, result_tablei=result_table)
+        try:
+            if  self.engine.debug:
+                print(drop_query)
+            self.engine.execute(drop_query)
+        except:
+            pass
+        try:
+            if  self.engine.debug:
+                print(join_query)
+            self.engine.execute(join_query)
+        except Exception as e:
+            try:
+                self.connection.rollback()
+            except Exception as _:
+                pass
+            print(e)
 
 
 TEMPLATES = {

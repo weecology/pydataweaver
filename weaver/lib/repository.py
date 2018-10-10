@@ -6,10 +6,9 @@ from future import standard_library
 standard_library.install_aliases()
 import os
 import sys
-import urllib.request
-import urllib.parse
-import urllib.error
+import requests
 import imp
+from tqdm import tqdm
 from pkg_resources import parse_version
 from weaver.lib.defaults import REPOSITORY, SCRIPT_WRITE_PATH, HOME_DIR
 from weaver.lib.models import file_exists
@@ -18,36 +17,35 @@ from weaver.lib.models import file_exists
 def _download_from_repository(filepath, newpath, repo=REPOSITORY):
     """Download latest version of a file from the repository."""
     try:
-        urllib.request.urlretrieve(repo + filepath, newpath)
+        r = requests.get(repo + filepath, allow_redirects=True, stream=True)
+        with open(newpath, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                f.write(chunk)
+        r.close()
     except:
         raise
 
 
-def check_for_updates(quite=True):
-    """Check for updates to scripts.
+def check_for_updates(quiet=False):
+    """Check for updates to datasets.
 
     This updates the HOME_DIR scripts directory with the latest script versions
     """
     try:
         # open version.txt for current release branch and get script versions
-        version_file = urllib.request.urlopen(REPOSITORY + "version.txt")
-        version_file.readline()
+        version_file = requests.get(REPOSITORY + "version.txt").text
+        version_file = version_file.splitlines()[1:]
 
         # read scripts from the repository and the checksums from the version.txt
         scripts = []
         for line in version_file:
-            scripts.append(line.decode().strip('\n').split(','))
-
-        total_script_count = len(scripts)
+            scripts.append(line.strip('\n').split(','))
 
         # create script directory if not available
         if not os.path.isdir(SCRIPT_WRITE_PATH):
             os.makedirs(SCRIPT_WRITE_PATH)
 
-        if not quite:
-            print("Downloading scripts...")
-            _update_progressbar(0.0 / float(total_script_count))
-        for index, script in enumerate(scripts):
+        for script in tqdm(scripts, unit='files', desc='Downloading scripts'):
             script_name = script[0]
             if len(script) > 1:
                 script_version = script[1]
@@ -75,30 +73,5 @@ def check_for_updates(quite=True):
                 except Exception as e:
                     print(e)
                     pass
-            if not quite:
-                _update_progressbar(float(index + 1) / float(total_script_count))
     except:
         raise
-    if not quite:
-        print("\nThe weaver is up-to-date")
-
-# removed from here
-# def _update_progressbar(progress):
-#     """Show progressbar.
-#
-#     Takes a number between 0 and 1 to indicate progress from 0 to 100%.
-#     And set the bar_length according to the console size
-#     """
-#     try:
-#         rows, columns = os.popen('stty size', 'r').read().split()
-#         bar_length = int(columns) - 35
-#         if not bar_length > 1:
-#             bar_length = 20
-#     except:
-#         # Default value if determination of console size fails
-#         bar_length = 20
-#     block = int(round(bar_length * progress))
-#     text = "\rDownload Progress: [{0}] {1:.2f}%".format(
-#         "#" * block + "-" * (bar_length - block), progress * 100)
-#     sys.stdout.write(text)
-#     sys.stdout.flush()
