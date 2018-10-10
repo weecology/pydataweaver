@@ -1,0 +1,120 @@
+{
+  "name": "breeding-bird-survey-bird-size.json",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "bird-size": "Terje Lislevand, Jordi Figuerola, and Tamas Szekely. 2007. Avian body sizes in relation to fecundity, mating system, display behavior, and resource sharing. Ecology 88:1605.",
+      "breed-bird-survey": "Pardieck, K.L., D.J. Ziolkowski Jr., M.-A.R. Hudson. 2015. North American Breeding Bird Survey Dataset 1966 - 2014, version 2014.0. U.S. Geological Survey, Patuxent Wildlife Research Center"
+    }
+  ],
+  "description": "Integrated dataset of Breeding Bird Survey with bird-size",
+  "retriever-datasets": [
+    "bird-size",
+    "breed-bird-survey"
+  ],
+  "keywords": [
+    "birds",
+    "masses",
+    "size",
+    "global-scale"
+  ],
+  "licenses":
+    {
+      "bird-size": ["CC0-1.0"],
+      "breed-bird-survey": []
+    },
+  "result": {
+    "dataset": "breeding-bird-survey-bird-size",
+    "table": "bird-survey-bird-size",
+    "fields": []
+  },
+  "main_file": {
+    "path": "breed_bird_survey.routes",
+    "database_name": "breed_bird_survey",
+    "table_name": "routes",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+    "fields": [
+      "countrynum",
+      "statenum",
+      "route",
+      "routename",
+      "active",
+      "latitude",
+      "longitude",
+      "stratum",
+      "bcr",
+      "routetypeid",
+      "routetypedetailid"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "bird-size",
+      "table_name": "species",
+      "table_type": "tabular",
+      "fields": [
+        "family",
+        "species_number",
+        "species_name",
+        "english_name",
+        "subspecies",
+        "m_mass",
+        "m_mass_n",
+        "f_mass",
+        "f_mass_n",
+        "m_wing",
+        "refs",
+        "resource",
+        "display",
+        "mating_system",
+        "egg_mass",
+        "clutch_size",
+        "unsexed_tail_n",
+        "unsexed_tail",
+        "f_tail_n",
+        "f_tail",
+        "m_tail_n",
+        "m_tail",
+        "unsexed_bill_n",
+        "unsexed_bill",
+        "f_bill_n",
+        "f_bill",
+        "m_bill_n",
+        "unsexed_tarsus_n",
+        "m_bill",
+        "unsexed_tarsus",
+        "f_tarsus_n",
+        "f_tarsus",
+        "m_tarsus_n",
+        "m_tarsus",
+        "unsexed_wing_n",
+        "unsexed_wing",
+        "f_wing_n",
+        "f_wing",
+        "m_wing_n",
+        "unsexed_mass_n",
+        "unsexed_mass"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "bird-size.species",
+      "table_type": "tabular",
+       "fields_to_use": [
+         "type_",
+          "notes",
+          "simmons_so",
+          "mesic_soil",
+          "drainage_c",
+          "geom"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_community_db.sites": ["latitude", "longitude"],
+        "harvard_forest.soils": ["geom"]
+      }
+    }
+  ]
+}
