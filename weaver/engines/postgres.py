@@ -9,49 +9,6 @@ class engine(Engine):
 
     name = "PostgreSQL"
     abbreviation = "postgres"
-    datatypes = {
-        "auto": "serial",
-        "int": "integer",
-        "bigint": "bigint",
-        "double": "double precision",
-        "decimal": "decimal",
-        "char": "varchar",
-        "bool": "boolean",
-    }
-    Subtype = {
-        "geometry":
-            {"point": "POINT",
-             "pointz": "POINT Z",
-             "pointm": "POINT M",
-             "pointzm": "POINT ZM",
-
-             "linestring": "LINESTRING",
-             "linestringz": "LINESTRING Z",
-             "linestringm": "LINESTRING M",
-             "linestringzm": "LINESTRING ZM",
-
-             "polygon": "POLYGON",
-             "polygonz": "POLYGON Z",
-             "polygonm": "POLYGON M",
-             "polygonzm": "POLYGON ZM"
-             },
-        "geometry_collection":
-            {"multipoint": "MULTIPOINT",
-             "multipointz": "MULTIPOINT Z",
-             "multipointm": "MULTIPOINT M",
-             "multipointzm": "MULTIPOINT ZM",
-
-             "multilinestring": "MULTILINESTRING",
-             "linestringz": "MULTILINESTRING Z",
-             "linestringm": "MULTILINESTRING M",
-             "linestringzm": "MULTILINESTRING ZM",
-
-             "multipolygon": "MULTIPOLYGON",
-             "multipolygonz": "MULTIPOLYGON Z",
-             "multipolygonm": "MULTIPOLYGON M",
-             "multipolygonzm": "MULTIPOLYGON ZM"
-             }
-    }
     max_int = 2147483647
     placeholder = "%s"
     required_opts = [("user",
@@ -77,27 +34,6 @@ class engine(Engine):
                       "{db}.{table}"),
                      ]
 
-    def get_insert_subtype(self, subtype_value, modiffier):
-        """Returns a Subtype  for creating an insert statement
-
-        CREATE TABLE exam.my_points (
-            id serial PRIMARY KEY,
-            p geometry(POINT),
-            pz geometry(POINTZ),
-            pm geometry(POINTM),
-            pzm geometry(POINTZM),
-            p_srid geometry(POINT,4269)
-        );
-        INSERT INTO exam.my_points (p, pz, pm, pzm, p_srid)
-        VALUES (
-            ST_GeomFromText('POINT(1 -1)'),
-            ST_GeomFromText('POINT Z(1 -1 1)'),
-            ST_GeomFromText('POINT M(1 -1 1)'),
-            ST_GeomFromText('POINT ZM(1 -1 1 1)'),
-            ST_GeomFromText('POINT(1 -1)',4269)
-        """
-        return self.Subtype[subtype_value][modiffier].replace(" ", "")
-
     def create_db_statement(self):
         """In PostgreSQL, the equivalent of a SQL database is a schema.
 
@@ -113,71 +49,11 @@ class engine(Engine):
             self.connection.rollback()
             pass
 
-    def create_table(self):
-        """PostgreSQL needs to commit operations individually."""
-        Engine.create_table(self)
-        self.connection.commit()
-
     def drop_statement(self, objecttype, objectname):
         """In PostgreSQL, the equivalent of a SQL database is a schema."""
         statement = Engine.drop_statement(self, objecttype, objectname)
         statement += " CASCADE;"
         return statement.replace(" DATABASE ", " SCHEMA ")
-
-    def insert_data_from_file(self, filename):
-        """Use PostgreSQL's "COPY FROM" statement to perform a bulk insert."""
-        self.get_cursor()
-        ct = len([True for c in self.table.columns if c[1][0][:3] == "ct-"]) != 0
-        if (([self.table.cleanup.function, self.table.delimiter,
-              self.table.header_rows] == [no_cleanup, ",", 1])
-            and not self.table.fixed_width
-            and not ct
-            and (not hasattr(self.table, "do_not_bulk_insert") or not self.table.do_not_bulk_insert)):
-            columns = self.table.get_insert_columns()
-            filename = os.path.abspath(filename)
-            statement = """
-COPY """ + self.table_name() + " (" + columns + """)
-FROM '""" + filename.replace("\\", "\\\\") + """'
-WITH DELIMITER ','
-CSV HEADER;"""
-            try:
-                self.execute("BEGIN")
-                self.execute(statement)
-                self.execute("COMMIT")
-            except:
-                self.connection.rollback()
-                return Engine.insert_data_from_file(self, filename)
-        else:
-            return Engine.insert_data_from_file(self, filename)
-
-    def insert_statement(self, values):
-        """Return SQL statement to insert a set of values."""
-        statement = Engine.insert_statement(self, values)
-        if isinstance(statement, bytes):
-            statement = statement.decode("utf-8", "ignore")
-        return statement
-
-    def table_exists(self, dbname, tablename):
-        """Check to see if the given table exists."""
-        if not hasattr(self, 'existing_table_names'):
-            self.cursor.execute(
-                "SELECT schemaname, tablename FROM pg_tables WHERE schemaname NOT LIKE 'pg_%';")
-            self.existing_table_names = set()
-            for schema, table in self.cursor:
-                self.existing_table_names.add((schema.lower(), table.lower()))
-        return (dbname.lower(), tablename.lower()) in self.existing_table_names
-
-    def format_insert_value(self, value, datatype):
-        """Format value for an insert statement."""
-        if datatype == "bool":
-            try:
-                if int(value) == 1:
-                    return "TRUE"
-                elif int(value) == 0:
-                    return "FALSE"
-            except:
-                pass
-        return Engine.format_insert_value(self, value, datatype)
 
     def get_connection(self):
         """
