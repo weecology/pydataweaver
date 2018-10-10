@@ -22,15 +22,13 @@ subparsers = parser.add_subparsers(help='sub-command help', dest='command')
 # subparsers
 # ..............................................................
 
-trim_parser = subparsers.add_parser('trim', help='select given attributes from a single file')
 help_parser = subparsers.add_parser('help', help='')
 
 ls_parser = subparsers.add_parser('ls', help='display a list all available datasets')
 citation_parser = subparsers.add_parser('citation', help='view citation')
 license_parser = subparsers.add_parser('license', help='view dataset licenses')
-install_parser = subparsers.add_parser('join', help='integrate datasets using the configuration file')
-# install_parser.add_argument('config', help='join configuration file', nargs='?', default=None)
-# file_join_parser = subparsers.add_parser('filejoin', help='integrate datasets using the configuration file')
+join_parser = subparsers.add_parser('join', help='integrate datasets using the configuration file')
+update_parser = subparsers.add_parser('update', help='download updated versions of scripts')
 
 #  ..............................................................
 # subparsers with Arguments
@@ -38,15 +36,12 @@ install_parser = subparsers.add_parser('join', help='integrate datasets using th
 
 citation_parser.add_argument('dataset', help='weaver citation or dataset citation', nargs='?', default=None)
 license_parser.add_argument('dataset', help='weaver license or dataset licenses', nargs='?', default=None)
-trim_parser.add_argument('src', help='source data set name', default=None)
-trim_parser.add_argument('dst', help='destination file name', default=None)
-trim_parser.add_argument('attr', help='data set name', nargs='?', default=None)
 
 ls_parser.add_argument('-l', help='search datasets with specific license(s)', nargs='*', default=False)
 ls_parser.add_argument('-k', help='search datasets with keyword(s)', nargs='*', default=False)
 ls_parser.add_argument('-v', help='verbose list of all datasets', nargs='*', default=False)
-
-join_subparsers = install_parser.add_subparsers(help='engine-specific help', dest='engine')
+join_parser.add_argument('--debug', help='run in debug mode', action='store_true')
+join_subparsers = join_parser.add_subparsers(help='engine-specific help', dest='engine')
 
 for engine in engine_list:
     join_engine_parser = join_subparsers.add_parser(engine.abbreviation, help=engine.name)
@@ -64,7 +59,7 @@ for engine in engine_list:
                                         '-%s' % abbreviation,
                                         help=help_msg, nargs='?',
                                         default=default)
-install_parser.add_argument('config', help='file name', default=None)
+join_parser.add_argument('config', help='file name', default=None)
 
 if __name__ == "__main__":
     args = parser.parse_args()
