@@ -78,7 +78,8 @@ class Engine(object):
                     self.connection.rollback()
                 except:
                     pass
-                print("Couldn't create database (%s). Trying to continue anyway." % e)
+                print("Couldn't create database (%s). "
+                      "\nTrying to continue the integration..." % e)
 
     def create_db_statement(self):
         """Return SQL statement to create a database."""
