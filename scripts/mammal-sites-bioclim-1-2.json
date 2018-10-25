@@ -1,0 +1,131 @@
+{
+  "name": "mammal-sites-bioclim-1-2",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "bioclim": "Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis, 2005. Very high resolution interpolated climate surfaces for global land areas. International Journal of Climatology 25: 1965-1978.",
+      "mammal-community-db": "Katherine M. Thibault, Sarah R. Supp, Mikaelle Giffin, Ethan P. White, and S. K. Morgan Ernest. 2011. Species composition and abundance of mammalian communities. Ecology 92:2316."
+    }
+  ],
+  "description": "Integrated dataset of Bioclim bio1, bio2 and mammal communities datasets",
+  "retriever-datasets": [
+    "mammal-community-db",
+    "bioclim"
+  ],
+  "keywords": [
+    "mammals",
+    "climate",
+    "spatial-data",
+    "global"
+  ],
+  "licenses":
+    {
+      "mammal-community-db": [],
+      "bioclim": ["CC-BY-SA"]
+    },
+  "result": {
+    "dataset": "mammal_sites_bioclim",
+    "table": "site_bioclim_one",
+    "fields": [],
+    "lat_long": ["latitude","longitude"]
+  },
+  "main_file": {
+    "path": "mammal_community_db.sites",
+    "database_name": "mammal_community_db",
+    "table_name": "sites",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "mammal_community_db",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "lat_long": ["latitude","longitude"],
+      "fields": [
+        "site_id",
+        "reference_id",
+        "location",
+        "country",
+        "state",
+        "latitude",
+        "longitude",
+        "uncertainty_radius",
+        "elevation_low",
+        "elevation_high",
+        "habitat_description",
+        "habitat_code",
+        "abundance_data_present",
+        "abundance_data_format",
+        "spatial_extent",
+        "study_duration",
+        "time_series",
+        "n_years",
+        "notes"
+      ]
+    },
+    {
+      "database_name": "bioclim",
+      "table_name": "bio1",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    },
+    {
+      "database_name": "bioclim",
+      "table_name": "bio2",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "bioclim.bio1",
+      "database_name": "bioclim",
+      "table_name": "bio1",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_community_db.sites": ["latitude", "longitude"],
+        "bioclim.bio1": ["geom"]
+      }
+    },
+    {
+      "table": "bioclim.bio2",
+      "database_name": "bioclim",
+      "table_name": "bio2",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_community_db.sites": ["latitude", "longitude"],
+        "bioclim.bio1": ["geom"]
+      }
+    }
+  ]
+}

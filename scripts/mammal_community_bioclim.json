@@ -1,32 +1,33 @@
 {
-  "name": "mammal-community-masses",
+  "name": "mammal-community-bioclim",
   "version": "1.0.0",
   "citation": [
     {
-      "mammal-masses": "Felisa A. Smith, S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M. Kaufman, Tamar Dayan, Pablo A. Marquet, James H. Brown, and John P. Haskell. 2003. Body mass of late Quaternary mammals. Ecology 84:3403.",
+      "bioclim": "Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis, 2005. Very high resolution interpolated climate surfaces for global land areas. International Journal of Climatology 25: 1965-1978.",
       "mammal-community-db": "Katherine M. Thibault, Sarah R. Supp, Mikaelle Giffin, Ethan P. White, and S. K. Morgan Ernest. 2011. Species composition and abundance of mammalian communities. Ecology 92:2316."
     }
   ],
-  "description": "Integrated dataset of mammal body mass and mammal communities",
+  "description": "Integrated dataset of Bioclim bio1 and mammal communities datasets",
   "retriever-datasets": [
     "mammal-community-db",
-    "mammal-masses"
+    "bioclim"
   ],
   "keywords": [
     "mammals",
-    "masses",
-    "size",
-    "global-scale"
+    "climate",
+    "spatial-data",
+    "global"
   ],
   "licenses":
     {
-      "mammal-community-db": ["CC0-1.0"],
-      "mammal-masses": ["CC0-1.0"]
+      "mammal-community-db": [],
+      "bioclim": ["CC-BY-SA"]
     },
   "result": {
-    "dataset": "mammal-community-masses",
+    "dataset": "mammal_community_bioclim",
     "table": "masses",
-    "fields": []
+    "fields": [],
+    "lat_long": ["latitude","longitude"]
   },
   "main_file": {
     "path": "mammal_community_db.communities",
@@ -95,27 +96,23 @@
       ]
     },
     {
-      "database_name": "mammal-masses",
-      "table_name": "mammalmasses",
-      "table_type": "tabular",
+      "database_name": "bioclim",
+      "table_name": "bio1",
+      "table_type": "raster",
       "fields": [
-        "record_id",
-        "continent",
-        "status",
-        "sporder",
-        "family",
-        "genus",
-        "species",
-        "log_mass_g",
-        "comb_mass_g",
-        "reference"
+        "rast"
       ]
     }
+
   ],
   "join": [
     {
       "table": "mammal_community_db.sites",
-       "fields_to_use": [
+      "database_name": "mammal_community_db",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "lat_long": ["latitude","longitude"],
+      "fields_to_use": [
          "site_id",
          "reference_id",
          "location",
@@ -133,13 +130,16 @@
          "spatial_extent"
        ],
       "join_ocn": {
-        "common_field": ["site_id"],
+        "common_field": [],
         "mammal_community_db.communities": ["site_id"],
         "mammal_community_db.sites": ["site_id"]
       }
     },
     {
-       "table": "mammal_community_db.species",
+      "table": "mammal_community_db.species",
+      "database_name": "mammal_community_db",
+      "table_name": "species",
+      "table_type": "tabular",
        "fields_to_use": [
         "species_id",
         "family",
@@ -148,19 +148,21 @@
         "species_level"
       ],
       "join_ocn": {
-        "common_field": ["species_id"],
+        "common_field": [],
         "mammal_community_db.communities": ["species_id"],
         "mammal_community_db.species": ["species_id"]
       }
     },
     {
       "table": "bioclim.bio1",
+      "database_name": "bioclim",
+      "table_name": "bio1",
       "table_type": "raster",
       "fields_to_use": [],
       "join_ocn": {
         "common_field": [],
         "mammal_community_db.sites": ["latitude", "longitude"],
-        "bioclim.bio1": ["geom"]
+        "bioclim.bio1": ["rast"]
       }
     }
   ]

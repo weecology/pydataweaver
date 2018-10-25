@@ -19,13 +19,11 @@
   ],
   "licenses":
     {
-      "mammal-life-hist": [
-        "CC0-1.0"
-      ],
+      "mammal-life-hist": ["CC0-1.0"],
       "mammal-diet": []
     },
   "result": {
-    "dataset": "mammal-diet-mammal-life-history",
+    "dataset": "mammal_diet_mammal_life_history",
     "table": "diet_history",
     "fields": []
   },
