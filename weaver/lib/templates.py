@@ -120,13 +120,13 @@ class BasicTextTemplate(Script):
         drop_query = self.engine.drop_statement("TABLE", db_table_name)
         join_query = sql_statement.format(result_dbi=result_db, result_tablei=result_table)
         try:
-            if  self.engine.debug:
+            if self.engine.debug:
                 print(drop_query)
             self.engine.execute(drop_query)
         except:
             pass
         try:
-            if  self.engine.debug:
+            if self.engine.debug:
                 print(join_query)
             self.engine.execute(join_query)
         except Exception as e:
@@ -135,7 +135,8 @@ class BasicTextTemplate(Script):
             except Exception as _:
                 pass
             print(e)
-
+        print("Process successfully launched in Database.")
+        print("Please wait for the table to render")
 
 TEMPLATES = {
     "default": BasicTextTemplate,

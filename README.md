@@ -90,10 +90,11 @@ $ weaver ls
 
 ```shell
 
-Available datasets :
+Available datasets : 7
 
-italy-parts
-mammal-diet-mammal-life-history
+mammal-community-bioclim        mammal-community-sites-harvard-soil  mammal-sites-bioclim-1-2
+mammal-community-masses         mammal-diet-mammal-life-history      portal-plot-species
+mammal-community-sites-bioclim
 .
 ...
 ```

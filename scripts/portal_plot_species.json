@@ -1,0 +1,115 @@
+{
+  "name": "portal-plot-species",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "portal": "S. K. Morgan Ernest, Thomas J. Valone, and James H. Brown. 2009. Long-term monitoring and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Arizona, USA. Ecology 90:1708."
+    }
+  ],
+  "description": "Integrated portal data with species and plot information",
+  "retriever-datasets": [
+    "portal"
+  ],
+  "keywords": [
+    "rodents",
+    "species"
+  ],
+  "licenses":
+    {
+      "portal": []
+    },
+  "result": {
+    "dataset": "portal_plot_species",
+    "table": "masses",
+    "fields": []
+  },
+  "main_file": {
+    "path": "portal.main",
+    "database_name": "portal",
+    "table_name": "main",
+    "table_type": "tabular",
+      "fields": [
+        "recordid",
+        "mo",
+        "dy",
+        "period",
+        "yr",
+        "plot",
+        "note1",
+        "stake",
+        "species",
+        "sex",
+        "age",
+        "reprod",
+        "vagina",
+        "testes",
+        "pregnant",
+        "nipples",
+        "hfl",
+        "lactation",
+        "wgt",
+        "tag",
+        "note2",
+        "ltag",
+        "note3",
+        "prevlet",
+        "prevrt",
+        "nestdir",
+        "neststk",
+        "note4",
+        "note5"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "portal",
+      "table_name": "plots",
+      "table_type": "tabular",
+      "fields": [
+        "plot_id",
+        "plot_type"
+      ]
+    },
+    {
+      "database_name": "portal",
+      "table_name": "species",
+      "table_type": "tabular",
+      "fields": [
+        "species_id",
+        "genus",
+        "species",
+        "taxa"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "portal.plots",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "plot_id",
+        "plot_type"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "portal.plots": ["plot_id"],
+        "portal.main": ["plot"]
+      }
+    },
+    {
+      "table": "portal.species",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "species_id",
+        "genus",
+        "species",
+        "taxa"
+      ],
+      "join_ocn": {
+        "common_field": [],
+        "portal.main": ["species"],
+        "portal.species": ["species_id"]
+      }
+    }
+  ]
+}
