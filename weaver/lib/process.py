@@ -308,7 +308,7 @@ def make_sql(dataset):
                 y = dataset.main_file["lat_long"][0]
                 x = dataset.main_file["lat_long"][1]
                 where_clause = "WHERE {latitude} Not LIKE '%NULL%' " \
-                               "WHERE {latitude} IS NOT NULL " \
+                               "AND {latitude} IS NOT NULL " \
                                "AND {longitude} Not LIKE '%NULL%' " \
                                "AND {longitude} IS NOT NULL " \
                                "".format(latitude=y,
