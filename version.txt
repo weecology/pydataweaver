@@ -1,1 +1,9 @@
-v1.0.dev
+v0.0.dev
+mammal-sites-bioclim-1-2.json,1.0.0
+mammal_community_bioclim.json,1.0.0
+mammal_community_masses.json,1.0.0
+mammal_community_sites_bioclim.json,1.0.0
+mammal_community_sites_bioclim_multi.json,1.0.0
+mammal_community_sites_harvard_soil.json,1.0.0
+mammal_diet_mammal_life_history.json,1.0.0
+portal_plot_species.json,1.0.0
