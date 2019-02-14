@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: travis
+      MYSQL_PASSWORD: Password12!
+      MYSQL_ROOT_PASSWORD: Password12!
+      MYSQL_DATABASE: testdb
+
+  pgdbs:
+    image: postgres
+    environment:
+      # Lets use sdocker-entrypoint-initdb.d/init-user-db.sh
+      # to set up the user and create the user privilege
+      # POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password12!
+      POSTGRES_DB: testdb
+
+  weav:
+    container_name: weaver_container
+    image: weaver_image
+    command: bash -c "python --version"
+    environment:
+      # If IN_DOCKER is set, use service names as hosts names(travis)
+      # otherwise use localhost (local tests)
+      "IN_DOCKER" : "true"
+    
+    build: .
+    
+    depends_on:
+      - mysqldb
+      - pgdbs
+    
+    ports:
+      - 5001:80
