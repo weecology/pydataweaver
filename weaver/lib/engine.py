@@ -222,43 +222,36 @@ class Engine(object):
                 dbname = ''
         return self.opts["table_name"].format(db=dbname, table=name)
 
-    def to_csv(self):
+    def to_csv(self, sort=True, path=os.getcwd(), table_name=None):
+        if not table_name:
+            # use the script result-name
+            if self.script.db_table_name:
+                table_name = self.script.db_table_name
+                print("no table specified")
+            # return
+        csv_file_output = os.path.normpath(os.path.join(path, table_name + '.csv'))
+        csv_file = open_fw(csv_file_output)
+        csv_writer = open_csvw(csv_file)
+        self.get_cursor()
+        self.set_engine_encoding()
+        self.cursor.execute("SELECT * FROM  {};".format(table_name))
+        row = self.cursor.fetchone()
+        column_names = [u'{}'.format(tuple_i[0])
+                        for tuple_i in self.cursor.description]
+        csv_writer.writerow(column_names)
+        while row is not None:
+            csv_writer.writerow(row)
+            row = self.cursor.fetchone()
+        csv_file.close()
+        # TODO: later for regression tests
+        # if sort:
+        #     sort_csv(csv_file_output)
         self.disconnect()
+        return csv_file_output
 
     def warning(self, warning):
         new_warning = Warning('%s:%s' % (self.script.name, self.table.name), warning)
         self.warnings.append(new_warning)
-
-    def load_data(self, filename):
-        """Generator returning lists of values from lines in a data file.
-
-        1. Works on both delimited (csv module)
-        and fixed width data (extract_fixed_width)
-        2. Identifies the delimiter if not known
-        3. Removes extra line endings
-
-        """
-        if not self.table.delimiter:
-            self.set_table_delimiter(filename)
-
-        dataset_file = open_fr(filename)
-
-        if self.table.fixed_width:
-            for row in dataset_file:
-                yield self.extract_fixed_width(row)
-        else:
-            reg = re.compile("\\r\\n|\n|\r")
-            for row in csv.reader(dataset_file, delimiter=self.table.delimiter):
-                yield [reg.sub(" ", values) for values in row]
-
-    def extract_fixed_width(self, line):
-        """Split line based on the fixed width, returns list of the values."""
-        pos = 0
-        values = []
-        for width in self.table.fixed_width:
-            values.append(line[pos:pos + width].strip())
-            pos += width
-        return values
 
     def gis_import(self, table):
         self.table = table

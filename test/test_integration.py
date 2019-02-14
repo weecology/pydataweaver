@@ -4,20 +4,24 @@ from __future__ import print_function
 
 import json
 import os
-import shlex
 import shutil
 import subprocess
 import sys
-import pandas
-from imp import reload
 from collections import OrderedDict
+from imp import reload
+
+import pandas
+import pytest
 
 from retriever import dataset_names
 from retriever import install_postgres
 from retriever import install_sqlite
 from retriever import reload_scripts as retriever_reload_scripts
+from weaver import reload_scripts as weaver_reload_scripts
+from weaver.engines import engine_list
 from weaver.lib.defaults import ENCODING
-
+from weaver.lib.engine_tools import create_file
+from weaver.lib.load_json import read_json
 
 encoding = ENCODING.lower()
 
@@ -25,20 +29,14 @@ reload(sys)
 if hasattr(sys, 'setdefaultencoding'):
     sys.setdefaultencoding(encoding)
 
-import pytest
-
-from weaver.lib.load_json import read_json
-from weaver.engines import engine_list
-from weaver.lib.engine_tools import create_file
-from weaver import reload_scripts as weaver_reload_scripts
-
 FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser('~/.retriever/'))
-RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser('~/.retriever/raw_data/'))
-RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser('~/.retriever/scripts/'))
+RETRIEVER_DATA_DIR = os.path.normpath(
+    os.path.expanduser('~/.retriever/raw_data/'))
+RETRIEVER_SCRIPT_DIR = os.path.normpath(
+    os.path.expanduser('~/.retriever/scripts/'))
 WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser('~/.weaver/'))
 WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser('~/.weaver/scripts/'))
-
 
 # Set postgres password, Appveyor service needs the password given
 # The Travis service obtains the password from the config file.
@@ -51,7 +49,6 @@ if docker_or_travis == "true":
     os_password = 'Password12!'
     pgdbs = "pgdbs"
 
-
 table_one = {
     'name': 'table-one',
     'raw_data': ['a,b,c',
@@ -62,20 +59,20 @@ table_one = {
                    {"dialect": {"do_not_bulk_insert": "True"},
                     "name": "table_one",
                     "schema": {
-                      "fields": [
-                         {
-                          "name": "a",
-                          "type": "int"
-                         },
-                         {
-                          "name": "b",
-                          "type": "int"
-                         },
-                         {
-                          "name": "c",
-                          "type": "int"
-                         }
-                      ]
+                        "fields": [
+                            {
+                                "name": "a",
+                                "type": "int"
+                            },
+                            {
+                                "name": "b",
+                                "type": "int"
+                            },
+                            {
+                                "name": "c",
+                                "type": "int"
+                            }
+                        ]
                     },
                     "url": "http://example.com/table_one.txt"}
                ],
@@ -95,22 +92,22 @@ table_two = {
                    {"dialect": {"do_not_bulk_insert": "True"},
                     "name": "table_two",
                     "schema": {
-                      "fields": [
-                         {
-                          "name": "a",
-                          "type": "int"
-                         },
-                         {
-                          "name": "d",
-                          "size": "4",
-                          "type": "char"
-                         },
-                         {
-                          "name": "e",
-                          "size": "4",
-                          "type": "char"
-                         }
-                      ]
+                        "fields": [
+                            {
+                                "name": "a",
+                                "type": "int"
+                            },
+                            {
+                                "name": "d",
+                                "size": "4",
+                                "type": "char"
+                            },
+                            {
+                                "name": "e",
+                                "size": "4",
+                                "type": "char"
+                            }
+                        ]
                     },
                     "url": "http://example.com/table_two.txt"}
                ],
@@ -132,21 +129,21 @@ table_three = {
                    {"dialect": {"do_not_bulk_insert": "True"},
                     "name": "table_three",
                     "schema": {
-                    "fields": [
-                      {
-                        "name": "a",
-                        "type": "int"
-                      },
-                      {
-                        "name": "b",
-                        "type": "int"
-                      },
-                      {
-                        "name": "e",
-                        "size": "4",
-                        "type": "char"
-                      }
-                    ]
+                        "fields": [
+                            {
+                                "name": "a",
+                                "type": "int"
+                            },
+                            {
+                                "name": "b",
+                                "type": "int"
+                            },
+                            {
+                                "name": "e",
+                                "size": "4",
+                                "type": "char"
+                            }
+                        ]
                     },
                     "url": "http://example.com/table_three.txt"}
                ],
@@ -166,22 +163,22 @@ table_four = {
                    {"dialect": {"do_not_bulk_insert": "True"},
                     "name": "table_four",
                     "schema": {
-                      "fields": [
-                        {
-                          "name": "a",
-                          "type": "int"
-                        },
-                        {
-                          "name": "f",
-                          "size": "4",
-                          "type": "char"
-                        },
-                        {
-                          "name": "g",
-                          "size": "4",
-                          "type": "char"
-                        }
-                      ]
+                        "fields": [
+                            {
+                                "name": "a",
+                                "type": "int"
+                            },
+                            {
+                                "name": "f",
+                                "size": "4",
+                                "type": "char"
+                            },
+                            {
+                                "name": "g",
+                                "size": "4",
+                                "type": "char"
+                            }
+                        ]
                     },
                     "url": "http://example.com/table_four.txt"}
                ],
@@ -201,24 +198,24 @@ table_five = {
                    {"dialect": {"do_not_bulk_insert": "True"},
                     "name": "table_five",
                     "schema": {
-                      "fields": [
-                         {
-                          "name": "id",
-                          "type": "int"
-                         },
-                         {
-                          "name": "a",
-                          "type": "int"
-                         },
-                         {
-                          "name": "b",
-                          "type": "int"
-                         },
-                         {
-                          "name": "f",
-                          "size": "4",
-                          "type": "char"
-                         }
+                        "fields": [
+                            {
+                                "name": "id",
+                                "type": "int"
+                            },
+                            {
+                                "name": "a",
+                                "type": "int"
+                            },
+                            {
+                                "name": "b",
+                                "type": "int"
+                            },
+                            {
+                                "name": "f",
+                                "size": "4",
+                                "type": "char"
+                            }
                         ]
                     },
                     "url": "http://example.com/table_five.txt"}
@@ -239,43 +236,66 @@ RETRIEVER_TESTS_DATA = [table_one,
 # Weaver defaults
 # Engines
 postgres_engine, sqlite_engine = engine_list
-WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(os.path.join(FILE_LOCATION, "test_data_packages"))
+WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
+    os.path.join(FILE_LOCATION, "test_data_packages"))
 
 # Weaver test data(Tuple)
 # (Script file name with no extensio, script name, result table, expected)
 
 WEAVER_TEST_DATA_PACKAGE_FILES2 = [
-    # ('multi_columns_multi_tables', 'tables-a-c-e-columns-a-b','tables-a-c-e-columns-a-b.a_b_e.csv', {}),
-    ('one_column_multi_tables', 'tables-a-b-d-columns-a', 'tables-a-b-d-columns-a.a_b_d.csv',{ 'a': [1, 2],
-                                                                                                'b': [3, 4],
-                                                                                                'c': [5, 6],
-                                                                                                'e': ['UV', 'WX'],
-                                                                                                'd': ['r', 's'],
-                                                                                                'g': [6, 5],
-                                                                                                'f': [3, 2],
+    # TODO: un-comment and ensure test passes
+    # ('multi_columns_multi_tables',
+    #  'tables-a-c-e-columns-a-b',
+    #  'tables-a-c-e-columns-a-b.a_b_e.csv',
+    #  {'a': [1, 2, 2],
+    #   'b': [3, 4, 4],
+    #   'c': [5, 6, 6],
+    #   'e': ['WX', 'OP', 'OP'],
+    #   'id': [1, 2, 3],
+    #   'f': ['PL', 'PT', 'PX']
+    #   }),
+    ('one_column_multi_tables',
+     'tables-a-b-d-columns-a',
+     'tables-a-b-d-columns-a.a_b_d.csv',
+     {'a': [1, 2],
+      'b': [3, 4],
+      'c': [5, 6],
+      'e': ['UV', 'WX'],
+      'd': ['r', 's'],
+      'g': [6, 5],
+      'f': [3, 2],
 
-                                                                                        }),
-    ('simple_join_one_column_custom', 'tables-a-b-columns-a-custom','tables-a-b-columns-a-custom.a_b_custom.csv', { 'a': [1, 2],
-                                                                                                                    'b': [3, 4],
-                                                                                                                    'c': [5, 6],
-                                                                                                                    'e': ['UV', 'WX']
-                                                                                        }),
-    ('simple_join_two_column', 'tables-a-c-columns-a-b', 'tables-a-c-columns-a-b.a_b.csv',{ 'a': [1, 2],
-                                                                                            'b': [3, 4],
-                                                                                            'c': [5, 6],
-                                                                                        'e': ['WX', 'OP']
-                                                                                        })
-    ,
-    ('simple_join_one_column', 'tables-a-b-columns-a', 'tables-a-b-columns-a.a_b.csv', { 'a': [1, 2],
-                                                                                        'b': [3, 4],
-                                                                                        'c': [5, 6],
-                                                                                        'e': ['UV', 'WX'],
-                                                                                        'd': ['r', 's']
-                                                                                        })
+      }),
+    ('simple_join_one_column_custom',
+     'tables-a-b-columns-a-custom',
+     'tables-a-b-columns-a-custom.a_b_custom.csv',
+     {'a': [1, 2],
+      'b': [3, 4],
+      'c': [5, 6],
+      'e': ['UV', 'WX']
+      }),
+    ('simple_join_two_column',
+     'tables-a-c-columns-a-b',
+     'tables-a-c-columns-a-b.a_b.csv',
+     {'a': [1, 2],
+      'b': [3, 4],
+      'c': [5, 6],
+      'e': ['WX', 'OP']
+      }),
+    ('simple_join_one_column',
+     'tables-a-b-columns-a',
+     'tables-a-b-columns-a.a_b.csv',
+     {'a': [1, 2],
+      'b': [3, 4],
+      'c': [5, 6],
+      'e': ['UV', 'WX'],
+      'd': ['r', 's']
+      })
 ]
 
 # File names without `.json` extension
-WEAVER_TEST_DATA_PACKAGE_FILES = [file_base_names[0] for file_base_names in WEAVER_TEST_DATA_PACKAGE_FILES2]
+WEAVER_TEST_DATA_PACKAGE_FILES = [file_base_names[0]
+                                  for file_base_names in WEAVER_TEST_DATA_PACKAGE_FILES2]
 
 
 def set_retriever_resources(resource_up=True):
@@ -314,7 +334,6 @@ def file_exists(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
 
 
-##############################################################################
 # WEAVER
 
 def set_weaver_data_packages(resources_up=True):
@@ -462,18 +481,11 @@ def test_weaver_test_data_packages():
     assert data_packages_exists is True
 
 
-# Weaver integration
+    # Weaver integration
 
-# [('simple_join_one_column', 'tables-a-b-columns-a', 'tables-a-b-columns-a.a_b.csv', [('a', [1, 2]),
-#                                                                                    ('b', [3, 4]),
-#                                                                                    ('c', [5, 6]),
-#                                                                                    ('d', ['r', 's']),
-#                                                                                    ('e', ['UV', 'WX']),
-#                                                                                    ])]
-test_parameters = [(test[1], test[2], test[3]) for test in WEAVER_TEST_DATA_PACKAGE_FILES2]
 
-# @pytest.mark.parametrize("dataset, csv_file, expected", test_parameters)
-# def test_postgres(dataset, expected=None, tmpdir=None):
+test_parameters = [(test[1], test[2], test[3])
+                   for test in WEAVER_TEST_DATA_PACKAGE_FILES2]
 
 
 def get_script_module(script_name):
@@ -481,46 +493,19 @@ def get_script_module(script_name):
     print(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
     return read_json(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
 
-#
-# def get_output_as_csv(dataset, engines, tmpdir, file_name,db):
-#     """Install dataset and return the output as a string version of the csv."""
-#
-#     # Since we are writing scripts to the .retriever directory,
-#     # we don't have to change to the main source directory in order
-#     # to have the scripts loaded
-#     script_module = get_script_module(file_name)
-#     script_module.integrate(engines)
-#     script_module.engine.final_cleanup()
-#     csv_file = script_module.engine.to_csv()
-#     # print(type(script_module))
-#     # print(h)
-#     # csv_file = script_module.engine.to_csv()
-#     # return csv_file, dataset
-#     return csv_file
 
-
-def get_output_as_csv(f, dataset, engines, tmpdir,db):
-    """Install dataset and return the output as a string version of the csv."""
+def get_output_as_csv(f, dataset, engines, tmpdir, db):
+    """integrate datasets and return the output as a csv."""
     import weaver
     weaver_reload_scripts()
-    h = weaver.join_postgres(dataset, database='testdb', host=pgdbs, password=os_password)
-    # h = weaver.join_postgres("tables-a-b-columns-a", database='testdb')
-    csv_file = h.to_csv()
-    # print(type(script_module))
-    # print(h)
-    # csv_file = script_module.engine.to_csv()
-    # return csv_file, dataset
+    eng = weaver.join_postgres(dataset, database='testdb', host=pgdbs, password=os_password)
+    csv_file = eng.to_csv()
     return csv_file
-# [('simple_join_one_column', 'tables-a-b-columns-a', 'tables-a-b-columns-a.a_b.csv', [('a', [1, 2]),
-#                                                                                    ('b', [3, 4]),
-#                                                                                    ('c', [5, 6]),
-#                                                                                    ('d', ['r', 's']),
-#                                                                                    ('e', ['UV', 'WX']),
-#                                                                                    ])]
-# test_parameters = [(test[1], test[2], test[3]) for test in WEAVER_TEST_DATA_PACKAGE_FILES2]
 
 
-@pytest.mark.parametrize("f, dataset, csv_file, expected", WEAVER_TEST_DATA_PACKAGE_FILES2)
+@pytest.mark.parametrize(
+    "f, dataset, csv_file, expected",
+    WEAVER_TEST_DATA_PACKAGE_FILES2)
 def test_postgres(f, dataset, csv_file, expected):
     tmpdir = None
     postgres_engine.opts = {'engine': 'postgres',
@@ -537,49 +522,21 @@ def test_postgres(f, dataset, csv_file, expected):
                       "database": postgres_engine.opts['database'],
                       "database_name": postgres_engine.opts['database_name'],
                       "table_name": postgres_engine.opts['table_name']}
-    res_csv = get_output_as_csv(f, dataset, postgres_engine, tmpdir, db=postgres_engine.opts['database_name'])
-
+    res_csv = get_output_as_csv(
+        f,
+        dataset,
+        postgres_engine,
+        tmpdir,
+        db=postgres_engine.opts['database_name'])
 
     # df = pandas.DataFrame.from_items(expected)
-    df=pandas.DataFrame.from_dict(OrderedDict(expected))
+    df = pandas.DataFrame.from_dict(OrderedDict(expected))
 
     data = pandas.read_csv(res_csv)
     os.remove(res_csv)
-
 
     assert sorted(list(data.columns)) == sorted(list(df.columns))
     data = data[sorted(sorted(list(data.columns)))]
     df = df[sorted(sorted(list(df.columns)))]
 
     assert df.equals(data)
-
-    # assert (data[sorted(data.columns)]).empty(df[sorted(df.columns)])
-
-
-    # assert df.equals(data)
-
-#     # assert get_output_as_csv(dataset, postgres_engine, tmpdir,
-#     #                          db=postgres_engine.opts['database_name']) == expected
-#     # assert f
-#     # os.chdir(retriever_root_dir)
-#     # return obs_out
-#
-#
-# if __name__ == '__main__':
-#
-#     # set_weaver_data_packages(resources_up=True)
-#     # setup_module()s
-#
-#
-#     # print(os.environ)
-#     # exit()
-#     set_retriever_resources(resource_up=True)
-#     set_weaver_data_packages(resources_up=True)
-#     setup_postgres_retriever_db()
-#
-#     # setup_weaver_data_packages()
-#     # setup_module()
-#     # print(WEAVER_TEST_DATA_PACKAGE_FILES[0])
-#     # test_postgres(WEAVER_TEST_DATA_PACKAGE_FILES[0])
-#     # # print(test_postgres(WEAVER_TEST_DATA_PACKAGE_FILES[0]))
-#     print("done.....")

@@ -18,6 +18,7 @@ def make_sql(dataset):
     # assume that the latitude and longitude fields are in the main file.
     # use ST_PointFromText ST_PointFromText('POINT(-71.064 42.28)', 4326);
     # 2. Refactoring to after raster joins are finalized
+
     main_table_path = dataset.main_file["path"]
     processed_tables = {main_table_path: {'name': 'T1'}}
     as_processed_table = processed_tables
