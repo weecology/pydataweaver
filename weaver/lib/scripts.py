@@ -12,7 +12,7 @@ from os.path import join, exists
 from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, ENCODING, SCRIPT_WRITE_PATH
 from weaver.lib.load_json import read_json
 
-global_script_list = {}
+global_script_list = None
 
 
 def reload_scripts():
@@ -38,6 +38,8 @@ def reload_scripts():
                     loaded_files.append(script_name)
                     loaded_scripts.append(read_script.name.lower())
 
+    if global_script_list:
+        global_script_list.set_scripts(modules)
     return modules
 
 
@@ -124,6 +126,9 @@ class StoredScripts:
 
     def get_scripts(self):
         return self._shared_scripts
+
+    def set_scripts(self, script_list):
+        self._shared_scripts = script_list
 
 
 global_script_list = StoredScripts()

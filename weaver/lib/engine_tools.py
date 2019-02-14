@@ -293,7 +293,7 @@ def file_2list(input_file):
 
 def get_script_version():
     """This function gets the version number of the scripts and returns them in array form."""
-    from retriever.lib.scripts import SCRIPT_LIST
+    from weaver.lib.scripts import SCRIPT_LIST
     modules = SCRIPT_LIST()
     scripts = []
     for module in modules:
@@ -320,4 +320,3 @@ def set_proxy():
                 for i in proxies:
                     os.environ[i] = os.environ[proxy]
                 break
-
