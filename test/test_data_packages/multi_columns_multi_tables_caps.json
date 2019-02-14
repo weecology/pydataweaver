@@ -1,0 +1,106 @@
+{
+  "name": "tables-a-c-e-columns-a-b-caps",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "table_one": "citatation for table_one",
+      "table_three": "citatation for table_three",
+      "table_five": "citatation for table_five"
+    }
+  ],
+  "description": "Integrated dataset of table_one and table_two, table_four using columns a and b",
+  "retriever-datasets": [],
+  "keywords": [
+    "Tests"
+  ],
+  "licenses":
+    {
+      "table_one": [],
+      "table_three": [],
+      "table_five": []
+    },
+  "result": {
+    "dataset": "tables-a-c-e-columns-a-b-caps",
+    "table": "a_b_e",
+    "fields": []
+  },
+  "main_file": {
+    "path": "testschema.table_one",
+    "database_name": "testschema",
+    "table_name": "table_one",
+    "table_type": "tabular",
+      "fields": [
+        "a",
+        "b",
+        "c"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "testschema",
+      "table_name": "table_one",
+      "table_type": "tabular",
+      "fields": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "database_name": "testschema",
+      "table_name": "table_three",
+      "table_type": "tabular",
+      "fields": [
+        "a",
+        "b",
+        "e"
+      ]
+    },
+    {
+      "database_name": "testschema",
+      "table_name": "table_five",
+      "table_type": "tabular",
+      "fields": [
+        "id",
+        "A",
+        "B",
+        "f"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "testschema.table_three",
+      "database_name": "testschema",
+      "table_name": "table_three",
+      "table_type": "tabular",
+      "fields_to_use": [
+         "a",
+         "b",
+         "e"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "testschema.table_one": ["a", "b"],
+        "testschema.table_three": ["a", "b"]
+      }
+    },
+    {
+      "table": "testschema.table_five",
+      "database_name": "testschema",
+      "table_name": "table_five",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "id",
+         "A",
+         "B",
+         "f"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "testschema.table_one": ["a", "b"],
+        "testschema.table_five": ["A", "B"]
+      }
+    }
+  ]
+}
