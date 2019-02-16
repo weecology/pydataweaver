@@ -7,6 +7,7 @@ import os
 import shutil
 import subprocess
 import sys
+import shlex
 from collections import OrderedDict
 from imp import reload
 
@@ -411,16 +412,23 @@ def install_dataset_postgres(dataset):
 
 
 def setup_postgres_retriever_db():
-    teardown_postgres_db()
     for test_data in RETRIEVER_TESTS_DATA:
         print(test_data["script"]["name"])
         install_dataset_postgres(test_data["script"]["name"])
 
 
 def teardown_postgres_db():
-    # cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"DROP SCHEMA IF EXISTS testschema CASCADE\"'
-    # subprocess.call(shlex.split(cmd))
-    pass
+    # Retriever database
+    cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"DROP SCHEMA IF EXISTS testschema CASCADE\"'
+    subprocess.call(shlex.split(cmd))
+
+    # Weaver database
+    for file_base_names in WEAVER_TEST_DATA_PACKAGE_FILES2:
+        dataset = file_base_names[1]
+        sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
+        cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"{sql_stm}\"'
+        dfd = cmd.format(sql_stm=sql_stm)
+        subprocess.call(shlex.split(dfd))
 
 
 def setup_module():
