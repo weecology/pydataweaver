@@ -245,9 +245,9 @@ WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
 
 WEAVER_TEST_DATA_PACKAGE_FILES2 = [
     # TODO: un-comment and ensure test passes
-    # ('multi_columns_multi_tables',
-    #  'tables-a-c-e-columns-a-b',
-    #  'tables-a-c-e-columns-a-b.a_b_e.csv',
+    # ('multi_columns_multi_tables_caps',
+    #  'tables-a-c-e-columns-a-b-caps',
+    #  'tables-a-c-e-columns-a-b-caps.a_b_e.csv',
     #  {'a': [1, 2, 2],
     #   'b': [3, 4, 4],
     #   'c': [5, 6, 6],
@@ -255,6 +255,16 @@ WEAVER_TEST_DATA_PACKAGE_FILES2 = [
     #   'id': [1, 2, 3],
     #   'f': ['PL', 'PT', 'PX']
     #   }),
+    ('multi_columns_multi_tables',
+     'tables-a-c-e-columns-a-b',
+     'tables-a-c-e-columns-a-b.a_b_e.csv',
+     {'a': [1, 2, 2],
+      'b': [3, 4, 4],
+      'c': [5, 6, 6],
+      'e': ['WX', 'OP', 'OP'],
+      'id': [1, 2, 3],
+      'f': ['PL', 'PT', 'PX']
+      }),
     ('one_column_multi_tables',
      'tables-a-b-d-columns-a',
      'tables-a-b-d-columns-a.a_b_d.csv',

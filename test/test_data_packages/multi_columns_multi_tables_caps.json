@@ -1,5 +1,5 @@
 {
-  "name": "tables-a-c-e-columns-a-b",
+  "name": "tables-a-c-e-columns-a-b-caps",
   "version": "1.0.0",
   "citation": [
     {
@@ -20,7 +20,7 @@
       "table_five": []
     },
   "result": {
-    "dataset": "tables-a-c-e-columns-a-b",
+    "dataset": "tables-a-c-e-columns-a-b-caps",
     "table": "a_b_e",
     "fields": []
   },
@@ -62,8 +62,8 @@
       "table_type": "tabular",
       "fields": [
         "id",
-        "a",
-        "b",
+        "A",
+        "B",
         "f"
       ]
     }
@@ -92,8 +92,8 @@
       "table_type": "tabular",
       "fields_to_use": [
         "id",
-         "a",
-         "b",
+         "A",
+         "B",
          "f"
        ],
       "join_ocn": {
