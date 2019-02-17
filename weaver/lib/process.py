@@ -35,7 +35,7 @@ def make_sql(dataset):
     if "fields" in dataset.main_file:
         if dataset.main_file["fields"]:
             all_fields += [as_processed_table[main_table_path]["name"] +
-                           "." + item_f for item_f in dataset.main_file["fields"]]
+                           "." + item_f.lower() for item_f in dataset.main_file["fields"]]
             unique_f |= set(dataset.main_file["fields"])
 
     # Process all tables that are to be joined
@@ -85,7 +85,7 @@ def make_sql(dataset):
 
         local_fields_used = []
         if "fields_to_use" in table2join:
-            local_fields_used = table2join["fields_to_use"]
+            local_fields_used = [field_to_lower.lower() for field_to_lower in table2join["fields_to_use"]]
 
             if vector_table:
                 # Remove 'geom'
@@ -288,9 +288,9 @@ def make_sql(dataset):
                 new_on = "{tab_i}.{field_i}={tab_j}.{field_j}".format(
                     tab_i=as_processed_table[str(tab_field_index[0])]['name'],
                     # field_i=items,
-                    field_i=temp_dict[tab_field_index[0]][num],
+                    field_i=temp_dict[tab_field_index[0]][num].lower(),
                     tab_j=as_processed_table[str(tab_field_index[1])]['name'],
-                    field_j=temp_dict[tab_field_index[1]][num])
+                    field_j=temp_dict[tab_field_index[1]][num].lower())
                 on_diff_stmt.append(new_on)
 
             all_on_stmts = on_diff_stmt + on_common_stmt
