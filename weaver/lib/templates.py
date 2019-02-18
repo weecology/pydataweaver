@@ -107,7 +107,7 @@ class BasicTextTemplate(Script):
             setattr(self, key, kwargs[key])
         self.db_table_name  = None
 
-    def integrate(self, engine=None, debug=False, ):
+    def integrate(self, engine=None, debug=False):
         """Create the SQL query to be sent to the Engine
 
         Uses the scripts' integrate function to prepare the engine
