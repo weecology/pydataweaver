@@ -338,4 +338,4 @@ def make_sql(dataset):
                                         where_stm=where_clause,
                                         table_m=as_processed_table[main_table_path]["name"])
 
-    return pivot_query + query_statement + " limit 4 "
+    return pivot_query + query_statement
