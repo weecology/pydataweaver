@@ -231,7 +231,7 @@ def make_sql(dataset):
                              "4326)) as feature_{ras}".format(T=T, longitude=x, latitude=y, ras=rast_alias)
                 # Add the value to final select statement
                 rast_values.append(rast_value)
-                # all_fields += [rast_value]
+                all_fields += [rast_value]
             if vector_table:
                 geovalue = "ST_PointFromText(FORMAT('POINT(%s %s)', " \
                            "cast({T}.{longitude} as varchar), " \
@@ -242,6 +242,7 @@ def make_sql(dataset):
                              "{tablei_as}.{geomalias}) ".format(T=T, geovalue=geovalue,
                                                                 tablei_as=as_tables,
                                                                 geomalias=geom_alias)
+                all_fields += [geovalue]
         if tabular_table and make_local_temp:
             # Create `LEFT JOIN` statements from non pivot tables
             _all_fields = ', '.join(str(e) for e in local_fields_used)
@@ -336,4 +337,5 @@ def make_sql(dataset):
                                         res="{result_dbi}.{result_tablei}",
                                         where_stm=where_clause,
                                         table_m=as_processed_table[main_table_path]["name"])
-    return pivot_query + query_statement
+
+    return pivot_query + query_statement + " limit 4 "

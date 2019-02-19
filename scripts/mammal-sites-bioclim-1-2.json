@@ -25,7 +25,7 @@
     },
   "result": {
     "dataset": "mammal_sites_bioclim",
-    "table": "site_bioclim_one",
+    "table": "site_bioclim_one_two",
     "fields": [],
     "lat_long": ["latitude","longitude"]
   },
@@ -124,7 +124,7 @@
       "join_ocn": {
         "common_field": [],
         "mammal_community_db.sites": ["latitude", "longitude"],
-        "bioclim.bio1": ["geom"]
+        "bioclim.bio2": ["geom"]
       }
     }
   ]
