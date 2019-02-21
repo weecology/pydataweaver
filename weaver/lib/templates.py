@@ -105,8 +105,9 @@ class BasicTextTemplate(Script):
         Script.__init__(self, **kwargs)
         for key in kwargs:
             setattr(self, key, kwargs[key])
+        self.db_table_name  = None
 
-    def integrate(self, engine=None, debug=False, ):
+    def integrate(self, engine=None, debug=False):
         """Create the SQL query to be sent to the Engine
 
         Uses the scripts' integrate function to prepare the engine
@@ -117,6 +118,10 @@ class BasicTextTemplate(Script):
         result_db = engine.database_name()
         result_table = self.result["table"]
         db_table_name = "{db_name}.{table_name}".format(db_name=result_db, table_name=result_table)
+
+        self.db_table_name = db_table_name
+        Script.db_table_name = db_table_name
+
         drop_query = self.engine.drop_statement("TABLE", db_table_name)
         join_query = sql_statement.format(result_dbi=result_db, result_tablei=result_table)
         try:
@@ -137,6 +142,7 @@ class BasicTextTemplate(Script):
             print(e)
         print("Process successfully launched in Database.")
         print("Please wait for the table to render")
+        return engine
 
 TEMPLATES = {
     "default": BasicTextTemplate,
