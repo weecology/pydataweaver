@@ -10,3 +10,4 @@ apidocs
 scripts/*.py
 .idea
 *__pycache__*
+docs/datasets_list.rst

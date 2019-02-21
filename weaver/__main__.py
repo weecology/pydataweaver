@@ -76,11 +76,6 @@ def main():
 
         # list the data sets available
         if args.command == 'ls':
-            # If scripts have never been downloaded, there is nothing to list
-            if not script_list:
-                print("No scripts are currently available. Updating scripts now...")
-                check_for_updates(False)
-                print("\n\nScripts downloaded.\n")
             if not (args.l or args.k or isinstance(args.v, list)):
                 all_scripts = dataset_names()
                 print("Available datasets : {}\n".format(len(all_scripts)))

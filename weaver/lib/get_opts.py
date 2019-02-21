@@ -20,8 +20,8 @@ help_parser = subparsers.add_parser('help', help='')
 ls_parser = subparsers.add_parser('ls', help='display a list all available datasets')
 citation_parser = subparsers.add_parser('citation', help='view citation')
 license_parser = subparsers.add_parser('license', help='view dataset licenses')
-join_parser = subparsers.add_parser('join', help='integrate datasets using the configuration file')
-update_parser = subparsers.add_parser('update', help='download updated versions of scripts')
+join_parser = subparsers.add_parser('join', help='integrate data using a data package script')
+update_parser = subparsers.add_parser('update', help='download updated versions of data package scripts')
 
 #  ..............................................................
 # subparsers with Arguments

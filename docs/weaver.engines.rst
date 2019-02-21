@@ -4,22 +4,6 @@ weaver.engines package
 Submodules
 ----------
 
-weaver.engines.csv module
--------------------------
-
-.. automodule:: weaver.engines.csv
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-weaver.engines.mysql module
----------------------------
-
-.. automodule:: weaver.engines.mysql
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 weaver.engines.postgres module
 ------------------------------
 

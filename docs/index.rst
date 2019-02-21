@@ -9,9 +9,14 @@ Welcome to weaver's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
-   weaver
+   introduction.rst
+   developer.rst
+   datasets_list.rst
+   code_of_conduct.rst
+   modules.rst
+
 
 
 Indices and tables
