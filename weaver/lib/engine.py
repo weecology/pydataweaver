@@ -17,7 +17,6 @@ import re
 import time
 from urllib.request import urlretrieve
 from weaver.lib.tools import open_fr, open_fw, open_csvw
-from weaver.lib.defaults import DATA_SEARCH_PATHS, DATA_WRITE_PATH
 from weaver.lib.warning import Warning
 
 
@@ -86,13 +85,6 @@ class Engine(object):
         create_stmt = "CREATE DATABASE " + self.database_name()
         return create_stmt
 
-    def create_raw_data_dir(self):
-        """Check to see if the archive directory exists and creates it if
-        necessary."""
-        path = self.format_data_dir()
-        if not os.path.exists(path):
-            os.makedirs(path)
-
     def database_name(self, name=None):
         """Return name of the database."""
         if not name:
@@ -105,24 +97,6 @@ class Engine(object):
         except KeyError:
             db_name = name
         return db_name.replace('-', '_')
-
-    def download_file(self, url, filename):
-        """Download file to the raw data directory."""
-        if not self.find_file(filename) or not self.use_cache:
-            path = self.format_filename(filename)
-            self.create_raw_data_dir()
-            print("\nDownloading " + filename + "...")
-            try:
-                urlretrieve(url, path, reporthook=reporthook)
-            except:
-                # For some urls lacking filenames urlretrieve from the future
-                # package seems to fail. This issue occurred in the PlantTaxonomy
-                # script. If this happens, fall back to the standard Python 2 version.
-                from urllib import urlretrieve as py2urlretrieve
-                py2urlretrieve(url, path, reporthook=reporthook)
-            finally:
-                # Download is complete, set to prevent repeated downloads
-                self.use_cache = True
 
     def drop_statement(self, objecttype, objectname):
         """Return drop table or database SQL statement."""
@@ -156,23 +130,6 @@ class Engine(object):
             print('\n'.join(str(w) for w in self.warnings))
 
         self.disconnect()
-
-    def find_file(self, filename):
-        """Check for an existing datafile."""
-        for search_path in DATA_SEARCH_PATHS:
-            search_path = search_path.format(dataset=self.script.name)
-            file_path = os.path.normpath(os.path.join(search_path, filename))
-            if file_exists(file_path):
-                return file_path
-        return False
-
-    def format_data_dir(self):
-        """Return correctly formatted raw data directory location."""
-        return DATA_WRITE_PATH.format(dataset=self.script.name)
-
-    def format_filename(self, filename):
-        """Return full path of a file in the archive directory."""
-        return os.path.join(self.format_data_dir(), filename)
 
     def get_cursor(self):
         """Get db cursor."""

@@ -93,18 +93,12 @@ def final_cleanup(engine):
 config_path = os.path.join(HOME_DIR, 'connections.config')
 
 
-def reset_weaver(scope="all", ask_permission=True):
+def reset_weaver(scope="scripts", ask_permission=True):
     """Remove stored information on scripts, data, and connections."""
     warning_messages = {
-        'all': "\nThis will remove existing scripts and cached data."
-               "\nSpecifically it will remove the scripts and raw_data folders"
-               "in {}\nDo you want to proceed? (y/N)\n",
         'scripts': "\nThis will remove existing scripts."
                    + "\nSpecifically it will remove the scripts folder in {}."
                    + "\nDo you want to proceed? (y/N)\n",
-        'data': "\nThis will remove raw data cached by the weaver."
-                + "\nSpecifically it will remove the raw_data folder in {}."
-                + "\nDo you want to proceed? (y/N)\n"
     }
     path = os.path.normpath(HOME_DIR)
     warn_msg = warning_messages[scope].format(path)
@@ -116,10 +110,7 @@ def reset_weaver(scope="all", ask_permission=True):
     else:
         confirm = 'y'
     if confirm.lower() == 'y':
-        if scope in ['data', 'all']:
-            if os.path.exists(os.path.join(path, 'raw_data')):
-                shutil.rmtree(os.path.join(path, 'raw_data'))
-        if scope in ['scripts', 'all']:
+        if scope in ['scripts']:
             if os.path.exists(os.path.join(path, 'scripts')):
                 shutil.rmtree(os.path.join(path, 'scripts'))
 
