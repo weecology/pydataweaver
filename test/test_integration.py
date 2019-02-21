@@ -4,10 +4,10 @@ from __future__ import print_function
 
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
-import shlex
 from collections import OrderedDict
 from imp import reload
 
@@ -234,6 +234,10 @@ RETRIEVER_TESTS_DATA = [table_one,
                         table_five
                         ]
 
+# Retriever script names
+TESTS_SCRIPTS = [data_dict["name"]
+                 for data_dict in RETRIEVER_TESTS_DATA]
+
 # Weaver defaults
 # Engines
 postgres_engine, sqlite_engine = engine_list
@@ -243,7 +247,7 @@ WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
 # Weaver test data(Tuple)
 # (Script file name with no extensio, script name, result table, expected)
 
-WEAVER_TEST_DATA_PACKAGE_FILES2 = [
+WEAVER_TEST_DATA = [
     # TODO: un-comment and ensure test passes
 
     ('multi_columns_multi_tables_caps',
@@ -307,7 +311,9 @@ WEAVER_TEST_DATA_PACKAGE_FILES2 = [
 
 # File names without `.json` extension
 WEAVER_TEST_DATA_PACKAGE_FILES = [file_base_names[0]
-                                  for file_base_names in WEAVER_TEST_DATA_PACKAGE_FILES2]
+                                  for file_base_names in WEAVER_TEST_DATA]
+weaver_test_parameters = [(test[1], test[2], test[3])
+                          for test in WEAVER_TEST_DATA]
 
 
 def set_retriever_resources(resource_up=True):
@@ -371,9 +377,7 @@ def set_weaver_data_packages(resources_up=True):
                 os.remove(dest_path)
 
 
-# weaver_reload_scripts()
 def install_to_database(dataset, install_function, config):
-    # install_function(dataset.replace('_', '-'), **config)
     install_function(dataset, **config)
     return
 
@@ -401,10 +405,6 @@ def teardown_sqlite_db():
 
 
 def install_dataset_postgres(dataset):
-    """Install test dataset into postgres ."""
-    # cmd = 'psql -U postgres -d testdb -h localhost -c ' \
-    #       '"DROP SCHEMA IF EXISTS testschema CASCADE"'
-    # subprocess.call(shlex.split(cmd))
     postgres_engine.opts = {'engine': 'postgres',
                             'user': 'postgres',
                             'password': os_password,
@@ -434,7 +434,7 @@ def teardown_postgres_db():
     subprocess.call(shlex.split(cmd))
 
     # Weaver database
-    for file_base_names in WEAVER_TEST_DATA_PACKAGE_FILES2:
+    for file_base_names in WEAVER_TEST_DATA:
         dataset = file_base_names[1]
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
         cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"{sql_stm}\"'
@@ -460,16 +460,9 @@ def test_retriever_test_resources():
     """Test retriever resource files"""
     scrpts_and_raw_data = True
     # ToDOs: Change tests the db_md5 and make it Global
-    tests_scripts = [
-        "table-one",
-        "table-two",
-        "table-three",
-        "table-four",
-        "table-five"]
-
-    for items in tests_scripts:
+    for items in TESTS_SCRIPTS:
         retriever_raw_data_path = os.path.normpath(
-            os.path.join(RETRIEVER_HOME_DIR, 'raw_data', items, items .replace("-", "_")+ '.txt'))
+            os.path.join(RETRIEVER_HOME_DIR, 'raw_data', items, items.replace("-", "_") + '.txt'))
         if not file_exists(retriever_raw_data_path):
             scrpts_and_raw_data = False
         retriever_script_path = os.path.normpath(
@@ -481,12 +474,6 @@ def test_retriever_test_resources():
 
 def test_restiever_test_scripts():
     """Test retriever test scripts"""
-    TESTS_SCRIPTS = [
-        "table-one",
-        "table-two",
-        "table-three",
-        "table-four",
-        "table-five"]
     assert set(TESTS_SCRIPTS).issubset(set(dataset_names()))
 
 
@@ -500,20 +487,14 @@ def test_weaver_test_data_packages():
     assert data_packages_exists is True
 
 
-    # Weaver integration
-
-
-test_parameters = [(test[1], test[2], test[3])
-                   for test in WEAVER_TEST_DATA_PACKAGE_FILES2]
-
-
+# Weaver integration
 def get_script_module(script_name):
     """Load a script module."""
     print(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
     return read_json(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
 
 
-def get_output_as_csv(f, dataset, engines, tmpdir, db):
+def get_output_as_csv(dataset, engines, db):
     """integrate datasets and return the output as a csv."""
     import weaver
     weaver_reload_scripts()
@@ -522,10 +503,8 @@ def get_output_as_csv(f, dataset, engines, tmpdir, db):
     return csv_file
 
 
-@pytest.mark.parametrize(
-    "f, dataset, csv_file, expected",
-    WEAVER_TEST_DATA_PACKAGE_FILES2)
-def test_postgres(f, dataset, csv_file, expected):
+@pytest.mark.parametrize("dataset, csv_file, expected", weaver_test_parameters)
+def test_postgres(dataset, csv_file, expected):
     tmpdir = None
     postgres_engine.opts = {'engine': 'postgres',
                             'user': 'postgres',
@@ -541,21 +520,14 @@ def test_postgres(f, dataset, csv_file, expected):
                       "database": postgres_engine.opts['database'],
                       "database_name": postgres_engine.opts['database_name'],
                       "table_name": postgres_engine.opts['table_name']}
-    res_csv = get_output_as_csv(
-        f,
-        dataset,
-        postgres_engine,
-        tmpdir,
-        db=postgres_engine.opts['database_name'])
-
-    # df = pandas.DataFrame.from_items(expected)
+    res_csv = get_output_as_csv(dataset, postgres_engine, db=postgres_engine.opts['database_name'])
     df = pandas.DataFrame.from_dict(OrderedDict(expected))
-
     data = pandas.read_csv(res_csv)
     os.remove(res_csv)
 
+    # The SQL results returned always change in order.
+    # tests the equality of column names and then tests the sorted data frames
     assert sorted(list(data.columns)) == sorted(list(df.columns))
     data = data[sorted(sorted(list(data.columns)))]
     df = df[sorted(sorted(list(df.columns)))]
-
     assert df.equals(data)
