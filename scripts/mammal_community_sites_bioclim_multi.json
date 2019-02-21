@@ -1,5 +1,5 @@
 {
-  "name": "mammal-sites-bioclim-1-2",
+  "name": "mammal-community-sites-all-bioclim",
   "version": "1.0.0",
   "citation": [
     {
@@ -7,16 +7,14 @@
       "mammal-community-db": "Katherine M. Thibault, Sarah R. Supp, Mikaelle Giffin, Ethan P. White, and S. K. Morgan Ernest. 2011. Species composition and abundance of mammalian communities. Ecology 92:2316."
     }
   ],
-  "description": "Integrated dataset of Bioclim bio1, bio2 and mammal communities datasets",
+  "description": "Integrated dataset of Bioclim bio 1 and mammal communities  mammal communities",
   "retriever-datasets": [
     "mammal-community-db",
     "bioclim"
   ],
   "keywords": [
     "mammals",
-    "climate",
-    "spatial-data",
-    "global"
+    "global-scale"
   ],
   "licenses":
     {
@@ -24,10 +22,9 @@
       "bioclim": ["CC-BY-SA"]
     },
   "result": {
-    "dataset": "mammal_sites_bioclim",
-    "table": "site_bioclim_one_two",
-    "fields": [],
-    "lat_long": ["latitude","longitude"]
+    "dataset": "mammal_community_sites_all_bioclim",
+    "table": "site_bioclim",
+    "fields": []
   },
   "main_file": {
     "path": "mammal_community_db.sites",
@@ -62,7 +59,6 @@
       "database_name": "mammal_community_db",
       "table_name": "sites",
       "table_type": "tabular",
-      "lat_long": ["latitude","longitude"],
       "fields": [
         "site_id",
         "reference_id",
@@ -127,5 +123,6 @@
         "bioclim.bio2": ["geom"]
       }
     }
+
   ]
 }
