@@ -1,3 +1,4 @@
+retriever
 future
 xlrd>=0.7
 argcomplete
@@ -6,3 +7,4 @@ psycopg2>=2.0
 numpydoc
 sphinx_py3doc_enhanced_theme
 sphinxcontrib-napoleon
+pandas

@@ -5,7 +5,6 @@ from future import standard_library
 
 standard_library.install_aliases()
 import os
-import sys
 import requests
 import imp
 from tqdm import tqdm
@@ -26,7 +25,7 @@ def _download_from_repository(filepath, newpath, repo=REPOSITORY):
         raise
 
 
-def check_for_updates(quiet=False):
+def check_for_updates():
     """Check for updates to datasets.
 
     This updates the HOME_DIR scripts directory with the latest script versions

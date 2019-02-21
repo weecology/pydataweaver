@@ -18,6 +18,7 @@ def make_sql(dataset):
     # assume that the latitude and longitude fields are in the main file.
     # use ST_PointFromText ST_PointFromText('POINT(-71.064 42.28)', 4326);
     # 2. Refactoring to after raster joins are finalized
+
     main_table_path = dataset.main_file["path"]
     processed_tables = {main_table_path: {'name': 'T1'}}
     as_processed_table = processed_tables
@@ -27,14 +28,14 @@ def make_sql(dataset):
         as_processed_table[main_table_path]["longitude"] = dataset.main_file["lat_long"][1]
 
     query_statement = ""
-    all_fields = []
+    all_fields = []  # Remove the geom or rast fields used to calculate feature value.
     unique_f = set()
     rast_values = []
 
     if "fields" in dataset.main_file:
         if dataset.main_file["fields"]:
             all_fields += [as_processed_table[main_table_path]["name"] +
-                           "." + item_f for item_f in dataset.main_file["fields"]]
+                           "." + item_f.lower() for item_f in dataset.main_file["fields"]]
             unique_f |= set(dataset.main_file["fields"])
 
     # Process all tables that are to be joined
@@ -52,6 +53,7 @@ def make_sql(dataset):
         join_with = res_set.pop()
 
         rast_alias = ''
+        geom_alias = ''
         where_clause = ''
         left_join = ""
         left_join_on = ""
@@ -84,7 +86,7 @@ def make_sql(dataset):
 
         local_fields_used = []
         if "fields_to_use" in table2join:
-            local_fields_used = table2join["fields_to_use"]
+            local_fields_used = [field_to_lower.lower() for field_to_lower in table2join["fields_to_use"]]
 
             if vector_table:
                 # Remove 'geom'
@@ -102,6 +104,7 @@ def make_sql(dataset):
                     'geom AS {geom_alias}'.format(
                         geom_alias=geom_alias))
                 local_fields_used = list(local_vector_fields)
+                # remove_fields += geom_alias
                 # Update the join on dictionary with the new alias
                 to_join = rename_fields(to_join, "geom", geom_alias)
 
@@ -118,7 +121,7 @@ def make_sql(dataset):
                 local_raster_fields.add('rast AS {rast_alias}'
                                         ''.format(rast_alias=rast_alias))
                 local_fields_used = list(local_raster_fields)
-                all_fields += [as_tables_dot + rast_alias]
+                # all_fields += [as_tables_dot + rast_alias]
 
                 # Update the join on dictionary with the new alias
                 to_join = rename_fields(to_join, "rast", rast_alias)
@@ -225,7 +228,7 @@ def make_sql(dataset):
                              ", 1, ST_PointFromText(FORMAT('POINT(%s %s)', " \
                              "cast({T}.{longitude} as varchar), " \
                              "cast({T}.{latitude} as varchar)), " \
-                             "4326)) ".format(T=T, longitude=x, latitude=y)
+                             "4326)) as feature_{ras}".format(T=T, longitude=x, latitude=y, ras=rast_alias)
                 # Add the value to final select statement
                 rast_values.append(rast_value)
                 all_fields += [rast_value]
@@ -239,6 +242,9 @@ def make_sql(dataset):
                              "{tablei_as}.{geomalias}) ".format(T=T, geovalue=geovalue,
                                                                 tablei_as=as_tables,
                                                                 geomalias=geom_alias)
+                # change the name of field to match the table
+                new_geom_value = geovalue + " as feature_{geo}".format(geo=geom_alias)
+                all_fields += [new_geom_value]
         if tabular_table and make_local_temp:
             # Create `LEFT JOIN` statements from non pivot tables
             _all_fields = ', '.join(str(e) for e in local_fields_used)
@@ -287,9 +293,9 @@ def make_sql(dataset):
                 new_on = "{tab_i}.{field_i}={tab_j}.{field_j}".format(
                     tab_i=as_processed_table[str(tab_field_index[0])]['name'],
                     # field_i=items,
-                    field_i=temp_dict[tab_field_index[0]][num],
+                    field_i=temp_dict[tab_field_index[0]][num].lower(),
                     tab_j=as_processed_table[str(tab_field_index[1])]['name'],
-                    field_j=temp_dict[tab_field_index[1]][num])
+                    field_j=temp_dict[tab_field_index[1]][num].lower())
                 on_diff_stmt.append(new_on)
 
             all_on_stmts = on_diff_stmt + on_common_stmt
@@ -298,7 +304,6 @@ def make_sql(dataset):
             left_join_on += on_condition
 
         query_statement += left_join + left_join_on
-
         # Process the main file and create the query string
         # for all the required fields
         if "fields" in dataset.main_file:
@@ -307,9 +312,9 @@ def make_sql(dataset):
                 # ["latitude", "longitude"] [y,x]
                 y = dataset.main_file["lat_long"][0]
                 x = dataset.main_file["lat_long"][1]
-                where_clause = "WHERE {latitude} Not LIKE '%NULL%' " \
+                where_clause = "WHERE CAST({latitude} AS TEXT) NOT LIKE '%NULL%' " \
                                "AND {latitude} IS NOT NULL " \
-                               "AND {longitude} Not LIKE '%NULL%' " \
+                               "AND CAST({longitude} AS TEXT) NOT LIKE '%NULL%' " \
                                "AND {longitude} IS NOT NULL " \
                                "".format(latitude=y,
                                                                            longitude=x)
@@ -334,4 +339,5 @@ def make_sql(dataset):
                                         res="{result_dbi}.{result_tablei}",
                                         where_stm=where_clause,
                                         table_m=as_processed_table[main_table_path]["name"])
+
     return pivot_query + query_statement

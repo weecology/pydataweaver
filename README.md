@@ -23,10 +23,14 @@ Dependencies
 
 This package requires Python 3.3+, recommends Python 3.6+ and depends on the following packages:
 
+     retriever
      PyMySQL>=0.4
      psycopg2>=2.0
      gdal
      future
+     numpydoc
+     pandas
+
 
 They can be installed using ``pip``.
 
@@ -67,21 +71,23 @@ $ weaver --help
 
 ```shell
 
-usage: weaver [-h] [-v] [-q] {trim,help,ls,citation,join} ...
+usage: weaver [-h] [-v] [-q] {help,ls,citation,license,join,update} ...
 
 positional arguments:
-  {trim,help,ls,citation,join}
+  {help,ls,citation,license,join,update}
                         sub-command help
-    trim                select given attributes from a single file
     help
     ls                  display a list all available datasets
     citation            view citation
-    join                integrate datasets using the configuration file
+    license             view dataset licenses
+    join                integrate data using a data package script
+    update              download updated versions of data package scripts
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
   -q, --quiet           suppress command-line output
+
 ```
 
 To get a list of available dataset use `weaver ls`
@@ -90,11 +96,20 @@ $ weaver ls
 
 ```shell
 
-Available datasets : 7
+Available datasets : 11
 
-mammal-community-bioclim        mammal-community-sites-harvard-soil  mammal-sites-bioclim-1-2
-mammal-community-masses         mammal-diet-mammal-life-history      portal-plot-species
+breed-bird-routes-bioclim
+mammal-community-bioclim
+mammal-community-masses
+mammal-community-sites-all-bioclim
 mammal-community-sites-bioclim
+mammal-community-sites-harvard-linear-features
+mammal-community-sites-harvard-linear-features-soils
+mammal-community-sites-harvard-soil
+mammal-diet-mammal-life-history
+mammal-sites-bioclim-1-2
+portal-plot-species
+
 .
 ...
 ```
@@ -113,6 +128,57 @@ Citations:
 mammal-life-hist:    S. K. Morgan Ernest. 2003. ....
 mammal-diet:    Kissling WD, Dalby L, Flojgaard C, Lenoir J, ...
 
+```
+
+Integrating Data
+----------------
+To integrate data, run weaver join [data package name] and provide the connection configurations.
+
+
+```shell
+
+weaver join postgres -h
+usage: weaver join postgres [-h] [--user [USER]] [--password [PASSWORD]]
+                            [--host [HOST]] [--port [PORT]]
+                            [--database [DATABASE]]
+                            [--database_name [DATABASE_NAME]]
+                            [--table_name [TABLE_NAME]]
+                            dataset
+
+positional arguments:
+  dataset               file name
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --user [USER], -u [USER]
+                        Enter your PostgreSQL username
+  --password [PASSWORD], -p [PASSWORD]
+                        Enter your password
+  --host [HOST], -o [HOST]
+                        Enter your PostgreSQL host
+  --port [PORT], -r [PORT]
+                        Enter your PostgreSQL port
+  --database [DATABASE], -d [DATABASE]
+                        Enter your PostgreSQL database name
+  --database_name [DATABASE_NAME], -a [DATABASE_NAME]
+                        Format of schema name
+  --table_name [TABLE_NAME], -t [TABLE_NAME]
+                        Format of table name
+
+```
+
+To use the weaver with postges .pgpass file set
+
+```shell
+
+weaver join postgres
+```
+
+or with command line configurations supplied
+
+```shell
+
+weaver join postgres -u name-of-user -h host-name -d database-to-use
 ```
 
 Contribution

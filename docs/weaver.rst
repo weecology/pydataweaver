@@ -6,7 +6,6 @@ Subpackages
 
 .. toctree::
 
-    weaver.app
     weaver.engines
     weaver.lib
 

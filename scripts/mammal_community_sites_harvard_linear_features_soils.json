@@ -1,5 +1,5 @@
 {
-  "name": "mammal-community-sites-harvard-soil",
+  "name": "mammal-community-sites-harvard-linear-features-soils",
   "version": "1.0.0",
   "citation": [
     {
@@ -14,7 +14,7 @@
   ],
   "keywords": [
     "mammals",
-    "harvard soil"
+    "harvard linear features"
   ],
   "licenses":
     {
@@ -22,8 +22,8 @@
       "harvard-forest": ["CC BY-ND"]
     },
   "result": {
-    "dataset": "mammal_community_sites_harvard_soil",
-    "table": "sites_soils",
+    "dataset": "mammal_community_sites_harvard_linear_features_soil",
+    "table": "sites_linear_features_soils",
     "fields": [],
      "lat_long": ["latitude","longitude"]
   },
@@ -58,6 +58,17 @@
   "tables": [
     {
       "database_name": "harvard_forest",
+      "table_name": "linear_features",
+      "table_type": "vector",
+      "fields": [
+        "gid",
+        "type",
+        "notes",
+        "geom"
+      ]
+    },
+    {
+      "database_name": "harvard_forest",
       "table_name": "soils",
       "table_type": "vector",
       "fields": [
@@ -73,14 +84,25 @@
   ],
   "join": [
     {
+      "table": "harvard_forest.linear_features",
+      "database_name": "harvard_forest",
+      "table_type": "vector",
+      "table_name": "linear_features",
+       "fields_to_use": [
+         "type"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "mammal_community_db.sites": ["latitude", "longitude"],
+        "harvard_forest.linear_features": ["geom"]
+      }
+    },
+    {
       "table": "harvard_forest.soils",
       "database_name": "harvard_forest",
       "table_type": "vector",
       "table_name": "soils",
        "fields_to_use": [
-         "gid",
-         "type_",
-          "notes",
           "simmons_so",
           "mesic_soil",
           "drainage_c"

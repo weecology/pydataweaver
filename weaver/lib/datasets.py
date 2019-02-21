@@ -48,10 +48,11 @@ def license(dataset):
     """Get the license for a dataset."""
     return get_script(dataset).licenses
 
+
 def dataset_licenses():
     """Return set with all available licenses."""
     script_license =[]
     for script in SCRIPT_LIST():
         temp_list =[lc.lower for lc in sum(script.licenses.values(), [])]
         script_license.append(temp_list)
-    return set(license_values)
+    return set(script_license)
