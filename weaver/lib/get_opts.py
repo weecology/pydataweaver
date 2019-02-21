@@ -22,6 +22,7 @@ citation_parser = subparsers.add_parser('citation', help='view citation')
 license_parser = subparsers.add_parser('license', help='view dataset licenses')
 join_parser = subparsers.add_parser('join', help='integrate data using a data package script')
 update_parser = subparsers.add_parser('update', help='download updated versions of data package scripts')
+reset_parser = subparsers.add_parser('reset', help='reset weaver: deletes scripts')
 
 #  ..............................................................
 # subparsers with Arguments
@@ -35,6 +36,7 @@ ls_parser.add_argument('-k', help='search datasets with keyword(s)', nargs='*', 
 ls_parser.add_argument('-v', help='verbose list of all datasets', nargs='*', default=False)
 join_parser.add_argument('--debug', help='run in debug mode', action='store_true')
 join_subparsers = join_parser.add_subparsers(help='engine-specific help', dest='engine')
+reset_parser.add_argument('scope', help='things to reset: scripts', choices=['scripts'])
 
 for engine in engine_list:
     join_engine_parser = join_subparsers.add_parser(engine.abbreviation, help=engine.name)
