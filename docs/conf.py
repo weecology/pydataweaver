@@ -18,15 +18,16 @@ from weaver.lib.tools import open_fw
 from weaver.lib.defaults import VERSION, COPYRIGHT
 
 reload(sys)
-if hasattr(sys, 'setdefaultencoding'):
+if hasattr(sys, "setdefaultencoding"):
     # set default encoding to latin-1 to decode source text
-    sys.setdefaultencoding('latin-1')
+    sys.setdefaultencoding("latin-1")
 
 
 def to_str(object, object_encoding=encoding):
     if sys.version_info >= (3, 0, 0):
-        return str(object).encode('UTF-8').decode(encoding)
+        return str(object).encode("UTF-8").decode(encoding)
     return object
+
 
 # Create the .rst file for the available datasets
 datasetfile = open_fw("datasets_list.rst")
@@ -51,20 +52,25 @@ for script_num, script in enumerate(WEAVER_ALL_SCRIPTS, start=1):
     datasetfile.write("-" * (len(title) - 1) + "\n\n")
     # keep the gap between : {} standard as required by restructuredtext
     datasetfile.write(":name: {}\n\n".format(name))
-
-    datasetfile.write(":citation: {}\n\n".format(to_str(script.citation, encoding)))
     datasetfile.write(":description: {}\n\n".format(script.description))
+    datasetfile.write(":citation:\n\n")
+    for items in script.citation:
+        for cite in items.keys():
+            datasetfile.write("\t**"+cite + "**: " + items[cite] + "\n\n")
+
+        # datasetfile.write(":citation: {}\n\n".format(to_str(script.citation, encoding)))
+
     datasetfile.write("\n\n")
 datasetfile.close()
 
-needs_sphinx = '1.3'
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
-templates_path = ['_templates']
-source_suffix = '.rst'
-master_doc = 'index'
+needs_sphinx = "1.3"
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
+templates_path = ["_templates"]
+source_suffix = ".rst"
+master_doc = "index"
 
 # General information about the project.
-project = u'Data Weaver'
+project = u"Data Weaver"
 copyright = COPYRIGHT
 
 version = release = VERSION
@@ -74,6 +80,6 @@ version = release = VERSION
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-html_theme = 'sphinx_rtd_theme'
+pygments_style = "sphinx"
+html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
