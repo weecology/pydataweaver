@@ -16,8 +16,6 @@ encoding = ENCODING.lower()
 from weaver.lib.scripts import SCRIPT_LIST as WEAVER_ALL_SCRIPTS
 from weaver.lib.tools import open_fw
 from weaver.lib.defaults import VERSION, COPYRIGHT
-from weaver import reload_scripts
-
 
 reload(sys)
 if hasattr(sys, 'setdefaultencoding'):
@@ -29,10 +27,6 @@ def to_str(object, object_encoding=encoding):
     if sys.version_info >= (3, 0, 0):
         return str(object).encode('UTF-8').decode(encoding)
     return object
-
-
-# Update weaver scripts
-reload_scripts()
 
 # Create the .rst file for the available datasets
 datasetfile = open_fw("datasets_list.rst")
