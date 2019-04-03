@@ -1,5 +1,5 @@
 {
-  "name": "test-raster",
+  "name": "test-multi-raster",
   "version": "1.0.0",
   "citation": [
     {
@@ -18,7 +18,7 @@
     {
     },
   "result": {
-    "dataset": "test_raster",
+    "dataset": "test_multi_raster",
     "table": "raster",
     "fields": [],
      "lat_long": ["latitude","longitude"]

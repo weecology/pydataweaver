@@ -448,17 +448,6 @@ def teardown_postgres_db():
         subprocess.call(shlex.split(dfd))
 
 
-def setup_module():
-
-    # Set up test data and scripts
-    set_retriever_resources(resource_up=True)
-    set_weaver_data_packages(resources_up=True)
-
-    # set up postgres database
-    setup_postgres_retriever_db()
-    setup_sqlite_retriever_db()
-
-
 # Test Retriever resources
 def test_retriever_test_resources():
     """Test retriever resource files"""
@@ -505,6 +494,22 @@ def get_output_as_csv(dataset, engines, db):
     eng = weaver.join_postgres(dataset, database=testdb, host=pgdb_host, password=os_password)
     csv_file = eng.to_csv()
     return csv_file
+
+
+def teardown_module():
+    teardown_postgres_db()
+    teardown_sqlite_db()
+
+
+def setup_module():
+
+    # Set up test data and scripts
+    set_retriever_resources(resource_up=True)
+    set_weaver_data_packages(resources_up=True)
+
+    # set up postgres database
+    setup_postgres_retriever_db()
+    setup_sqlite_retriever_db()
 
 
 @pytest.mark.parametrize("dataset, csv_file, expected", weaver_test_parameters)
