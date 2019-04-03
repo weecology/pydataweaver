@@ -25,8 +25,8 @@
     "fields": []
   },
   "main_file": {
-    "path": "testschema.table_one",
-    "database_name": "testschema",
+    "path": "testschema_weaver.table_one",
+    "database_name": "testschema_weaver",
     "table_name": "table_one",
     "table_type": "tabular",
       "fields": [
@@ -37,7 +37,7 @@
   },
   "tables": [
     {
-      "database_name": "testschema",
+      "database_name": "testschema_weaver",
       "table_name": "table_one",
       "table_type": "tabular",
       "fields": [
@@ -47,7 +47,7 @@
       ]
     },
     {
-      "database_name": "testschema",
+      "database_name": "testschema_weaver",
       "table_name": "table_three",
       "table_type": "tabular",
       "fields": [
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "database_name": "testschema",
+      "database_name": "testschema_weaver",
       "table_name": "table_five",
       "table_type": "tabular",
       "fields": [
@@ -70,8 +70,8 @@
   ],
   "join": [
     {
-      "table": "testschema.table_three",
-      "database_name": "testschema",
+      "table": "testschema_weaver.table_three",
+      "database_name": "testschema_weaver",
       "table_name": "table_three",
       "table_type": "tabular",
       "fields_to_use": [
@@ -81,13 +81,13 @@
        ],
       "join_ocn": {
         "common_field": [],
-        "testschema.table_one": ["a", "b"],
-        "testschema.table_three": ["a", "b"]
+        "testschema_weaver.table_one": ["a", "b"],
+        "testschema_weaver.table_three": ["a", "b"]
       }
     },
     {
-      "table": "testschema.table_five",
-      "database_name": "testschema",
+      "table": "testschema_weaver.table_five",
+      "database_name": "testschema_weaver",
       "table_name": "table_five",
       "table_type": "tabular",
       "fields_to_use": [
@@ -98,8 +98,8 @@
        ],
       "join_ocn": {
         "common_field": [],
-        "testschema.table_one": ["a", "b"],
-        "testschema.table_five": ["A", "B"]
+        "testschema_weaver.table_one": ["a", "b"],
+        "testschema_weaver.table_five": ["A", "B"]
       }
     }
   ]

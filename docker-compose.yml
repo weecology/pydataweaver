@@ -1,37 +1,37 @@
 version: '3'
 
 services:
-  mysqldb:
-    image: mysql:5.7
+  pgdb_weaver:
+    image: kartoza/postgis:11.0-2.5
+    volumes:
+      - ./cli_tools/postgis-data:/var/lib/postgresql
+      - ./cli_tools/:/backups
+    container_name: pgdb_weav_container
     environment:
-      MYSQL_USER: travis
-      MYSQL_PASSWORD: Password12!
-      MYSQL_ROOT_PASSWORD: Password12!
-      MYSQL_DATABASE: testdb
-
-  pgdbs:
-    image: postgres
-    environment:
-      # Lets use sdocker-entrypoint-initdb.d/init-user-db.sh
-      # to set up the user and create the user privilege
-      # POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Password12!
-      POSTGRES_DB: testdb
+      - POSTGRES_DB=testdb_weaver
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=Password12!
+      - ALLOW_IP_RANGE=0.0.0.0/0
+    restart: on-failure
 
   weav:
     container_name: weaver_container
     image: weaver_image
-    command: bash -c "python --version"
+    command: bash -c "Python --version"
     environment:
       # If IN_DOCKER is set, use service names as hosts names(travis)
       # otherwise use localhost (local tests)
       "IN_DOCKER" : "true"
-    
+      "PGUSER" : "postgres"
+      "PGPASSWORD" : "Password12!"
+      "PGDATABASE" : "testdb_weaver"
+      "PGPORT" : "5432"
+      "PGHOST" : "pgdb_weaver"
+    restart: on-failure
     build: .
     
     depends_on:
-      - mysqldb
-      - pgdbs
+      - pgdb_weaver
     
     ports:
       - 5001:80
