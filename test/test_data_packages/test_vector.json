@@ -1,0 +1,101 @@
+{
+  "name": "test-vector",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "us_eco": "Fill."
+    }
+  ],
+  "description": "Integrated test dataset bioclim, us eco levels",
+  "retriever-datasets": [
+  ],
+  "keywords": [
+  ],
+  "licenses":
+    {
+    },
+  "result": {
+    "dataset": "test_vector",
+    "table": "vector_table",
+    "fields": [],
+     "lat_long": ["latitude","longitude"]
+  },
+  "main_file": {
+    "path": "testsurverytwo.sites",
+    "database_name": "testsurverytwo",
+    "table_name": "sites",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+    "fields": [
+        "site_id",
+        "state",
+        "latitude",
+        "longitude",
+        "habitat_code"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "testsurverytwo",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "lat_long": ["latitude","longitude"],
+      "fields": [
+          "site_id",
+          "state",
+          "latitude",
+          "longitude",
+          "habitat_code"
+        ]
+    },
+    {
+      "database_name": "test_us_eco",
+      "table_name": "us_eco",
+      "table_type": "vector",
+      "fields": [
+        "US_L3CODE",
+        "US_L3NAME",
+        "NA_L3CODE",
+        "NA_L3NAME",
+        "NA_L2CODE",
+        "NA_L2NAME",
+        "NA_L1CODE",
+        "NA_L1NAME",
+        "STATE_NAME",
+        "EPA_REGION",
+        "L3_KEY",
+        "L2_KEY",
+        "L1_KEY"
+      ]
+    }
+
+  ],
+  "join": [
+    {
+      "table": "test_us_eco.us_eco",
+      "database_name": "test_us_eco",
+      "table_type": "vector",
+      "table_name": "us_eco",
+       "fields_to_use": [
+        "US_L3CODE",
+        "US_L3NAME",
+        "NA_L3CODE",
+        "NA_L3NAME",
+        "NA_L2CODE",
+        "NA_L2NAME",
+        "NA_L1CODE",
+        "NA_L1NAME",
+        "STATE_NAME",
+        "EPA_REGION",
+        "L3_KEY",
+        "L2_KEY",
+        "L1_KEY"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "testsurverytwo.sites": ["latitude", "longitude"],
+        "test_us_eco.us_eco": ["geom"]
+      }
+    }
+  ]
+}

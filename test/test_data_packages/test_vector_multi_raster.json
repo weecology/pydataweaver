@@ -1,0 +1,143 @@
+{
+  "name": "test-vector-multi-raster",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "us_eco": "Fill.",
+      "us_eco": "Fill.",
+      "test_raster_bio1": "Fill",
+      "test_raster_bio2": "Fill"
+    }
+  ],
+  "description": "Integrated test dataset bioclim, us eco levels",
+  "retriever-datasets": [
+  ],
+  "keywords": [
+  ],
+  "licenses":
+    {
+    },
+  "result": {
+    "dataset": "test_vector_multi_raster",
+    "table": "vector_multi_raster",
+    "fields": [],
+     "lat_long": ["latitude","longitude"]
+  },
+  "main_file": {
+    "path": "testsurvery.sites",
+    "database_name": "testsurvery",
+    "table_name": "sites",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+    "fields": [
+        "site_id",
+        "state",
+        "latitude",
+        "longitude",
+        "habitat_code"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "testsurvery",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "lat_long": ["latitude","longitude"],
+      "fields": [
+          "site_id",
+          "state",
+          "latitude",
+          "longitude",
+          "habitat_code"
+        ]
+    },
+    {
+      "database_name": "test_us_eco",
+      "table_name": "us_eco",
+      "table_type": "vector",
+      "fields": [
+        "US_L3CODE",
+        "US_L3NAME",
+        "NA_L3CODE",
+        "NA_L3NAME",
+        "NA_L2CODE",
+        "NA_L2NAME",
+        "NA_L1CODE",
+        "NA_L1NAME",
+        "STATE_NAME",
+        "EPA_REGION",
+        "L3_KEY",
+        "L2_KEY",
+        "L1_KEY"
+      ]
+    },
+    {
+      "database_name": "test_raster_bio1",
+      "table_name": "raster_bio1",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    },
+    {
+      "database_name": "test_raster_bio2",
+      "table_name": "raster_bio2",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "test_us_eco.us_eco",
+      "database_name": "test_us_eco",
+      "table_type": "vector",
+      "table_name": "us_eco",
+       "fields_to_use": [
+        "US_L3CODE",
+        "US_L3NAME",
+        "NA_L3CODE",
+        "NA_L3NAME",
+        "NA_L2CODE",
+        "NA_L2NAME",
+        "NA_L1CODE",
+        "NA_L1NAME",
+        "STATE_NAME",
+        "EPA_REGION",
+        "L3_KEY",
+        "L2_KEY",
+        "L1_KEY"
+       ],
+      "join_ocn": {
+        "common_field": [],
+        "testsurvery.sites": ["latitude", "longitude"],
+        "test_us_eco.us_eco": ["geom"]
+      }
+    },
+    {
+      "table": "test_raster_bio1.raster_bio1",
+      "database_name": "test_raster_bio1",
+      "table_name": "raster_bio1",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "testsurvery.sites": ["latitude", "longitude"],
+        "test_raster_bio1.raster_bio1": ["geom"]
+      }
+    },
+    {
+      "table": "test_raster_bio2.raster_bio2",
+      "database_name": "test_raster_bio2",
+      "table_name": "raster_bio2",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "testsurvery.sites": ["latitude", "longitude"],
+        "test_raster_bio1.raster_bio1": ["geom"]
+      }
+    }
+  ]
+}
