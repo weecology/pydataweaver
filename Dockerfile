@@ -30,6 +30,9 @@ RUN retriever ls > /dev/null
 RUN pip install  psycopg2 pymysql > /dev/null
 RUN pip  install codecov pytest-cov  pytest-xdist pytest==3.9.3 -U
 
+# Install Postgis after Python is setup
+RUN apt-get install -y --force-yes postgis
+
 COPY . ./weaver
 # Use entrypoint to run more configurations.
 # Set permissions.
