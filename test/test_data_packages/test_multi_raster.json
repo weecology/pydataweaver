@@ -1,0 +1,77 @@
+{
+  "name": "test-multi-raster",
+  "version": "1.0.0",
+  "citation": [
+    {
+      "us_eco": "Fill.",
+      "us_eco": "Fill.",
+      "test_raster_bio1": "Fill",
+      "test_raster_bio2": "Fill"
+    }
+  ],
+  "description": "Integrated test dataset bioclim, us eco levels",
+  "retriever-datasets": [
+  ],
+  "keywords": [
+  ],
+  "licenses":
+    {
+    },
+  "result": {
+    "dataset": "test_multi_raster",
+    "table": "raster",
+    "fields": [],
+     "lat_long": ["latitude","longitude"]
+  },
+  "main_file": {
+    "path": "testsurveryone.sites",
+    "database_name": "testsurveryone",
+    "table_name": "sites",
+    "table_type": "tabular",
+    "lat_long": ["latitude","longitude"],
+    "fields": [
+        "site_id",
+        "state",
+        "latitude",
+        "longitude",
+        "habitat_code"
+      ]
+  },
+  "tables": [
+    {
+      "database_name": "testsurveryone",
+      "table_name": "sites",
+      "table_type": "tabular",
+      "lat_long": ["latitude","longitude"],
+      "fields": [
+          "site_id",
+          "state",
+          "latitude",
+          "longitude",
+          "habitat_code"
+        ]
+    },
+    {
+      "database_name": "test_raster_bio1",
+      "table_name": "raster_bio1",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "test_raster_bio1.raster_bio1",
+      "database_name": "test_raster_bio1",
+      "table_name": "raster_bio1",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "testsurveryone.sites": ["latitude", "longitude"],
+        "test_raster_bio1.raster_bio1": ["geom"]
+      }
+    }
+  ]
+}

@@ -23,8 +23,8 @@
     "fields": ["a","b", "c","e"]
   },
   "main_file": {
-    "path": "testschema.table_one",
-    "database_name": "testschema",
+    "path": "testschema_weaver.table_one",
+    "database_name": "testschema_weaver",
     "table_name": "table_one",
     "table_type": "tabular",
       "fields": [
@@ -35,7 +35,7 @@
   },
   "tables": [
     {
-      "database_name": "testschema",
+      "database_name": "testschema_weaver",
       "table_name": "table_one",
       "table_type": "tabular",
       "fields": [
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "database_name": "testschema",
+      "database_name": "testschema_weaver",
       "table_name": "table_two",
       "table_type": "tabular",
       "fields": [
@@ -57,8 +57,8 @@
   ],
   "join": [
     {
-      "table": "testschema.table_two",
-      "database_name": "testschema",
+      "table": "testschema_weaver.table_two",
+      "database_name": "testschema_weaver",
       "table_name": "table_two",
       "table_type": "tabular",
       "fields_to_use": [
@@ -67,8 +67,8 @@
        ],
       "join_ocn": {
         "common_field": [],
-        "testschema.table_one": ["a"],
-        "testschema.table_two": ["a"]
+        "testschema_weaver.table_one": ["a"],
+        "testschema_weaver.table_two": ["a"]
       }
     }
   ]

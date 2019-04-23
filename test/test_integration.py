@@ -38,17 +38,25 @@ RETRIEVER_SCRIPT_DIR = os.path.normpath(
     os.path.expanduser('~/.retriever/scripts/'))
 WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser('~/.weaver/'))
 WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser('~/.weaver/scripts/'))
+WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
+    os.path.join(FILE_LOCATION, "test_data_packages"))
 
 # Set postgres password, Appveyor service needs the password given
 # The Travis service obtains the password from the config file.
 os_password = ""
-pgdbs = "localhost"
-docker_or_travis = os.environ.get("IN_DOCKER")
+pgdb_host = "localhost"
+mysqldb_host = "localhost"
+testdb = "testdb_weaver"
+testschema = "testschema_weaver"
 
-# Check if the environment variable "IN_DOCKER" is set to "true"
+if os.name == "nt":
+    os_password = "Password12!"
+
+docker_or_travis = os.environ.get("IN_DOCKER")
 if docker_or_travis == "true":
     os_password = 'Password12!'
-    pgdbs = "pgdbs"
+    pgdb_host = "pgdb_weaver"
+    mysqldb_host = "mysqldb_weaver"
 
 table_one = {
     'name': 'table-one',
@@ -241,11 +249,10 @@ TESTS_SCRIPTS = [data_dict["name"]
 # Weaver defaults
 # Engines
 postgres_engine, sqlite_engine = engine_list
-WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
-    os.path.join(FILE_LOCATION, "test_data_packages"))
+
 
 # Weaver test data(Tuple)
-# (Script file name with no extensio, script name, result table, expected)
+# (Script file name with no extension, script name, result table, expected)
 
 WEAVER_TEST_DATA = [
     # TODO: un-comment and ensure test passes
@@ -384,7 +391,7 @@ def install_to_database(dataset, install_function, config):
 
 def install_sqlite_regression(dataset):
     """Install test dataset into sqlite."""
-    dbfile = os.path.normpath(os.path.join(os.getcwd(), 'testdb.sqlite'))
+    dbfile = os.path.normpath(os.path.join(os.getcwd(), testdb + '.sqlite'))
     sqlite_engine.opts = {
         'engine': 'sqlite',
         'file': dbfile,
@@ -400,7 +407,7 @@ def setup_sqlite_retriever_db():
 
 
 def teardown_sqlite_db():
-    dbfile = os.path.normpath(os.path.join(os.getcwd(), 'testdb.sqlite'))
+    dbfile = os.path.normpath(os.path.join(os.getcwd(), testdb + '.sqlite'))
     subprocess.call(['rm', '-r', dbfile])
 
 
@@ -408,10 +415,10 @@ def install_dataset_postgres(dataset):
     postgres_engine.opts = {'engine': 'postgres',
                             'user': 'postgres',
                             'password': os_password,
-                            'host': pgdbs,
+                            'host': pgdb_host,
                             'port': 5432,
-                            'database': 'testdb',
-                            'database_name': 'testschema',
+                            'database': testdb,
+                            'database_name': testschema,
                             'table_name': '{db}.{table}'}
     interface_opts = {"user": 'postgres',
                       "password": postgres_engine.opts['password'],
@@ -424,35 +431,21 @@ def install_dataset_postgres(dataset):
 
 def setup_postgres_retriever_db():
     for test_data in RETRIEVER_TESTS_DATA:
-        print(test_data["script"]["name"])
         install_dataset_postgres(test_data["script"]["name"])
 
 
 def teardown_postgres_db():
     # Retriever database
-    cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"DROP SCHEMA IF EXISTS testschema CASCADE\"'
+    cmd = 'psql -U postgres -d ' + testdb + '-h ' + pgdb_host + ' -w -c \"DROP SCHEMA IF EXISTS ' + testschema + 'CASCADE\"'
     subprocess.call(shlex.split(cmd))
 
     # Weaver database
     for file_base_names in WEAVER_TEST_DATA:
         dataset = file_base_names[1]
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
-        cmd = 'psql -U postgres -d testdb -h ' + pgdbs + ' -w -c \"{sql_stm}\"'
+        cmd = 'psql -U postgres -d ' + testdb + ' -h ' + pgdb_host + ' -w -c \"{sql_stm}\"'
         dfd = cmd.format(sql_stm=sql_stm)
         subprocess.call(shlex.split(dfd))
-
-
-def setup_module():
-    # Clean up any old files
-    teardown_sqlite_db()
-
-    # Set up test data and scripts
-    set_retriever_resources(resource_up=True)
-    set_weaver_data_packages(resources_up=True)
-
-    # set up postgres database
-    setup_postgres_retriever_db()
-    setup_sqlite_retriever_db()
 
 
 # Test Retriever resources
@@ -498,9 +491,25 @@ def get_output_as_csv(dataset, engines, db):
     """integrate datasets and return the output as a csv."""
     import weaver
     weaver_reload_scripts()
-    eng = weaver.join_postgres(dataset, database='testdb', host=pgdbs, password=os_password)
+    eng = weaver.join_postgres(dataset, database=testdb, host=pgdb_host, password=os_password)
     csv_file = eng.to_csv()
     return csv_file
+
+
+def teardown_module():
+    teardown_postgres_db()
+    teardown_sqlite_db()
+
+
+def setup_module():
+
+    # Set up test data and scripts
+    set_retriever_resources(resource_up=True)
+    set_weaver_data_packages(resources_up=True)
+
+    # set up postgres database
+    setup_postgres_retriever_db()
+    setup_sqlite_retriever_db()
 
 
 @pytest.mark.parametrize("dataset, csv_file, expected", weaver_test_parameters)
@@ -509,10 +518,10 @@ def test_postgres(dataset, csv_file, expected):
     postgres_engine.opts = {'engine': 'postgres',
                             'user': 'postgres',
                             'password': os_password,
-                            'host': pgdbs,
+                            'host': pgdb_host,
                             'port': 5432,
-                            'database': 'testdb',
-                            'database_name': 'testschema',
+                            'database': testdb,
+                            'database_name': testschema,
                             'table_name': '{db}.{table}'}
     interface_opts = {"user": 'postgres',
                       "password": postgres_engine.opts['password'],
