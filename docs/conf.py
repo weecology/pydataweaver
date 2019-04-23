@@ -56,9 +56,7 @@ for script_num, script in enumerate(WEAVER_ALL_SCRIPTS, start=1):
     datasetfile.write(":citation:\n\n")
     for items in script.citation:
         for cite in items.keys():
-            datasetfile.write("\t**"+cite + "**: " + items[cite] + "\n\n")
-
-        # datasetfile.write(":citation: {}\n\n".format(to_str(script.citation, encoding)))
+            datasetfile.write("\t**" + cite + "**: " + items[cite] + "\n\n")
 
     datasetfile.write("\n\n")
 datasetfile.close()
