@@ -19,14 +19,15 @@ class engine(Engine):
         "bool": "INTEGER",
     }
     placeholder = "?"
-    required_opts = [("file",
-                      "Enter the filename of your SQLite database",
-                      os.path.join(DATA_DIR, "sqlite.db"),
-                      ""),
-                     ("table_name",
-                      "Format of table name",
-                      "{db}_{table}"),
-                     ]
+    required_opts = [
+        (
+            "file",
+            "Enter the filename of your SQLite database",
+            os.path.join(DATA_DIR, "sqlite.db"),
+            "",
+        ),
+        ("table_name", "Format of table name", "{db}_{table}"),
+    ]
 
     def create_db(self):
         """Don't create database for SQLite
@@ -42,5 +43,6 @@ class engine(Engine):
     def get_connection(self):
         """Get db connection."""
         import sqlite3 as dbapi
+
         self.get_input()
         return dbapi.connect(self.opts["file"])

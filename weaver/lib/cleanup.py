@@ -15,7 +15,9 @@ def correct_invalid_value(value, args):
     try:
         if value in [item for item in args["missing_values"]]:
             return None
-        if float(value) in [float(item) for item in args["missing_values"] if floatable(item)]:
+        if float(value) in [
+            float(item) for item in args["missing_values"] if floatable(item)
+        ]:
             return None
         return value
     except:

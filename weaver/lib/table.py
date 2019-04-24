@@ -15,6 +15,7 @@ class Dataset(object):
 
     all have some common table features
     """
+
     def __init__(self, name=None):
         self.name = name
 
@@ -22,11 +23,9 @@ class Dataset(object):
 class TabularDataset(Dataset):
     """Information about a database table."""
 
-    def __init__(self, name=None,
-                 fields=[],
-                 table_type="tabular",
-                 database_name=None,
-                 **kwargs):
+    def __init__(
+        self, name=None, fields=[], table_type="tabular", database_name=None, **kwargs
+    ):
 
         self.name = name
         self.fields = fields
@@ -44,11 +43,10 @@ class TabularDataset(Dataset):
 
 class RasterDataset(Dataset):
     """Raster table implementation"""
-    def __init__(self, name=None,
-                 fields=[],
-                 table_type="raster",
-                 database_name=None,
-                 **kwargs):
+
+    def __init__(
+        self, name=None, fields=[], table_type="raster", database_name=None, **kwargs
+    ):
         self.name = None
         self.table_type = table_type
         self.group = None
@@ -60,7 +58,7 @@ class RasterDataset(Dataset):
         self.geoTransform = None
         self.parameter = None
         self.fields = fields
-        self.database_name=database_name
+        self.database_name = database_name
         self.extent = None
 
         for key in kwargs:
@@ -74,16 +72,14 @@ class RasterDataset(Dataset):
 class VectorDataset(Dataset):
     """Vector table implementation"""
 
-    def __init__(self, name=None,
-                 fields=[],
-                 table_type="vector",
-                 database_name=None,
-                 **kwargs):
+    def __init__(
+        self, name=None, fields=[], table_type="vector", database_name=None, **kwargs
+    ):
         self.name = name
         self.table_type = table_type
         self.feature_count = None
         self.fields = fields
-        self.database_name=database_name
+        self.database_name = database_name
         self.extent = {}
         self.saptialref = None
 
@@ -96,8 +92,4 @@ class VectorDataset(Dataset):
         Dataset.__init__(self, self.name)
 
 
-myTables = {
-    "vector": VectorDataset,
-    "raster": RasterDataset,
-    "tabular": TabularDataset,
-}
+myTables = {"vector": VectorDataset, "raster": RasterDataset, "tabular": TabularDataset}

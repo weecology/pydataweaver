@@ -28,7 +28,7 @@ def read_json(json_file, debug=False):
         file_obj = open_fr(json_file)
         json_object = json.load(file_obj)
         if "encoding" in json_object:
-            json_file_encoding = json_object['encoding']
+            json_file_encoding = json_object["encoding"]
         file_obj.close()
     except ValueError:
         pass

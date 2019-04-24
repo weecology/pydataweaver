@@ -9,10 +9,10 @@ from .scripts import reload_scripts
 
 __all__ = [
     "check_for_updates",
-    'join_postgres',
-    'join_sqlite',
-    'datasets',
-    'dataset_names',
-    'reload_scripts',
-    'reset_weaver'
+    "join_postgres",
+    "join_sqlite",
+    "datasets",
+    "dataset_names",
+    "reload_scripts",
+    "reset_weaver",
 ]

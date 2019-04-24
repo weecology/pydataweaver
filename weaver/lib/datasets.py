@@ -21,9 +21,9 @@ def datasets(keywords=None, licenses=None):
                     result_scripts.add(script)
                     continue
             if keywords:
-                script_keywords = script.title + ' ' + script.name
+                script_keywords = script.title + " " + script.name
                 if script.keywords:
-                    script_keywords = script_keywords + ' ' + '-'.join(script.keywords)
+                    script_keywords = script_keywords + " " + "-".join(script.keywords)
                 script_keywords = script_keywords.lower()
                 for k in keywords:
                     if script_keywords.find(k.lower()) != -1:
@@ -51,8 +51,8 @@ def license(dataset):
 
 def dataset_licenses():
     """Return set with all available licenses."""
-    script_license =[]
+    script_license = []
     for script in SCRIPT_LIST():
-        temp_list =[lc.lower for lc in sum(script.licenses.values(), [])]
+        temp_list = [lc.lower for lc in sum(script.licenses.values(), [])]
         script_license.append(temp_list)
     return set(script_license)
