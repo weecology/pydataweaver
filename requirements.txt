@@ -3,9 +3,10 @@ future
 xlrd>=0.7
 argcomplete
 PyMySQL>=0.4
-psycopg2>=2.0
+psycopg2-binary
 numpydoc
+requests
 sphinx_py3doc_enhanced_theme
 sphinxcontrib-napoleon
 sphinx_rtd_theme
-pandas
+tqdm==4.30.0

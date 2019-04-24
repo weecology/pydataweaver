@@ -27,8 +27,12 @@ RUN chmod 0644 ~/.profile
 # Install retriever dev  version, python core package
 RUN pip install git+https://git@github.com/weecology/retriever.git
 RUN retriever ls > /dev/null
-RUN pip install  psycopg2 pymysql > /dev/null
-RUN pip  install codecov pytest-cov  pytest-xdist pytest==3.9.3 -U
+RUN pip install pymysql
+RUN pip install psycopg2-binary -U
+RUN pip  install codecov
+RUN pip install pytest-cov -U
+RUN pip install pytest-xdist -U
+RUN pip install pytest
 
 # Install Postgis after Python is setup
 RUN apt-get install -y --force-yes postgis

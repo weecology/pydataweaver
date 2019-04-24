@@ -27,22 +27,23 @@ from weaver.lib.engine_tools import create_file
 encoding = ENCODING.lower()
 
 reload(sys)
-if hasattr(sys, 'setdefaultencoding'):
+if hasattr(sys, "setdefaultencoding"):
     sys.setdefaultencoding(encoding)
 
 FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
-RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser('~/.retriever/'))
-RETRIEVER_DATA_DIR = os.path.normpath(
-    os.path.expanduser('~/.retriever/raw_data/'))
-RETRIEVER_SCRIPT_DIR = os.path.normpath(
-    os.path.expanduser('~/.retriever/scripts/'))
-WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser('~/.weaver/'))
-WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser('~/.weaver/scripts/'))
+RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.retriever/"))
+RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser("~/.retriever/raw_data/"))
+RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.retriever/scripts/"))
+WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.weaver/"))
+WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.weaver/scripts/"))
 WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
-    os.path.join(FILE_LOCATION, "test_data_packages"))
+    os.path.join(FILE_LOCATION, "test_data_packages")
+)
 
-RETRIEVER_GIS_REPO = "https://raw.githubusercontent.com/weecology" \
-                     "/retriever/master/test/raw_data_gis/scripts/{script_names}.json"
+RETRIEVER_GIS_REPO = (
+    "https://raw.githubusercontent.com/weecology"
+    "/retriever/master/test/raw_data_gis/scripts/{script_names}.json"
+)
 
 postgres_engine, _ = engine_list
 
@@ -58,104 +59,76 @@ if os.name == "nt":
     os_password = "Password12!"
 docker_or_travis = os.environ.get("IN_DOCKER")
 if docker_or_travis == "true":
-    os_password = 'Password12!'
+    os_password = "Password12!"
     pgdb_host = "pgdb_weaver"
     mysqldb_host = "mysqldb_weaver"
 
 test_sample_wgs84 = {
-    'name': 'testsurveryone',
-    'raw_data': ['site_id, state, longitude, latitude, habitat_code',
-                 '1,QP,-117.20,40.04, H1',
-                 '2,QR,-112.10,41.00, H2',
-                 '3,QS,-115.58,34.50, HA',
-                 '4,QT,-114.62,36.78, H3',
-                 '5,QU,-111.70,32.97, H4',
-                 '6,Qv,-120.09,35.62, H5',
-                 '7,QX,-120.68,38.84, H6'
-                 ],
-
-    'script': {"name": "testsurveryone",
-               "resources": [
-                   {"dialect": {"do_not_bulk_insert": "True"},
-                    "name": "sites",
-                    "schema": {
-                        "fields": [
-                            {
-                                "name": "site_id",
-                                "type": "int"
-                            },
-                            {
-                                "name": "state",
-                                "size": "4",
-                                "type": "char"
-                            },
-                            {
-                                "name": "longitude",
-                                "type": "double"
-                            },
-                            {
-                                "name": "latitude",
-                                "type": "double"
-                            },
-                            {
-                                "name": "habitat_code",
-                                "size": "4",
-                                "type": "char"
-                            }
-                        ]
-                    },
-                    "url": "http://example.com/testsurveryone.txt"}
-               ],
-               "retriever": "True",
-               "version": "1.0.0"
-               }
+    "name": "testsurveryone",
+    "raw_data": [
+        "site_id, state, longitude, latitude, habitat_code",
+        "1,QP,-117.20,40.04, H1",
+        "2,QR,-112.10,41.00, H2",
+        "3,QS,-115.58,34.50, HA",
+        "4,QT,-114.62,36.78, H3",
+        "5,QU,-111.70,32.97, H4",
+        "6,Qv,-120.09,35.62, H5",
+        "7,QX,-120.68,38.84, H6",
+    ],
+    "script": {
+        "name": "testsurveryone",
+        "resources": [
+            {
+                "dialect": {"do_not_bulk_insert": "True"},
+                "name": "sites",
+                "schema": {
+                    "fields": [
+                        {"name": "site_id", "type": "int"},
+                        {"name": "state", "size": "4", "type": "char"},
+                        {"name": "longitude", "type": "double"},
+                        {"name": "latitude", "type": "double"},
+                        {"name": "habitat_code", "size": "4", "type": "char"},
+                    ]
+                },
+                "url": "http://example.com/testsurveryone.txt",
+            }
+        ],
+        "retriever": "True",
+        "version": "1.0.0",
+    },
 }
 
 test_sample_nad83 = {
-    'name': 'testsurverytwo',
-    'raw_data': ['site_id, state, longitude, latitude, habitat_code',
-                 '1,QP,-2152956,2033827, HA',
-                 '2,QR,-2001329,1867986, HA',
-                 '3,QS,-1598571,1221204, HA',
-                 '4,QT,-1735983,2180715, HA',
-                 '5,QU,-1240827,2064625, HA'
-                 ],
-
-    'script': {"name": "testsurverytwo",
-               "resources": [
-                   {"dialect": {"do_not_bulk_insert": "True"},
-                    "name": "sites",
-                    "schema": {
-                        "fields": [
-                            {
-                                "name": "site_id",
-                                "type": "int"
-                            },
-                            {
-                                "name": "state",
-                                "size": "4",
-                                "type": "char"
-                            },
-                            {
-                                "name": "longitude",
-                                "type": "double"
-                            },
-                            {
-                                "name": "latitude",
-                                "type": "double"
-                            },
-                            {
-                                "name": "habitat_code",
-                                "size": "4",
-                                "type": "char"
-                            }
-                        ]
-                    },
-                    "url": "http://example.com/testsurverytwo.txt"}
-               ],
-               "retriever": "True",
-               "version": "1.0.0"
-               }
+    "name": "testsurverytwo",
+    "raw_data": [
+        "site_id, state, longitude, latitude, habitat_code",
+        "1,QP,-2152956,2033827, HA",
+        "2,QR,-2001329,1867986, HA",
+        "3,QS,-1598571,1221204, HA",
+        "4,QT,-1735983,2180715, HA",
+        "5,QU,-1240827,2064625, HA",
+    ],
+    "script": {
+        "name": "testsurverytwo",
+        "resources": [
+            {
+                "dialect": {"do_not_bulk_insert": "True"},
+                "name": "sites",
+                "schema": {
+                    "fields": [
+                        {"name": "site_id", "type": "int"},
+                        {"name": "state", "size": "4", "type": "char"},
+                        {"name": "longitude", "type": "double"},
+                        {"name": "latitude", "type": "double"},
+                        {"name": "habitat_code", "size": "4", "type": "char"},
+                    ]
+                },
+                "url": "http://example.com/testsurverytwo.txt",
+            }
+        ],
+        "retriever": "True",
+        "version": "1.0.0",
+    },
 }
 
 RETRIEVER_TESTS_DATA = [test_sample_wgs84, test_sample_nad83]
@@ -174,10 +147,10 @@ WEAVER_TEST_SCRIPTS = [
     ("test-raster", "csvfile_name", "dd"),
     ("test-vector", "csvfile_name", "dd"),
     ("test-multi-raster", "csvfile_name", "dd"),
-
 ]
-WEAVER_TEST_DATA_PACKAGE_FILES = [file_base_names[0].replace("-", "_")
-                                  for file_base_names in WEAVER_TEST_SCRIPTS]
+WEAVER_TEST_DATA_PACKAGE_FILES = [
+    file_base_names[0].replace("-", "_") for file_base_names in WEAVER_TEST_SCRIPTS
+]
 
 
 def set_weaver_data_packages(resources_up=True):
@@ -192,7 +165,9 @@ def set_weaver_data_packages(resources_up=True):
             os.makedirs(WEAVER_SCRIPT_DIR)
     for file_name in WEAVER_TEST_DATA_PACKAGE_FILES:
         if resources_up:
-            scr_pack_path = os.path.join(WEAVER_TEST_DATA_PACKAEGES_DIR, file_name + ".json")
+            scr_pack_path = os.path.join(
+                WEAVER_TEST_DATA_PACKAEGES_DIR, file_name + ".json"
+            )
             pack_path = os.path.normpath(scr_pack_path)
             shutil.copy(pack_path, WEAVER_SCRIPT_DIR)
         else:
@@ -214,27 +189,31 @@ def set_retriever_res(resource_up=True):
     if not os.path.exists(RETRIEVER_SCRIPT_DIR):
         os.makedirs(RETRIEVER_SCRIPT_DIR)
     for file_names in RETRIEVER_TESTS_DATA:
-        data_dir_path = (os.path.join(RETRIEVER_DATA_DIR, file_names['name']))
+        data_dir_path = os.path.join(RETRIEVER_DATA_DIR, file_names["name"])
         data_dir_path = os.path.normpath(data_dir_path)
-        data_file_name = file_names['name'].replace("-", "_") + '.txt'
+        data_file_name = file_names["name"].replace("-", "_") + ".txt"
         data_file_path = os.path.normpath(os.path.join(data_dir_path, data_file_name))
-        script_name = file_names['script']["name"] + '.json'
-        script_file_path = os.path.normpath(os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_")))
+        script_name = file_names["script"]["name"] + ".json"
+        script_file_path = os.path.normpath(
+            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_"))
+        )
 
         # Set or tear down raw data files
         # in '~/.retriever/raw_data/data_dir_path/data_file_name'
         if resource_up:
             if not os.path.exists(data_dir_path):
                 os.makedirs(data_dir_path)
-                create_file(file_names['raw_data'], data_file_path)
-            with open(script_file_path, 'w') as js:
-                json.dump(file_names['script'], js, indent=2)
+                create_file(file_names["raw_data"], data_file_path)
+            with open(script_file_path, "w") as js:
+                json.dump(file_names["script"], js, indent=2)
         else:
             shutil.rmtree(data_dir_path)
             os.remove(script_file_path)
     for script_name in RETRIEVER_SPATIAL_DATA:
         file_name = script_name.replace("-", "_")
-        script_file_path = os.path.normpath(os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_") + ".json"))
+        script_file_path = os.path.normpath(
+            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_") + ".json")
+        )
         if resource_up:
             url = RETRIEVER_GIS_REPO.format(script_names=file_name)
             urlretrieve(url, script_file_path)
@@ -260,20 +239,23 @@ def install_dataset_postgres(dataset):
     Datasets are installed into Postgres
     with the names as the database_name
     """
-    postgres_engine.opts = {'engine': 'postgres',
-                            'user': 'postgres',
-                            'password': os_password,
-                            'host': pgdb_host,
-                            'port': 5432,
-                            'database': testdb,
-                            'database_name': testschema,
-                            'table_name': '{db}.{table}'}
-    interface_opts = {"user": 'postgres',
-                      "password": postgres_engine.opts['password'],
-                      "host": postgres_engine.opts['host'],
-                      "database": postgres_engine.opts['database'],
-                      "table_name": postgres_engine.opts['table_name']
-                      }
+    postgres_engine.opts = {
+        "engine": "postgres",
+        "user": "postgres",
+        "password": os_password,
+        "host": pgdb_host,
+        "port": 5432,
+        "database": testdb,
+        "database_name": testschema,
+        "table_name": "{db}.{table}",
+    }
+    interface_opts = {
+        "user": "postgres",
+        "password": postgres_engine.opts["password"],
+        "host": postgres_engine.opts["host"],
+        "database": postgres_engine.opts["database"],
+        "table_name": postgres_engine.opts["table_name"],
+    }
     install_to_database(dataset, rt.install_postgres, interface_opts)
 
 
@@ -285,13 +267,23 @@ def setup_postgres_retriever_db():
 
 def teardown_postgres_db():
     # Retriever database
-    cmd = 'psql -U postgres -d ' + testdb + ' -h ' + pgdb_host + ' -w -c \"DROP SCHEMA IF EXISTS ' + testschema + ' CASCADE\"'
+    cmd = (
+        "psql -U postgres -d "
+        + testdb
+        + " -h "
+        + pgdb_host
+        + ' -w -c "DROP SCHEMA IF EXISTS '
+        + testschema
+        + ' CASCADE"'
+    )
     subprocess.call(shlex.split(cmd))
 
     # Weaver database
     for dataset in all_script_names:
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
-        cmd = "psql -U postgres -d " + testdb + " -h " + pgdb_host + " -w -c \'{sql_stm}\'"
+        cmd = (
+            "psql -U postgres -d " + testdb + " -h " + pgdb_host + " -w -c '{sql_stm}'"
+        )
         dfd = cmd.format(sql_stm=sql_stm)
         subprocess.call(shlex.split(dfd))
 
@@ -300,7 +292,13 @@ def teardown_postgres_db():
 def get_output_as_csv(dataset, engines, db):
     """integrate datasets and return the output as a csv."""
     wt.reload_scripts()
-    eng = wt.join_postgres(dataset, database=testdb, database_name=testschema, host=pgdb_host, password=os_password)
+    eng = wt.join_postgres(
+        dataset,
+        database=testdb,
+        database_name=testschema,
+        host=pgdb_host,
+        password=os_password,
+    )
     # Wait for 5 seconds
     time.sleep(5)
     csv_file = eng.to_csv()
@@ -321,21 +319,27 @@ def teardown_module():
 
 @pytest.mark.parametrize("dataset, csv_file, expected", WEAVER_TEST_SCRIPTS)
 def test_postgres(dataset, csv_file, expected):
-    postgres_engine.opts = {'engine': 'postgres',
-                            'user': 'postgres',
-                            'password': os_password,
-                            'host': pgdb_host,
-                            'port': 5432,
-                            'database': testdb,
-                            'database_name': testschema,
-                            'table_name': '{db}.{table}'}
-    interface_opts = {"user": 'postgres',
-                      "password": postgres_engine.opts['password'],
-                      "host": postgres_engine.opts['host'],
-                      'port': postgres_engine.opts['port'],
-                      "database": postgres_engine.opts['database'],
-                      "database_name": postgres_engine.opts['database_name'],
-                      "table_name": postgres_engine.opts['table_name']}
-    res_csv = get_output_as_csv(dataset, postgres_engine, db=postgres_engine.opts['database_name'])
+    postgres_engine.opts = {
+        "engine": "postgres",
+        "user": "postgres",
+        "password": os_password,
+        "host": pgdb_host,
+        "port": 5432,
+        "database": testdb,
+        "database_name": testschema,
+        "table_name": "{db}.{table}",
+    }
+    interface_opts = {
+        "user": "postgres",
+        "password": postgres_engine.opts["password"],
+        "host": postgres_engine.opts["host"],
+        "port": postgres_engine.opts["port"],
+        "database": postgres_engine.opts["database"],
+        "database_name": postgres_engine.opts["database_name"],
+        "table_name": postgres_engine.opts["table_name"],
+    }
+    res_csv = get_output_as_csv(
+        dataset, postgres_engine, db=postgres_engine.opts["database_name"]
+    )
     assert file_exists(res_csv)
     os.remove(res_csv)
