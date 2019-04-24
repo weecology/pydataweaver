@@ -8,8 +8,9 @@ def rename_fields(dictionary_object, original, alias):
         return None
     for items in dictionary_object.keys():
         if original in dictionary_object[items]:
-            dictionary_object[items] = [x if not x == original else alias
-                                        for x in dictionary_object[items]]
+            dictionary_object[items] = [
+                x if not x == original else alias for x in dictionary_object[items]
+            ]
     return dictionary_object
 
 
@@ -20,12 +21,16 @@ def make_sql(dataset):
     # 2. Refactoring to after raster joins are finalized
 
     main_table_path = dataset.main_file["path"]
-    processed_tables = {main_table_path: {'name': 'T1'}}
+    processed_tables = {main_table_path: {"name": "T1"}}
     as_processed_table = processed_tables
 
     if "lat_long" in dataset.main_file and dataset.main_file["lat_long"]:
-        as_processed_table[main_table_path]["latitude"] = dataset.main_file["lat_long"][0]
-        as_processed_table[main_table_path]["longitude"] = dataset.main_file["lat_long"][1]
+        as_processed_table[main_table_path]["latitude"] = dataset.main_file["lat_long"][
+            0
+        ]
+        as_processed_table[main_table_path]["longitude"] = dataset.main_file[
+            "lat_long"
+        ][1]
 
     query_statement = ""
     all_fields = []  # Remove the geom or rast fields used to calculate feature value.
@@ -34,8 +39,10 @@ def make_sql(dataset):
 
     if "fields" in dataset.main_file:
         if dataset.main_file["fields"]:
-            all_fields += [as_processed_table[main_table_path]["name"] +
-                           "." + item_f.lower() for item_f in dataset.main_file["fields"]]
+            all_fields += [
+                as_processed_table[main_table_path]["name"] + "." + item_f.lower()
+                for item_f in dataset.main_file["fields"]
+            ]
             unique_f |= set(dataset.main_file["fields"])
 
     # Process all tables that are to be joined
@@ -52,9 +59,9 @@ def make_sql(dataset):
         res_set = set(to_join.keys()) - {"common_field", table2join["table"]}
         join_with = res_set.pop()
 
-        rast_alias = ''
-        geom_alias = ''
-        where_clause = ''
+        rast_alias = ""
+        geom_alias = ""
+        where_clause = ""
         left_join = ""
         left_join_on = ""
         original_tabular_fields = []
@@ -86,23 +93,28 @@ def make_sql(dataset):
 
         local_fields_used = []
         if "fields_to_use" in table2join:
-            local_fields_used = [field_to_lower.lower() for field_to_lower in table2join["fields_to_use"]]
+            local_fields_used = [
+                field_to_lower.lower() for field_to_lower in table2join["fields_to_use"]
+            ]
 
             if vector_table:
                 # Remove 'geom'
                 # Rename the geom with respect to the DB and the table names
                 # SELECT id, geom as geom_table_name FROM table_name
                 local_vector_fields |= set(local_fields_used)
-                local_vector_fields.discard('geom')
+                local_vector_fields.discard("geom")
                 # Add fields that do not use alias to all_fields
-                all_fields += [as_tables_dot +
-                               field_i for field_i in list(local_vector_fields)
-                               if field_i not in unique_f]
+                all_fields += [
+                    as_tables_dot + field_i
+                    for field_i in list(local_vector_fields)
+                    if field_i not in unique_f
+                ]
                 geom_alias = "geom_{As_DB}_{Ta}".format(
-                    As_DB=table2join["database_name"], Ta=table2join["table_name"])
+                    As_DB=table2join["database_name"], Ta=table2join["table_name"]
+                )
                 local_vector_fields.add(
-                    'geom AS {geom_alias}'.format(
-                        geom_alias=geom_alias))
+                    "geom AS {geom_alias}".format(geom_alias=geom_alias)
+                )
                 local_fields_used = list(local_vector_fields)
                 # remove_fields += geom_alias
                 # Update the join on dictionary with the new alias
@@ -112,14 +124,17 @@ def make_sql(dataset):
                 # Remove and rename 'rast' with respect to the DB and the table
                 # names
                 local_raster_fields |= set(local_fields_used)
-                local_raster_fields.discard('rast')
+                local_raster_fields.discard("rast")
                 # Add fields that do not use alias to all_fields
-                all_fields += [as_tables_dot +
-                               field_i for field_i in list(local_raster_fields)]
-                rast_alias = 'rast_{As_DB}_{Ta}'.format(
-                    As_DB=table2join["database_name"], Ta=table2join["table_name"])
-                local_raster_fields.add('rast AS {rast_alias}'
-                                        ''.format(rast_alias=rast_alias))
+                all_fields += [
+                    as_tables_dot + field_i for field_i in list(local_raster_fields)
+                ]
+                rast_alias = "rast_{As_DB}_{Ta}".format(
+                    As_DB=table2join["database_name"], Ta=table2join["table_name"]
+                )
+                local_raster_fields.add(
+                    "rast AS {rast_alias}" "".format(rast_alias=rast_alias)
+                )
                 local_fields_used = list(local_raster_fields)
                 # all_fields += [as_tables_dot + rast_alias]
 
@@ -131,9 +146,11 @@ def make_sql(dataset):
 
                 # Remove and rename the longitude and the latitude
                 if "lat_long" not in table2join:
-                    all_fields += [as_tables_dot +
-                                   field_i for field_i in list(local_tabular_fields)
-                                   if field_i not in unique_f]
+                    all_fields += [
+                        as_tables_dot + field_i
+                        for field_i in list(local_tabular_fields)
+                        if field_i not in unique_f
+                    ]
                 else:
                     make_local_temp = True
                     # ["latitude", "longitude"] [y,x]
@@ -148,28 +165,28 @@ def make_sql(dataset):
 
                     local_tabular_fields.discard(y)
                     local_tabular_fields.discard(x)
-                    lat_alias = 'lat_{as_DB}_{as_Ta}'.format(
-                        as_DB=as_DB, as_Ta=as_Ta)
-                    long_alias = 'long_{as_DB}_{as_Ta}'.format(
-                        as_DB=as_DB, as_Ta=as_Ta)
-                    all_fields += [as_tables_dot +
-                                   field_i for field_i in list(local_tabular_fields)
-                                   if field_i not in unique_f]
+                    lat_alias = "lat_{as_DB}_{as_Ta}".format(as_DB=as_DB, as_Ta=as_Ta)
+                    long_alias = "long_{as_DB}_{as_Ta}".format(as_DB=as_DB, as_Ta=as_Ta)
+                    all_fields += [
+                        as_tables_dot + field_i
+                        for field_i in list(local_tabular_fields)
+                        if field_i not in unique_f
+                    ]
                     local_tabular_fields.add(
-                        '{y} AS {lat_alias}'.format(
-                            y=y, lat_alias=lat_alias))
+                        "{y} AS {lat_alias}".format(y=y, lat_alias=lat_alias)
+                    )
                     local_tabular_fields.add(
-                        '{x} AS {long_alias}'.format(
-                            x=x, long_alias=long_alias))
+                        "{x} AS {long_alias}".format(x=x, long_alias=long_alias)
+                    )
 
-                    as_processed_table[table2join["table"]
-                                       ]["latitude"] = lat_alias
-                    as_processed_table[table2join["table"]
-                                       ]["longitude"] = long_alias
+                    as_processed_table[table2join["table"]]["latitude"] = lat_alias
+                    as_processed_table[table2join["table"]]["longitude"] = long_alias
 
                     # add alias
-                    all_fields += [as_tables_dot + lat_alias,
-                                   as_tables_dot + long_alias]
+                    all_fields += [
+                        as_tables_dot + lat_alias,
+                        as_tables_dot + long_alias,
+                    ]
 
                     # Update the join on dictionary with the new alias
                     to_join = rename_fields(to_join, "rast", lat_alias)
@@ -178,28 +195,33 @@ def make_sql(dataset):
                     # include where statement, use original fields
                     # Rows with no latitude and longitutde values are not considered
                     # If we consider them, we increase the time complexity
-                    where_clause = "\n\tWHERE {latitude} Not LIKE '%NULL%' " \
-                                   "\n\tAND {latitude} IS NOT NULL " \
-                                   "\n\tAND {longitude} Not LIKE '%NULL%' " \
-                                   "\n\tAND {longitude} IS NOT NULL " \
-                                   "".format(latitude=y, longitude=x)
+                    where_clause = (
+                        "\n\tWHERE {latitude} Not LIKE '%NULL%' "
+                        "\n\tAND {latitude} IS NOT NULL "
+                        "\n\tAND {longitude} Not LIKE '%NULL%' "
+                        "\n\tAND {longitude} IS NOT NULL "
+                        "".format(latitude=y, longitude=x)
+                    )
                 local_fields_used = list(local_tabular_fields)
 
         # Create `LEFT JOIN` and ON statements raster and vector data
         if raster_table or vector_table:
-            left_join += "\nLEFT OUTER JOIN " \
-                         "\n\t(SELECT {fields_used} " \
-                         "\n\tFROM {table_j}) AS {table_j_as} " \
-                         "".format(fields_used=', '.join(str(e) for e in local_fields_used),
-                                   table_j=table2join["table"],
-                                   table_j_as=as_tables)
+            left_join += (
+                "\nLEFT OUTER JOIN "
+                "\n\t(SELECT {fields_used} "
+                "\n\tFROM {table_j}) AS {table_j_as} "
+                "".format(
+                    fields_used=", ".join(str(e) for e in local_fields_used),
+                    table_j=table2join["table"],
+                    table_j_as=as_tables,
+                )
+            )
             # on statement
             # look for the names of longitude and latitude for the particular join.
             # Get the table to be joined to,
             # set U =  to_join keys known-keys = {"common_field", values for this table}
             # To join with  = U | {"common_field", table2join["table"]}
-            res_set = set(to_join.keys()) - \
-                {"common_field", table2join["table"]}
+            res_set = set(to_join.keys()) - {"common_field", table2join["table"]}
             join_with = res_set.pop()
 
             if join_with in as_processed_table:
@@ -207,65 +229,91 @@ def make_sql(dataset):
                 y = as_processed_table[join_with]["latitude"]
                 x = as_processed_table[join_with]["longitude"]
             else:
-                msg = "The order of the tables in the script needs re-arranging.\n" \
-                      "Table {a} should be processed first before " \
-                      "{b}".format(a=join_with, b=table2join["table"])
+                msg = (
+                    "The order of the tables in the script needs re-arranging.\n"
+                    "Table {a} should be processed first before "
+                    "{b}".format(a=join_with, b=table2join["table"])
+                )
                 print(msg)
                 exit()
             T = as_processed_table[join_with]["name"]
             if raster_table:
-                left_join_on += "\nON ST_Intersects(" + \
-                                as_tables_dot + rast_alias + \
-                                ", ST_PointFromText(FORMAT('POINT(%s %s)'," \
-                                " cast({T}.{x} as varchar), " \
-                                "cast({T}.{y} as varchar))," \
-                                " 4326))\n".format(T=T, x=x, y=y)
+                left_join_on += (
+                    "\nON ST_Intersects("
+                    + as_tables_dot
+                    + rast_alias
+                    + ", ST_PointFromText(FORMAT('POINT(%s %s)',"
+                    " cast({T}.{x} as varchar), "
+                    "cast({T}.{y} as varchar)),"
+                    " 4326))\n".format(T=T, x=x, y=y)
+                )
 
                 # now Add the ST_Value for this point , rast value
 
-                rast_value = "ST_Value(" + \
-                             as_tables_dot + rast_alias + \
-                             ", 1, ST_PointFromText(FORMAT('POINT(%s %s)', " \
-                             "cast({T}.{longitude} as varchar), " \
-                             "cast({T}.{latitude} as varchar)), " \
-                             "4326)) as feature_{ras}".format(T=T, longitude=x, latitude=y, ras=rast_alias)
+                rast_value = (
+                    "ST_Value("
+                    + as_tables_dot
+                    + rast_alias
+                    + ", 1, ST_PointFromText(FORMAT('POINT(%s %s)', "
+                    "cast({T}.{longitude} as varchar), "
+                    "cast({T}.{latitude} as varchar)), "
+                    "4326)) as feature_{ras}".format(
+                        T=T, longitude=x, latitude=y, ras=rast_alias
+                    )
+                )
                 # Add the value to final select statement
                 rast_values.append(rast_value)
                 all_fields += [rast_value]
             if vector_table:
-                geovalue = "ST_PointFromText(FORMAT('POINT(%s %s)', " \
-                           "cast({T}.{longitude} as varchar), " \
-                           "cast({T}.{latitude} as varchar))," \
-                           " 4326) ".format(T=T, longitude=x, latitude=y)
+                geovalue = (
+                    "ST_PointFromText(FORMAT('POINT(%s %s)', "
+                    "cast({T}.{longitude} as varchar), "
+                    "cast({T}.{latitude} as varchar)),"
+                    " 4326) ".format(T=T, longitude=x, latitude=y)
+                )
 
-                left_join += " \nON ST_Within({geovalue}, " \
-                             "{tablei_as}.{geomalias}) ".format(T=T, geovalue=geovalue,
-                                                                tablei_as=as_tables,
-                                                                geomalias=geom_alias)
+                left_join += (
+                    " \nON ST_Within({geovalue}, "
+                    "{tablei_as}.{geomalias}) ".format(
+                        T=T,
+                        geovalue=geovalue,
+                        tablei_as=as_tables,
+                        geomalias=geom_alias,
+                    )
+                )
                 # change the name of field to match the table
                 new_geom_value = geovalue + " as feature_{geo}".format(geo=geom_alias)
                 all_fields += [new_geom_value]
         if tabular_table and make_local_temp:
             # Create `LEFT JOIN` statements from non pivot tables
-            _all_fields = ', '.join(str(e) for e in local_fields_used)
-            _local_fields = ', '.join(str(e) for e in original_tabular_fields)
-            left_join += "\nLEFT OUTER JOIN  " \
-                         "\n\t(SELECT  {all_flds} " \
-                         "\nFROM (SELECT  {original_fields} " \
-                         "\nFROM {table_j} " \
-                         "\n{where_stm}) temp) " \
-                         "{table_j_as} ".format(all_flds=_all_fields, original_fields=_local_fields,
-                                                table_j=table2join["table"],
-                                                where_stm=str(where_clause),
-                                                table_j_as=as_tables)
+            _all_fields = ", ".join(str(e) for e in local_fields_used)
+            _local_fields = ", ".join(str(e) for e in original_tabular_fields)
+            left_join += (
+                "\nLEFT OUTER JOIN  "
+                "\n\t(SELECT  {all_flds} "
+                "\nFROM (SELECT  {original_fields} "
+                "\nFROM {table_j} "
+                "\n{where_stm}) temp) "
+                "{table_j_as} ".format(
+                    all_flds=_all_fields,
+                    original_fields=_local_fields,
+                    table_j=table2join["table"],
+                    where_stm=str(where_clause),
+                    table_j_as=as_tables,
+                )
+            )
         elif tabular_table:
-            left_join += "\nLEFT OUTER JOIN " \
-                         "\n\t(SELECT {fields_used} " \
-                         "\n\tFROM {table_i} {where_clause}) AS {tablei_as} " \
-                         "".format(fields_used=', '.join(str(e) for e in local_fields_used),
-                                   table_i=table2join["table"],
-                                   where_clause=str(where_clause),
-                                   tablei_as=as_tables)
+            left_join += (
+                "\nLEFT OUTER JOIN "
+                "\n\t(SELECT {fields_used} "
+                "\n\tFROM {table_i} {where_clause}) AS {tablei_as} "
+                "".format(
+                    fields_used=", ".join(str(e) for e in local_fields_used),
+                    table_i=table2join["table"],
+                    where_clause=str(where_clause),
+                    tablei_as=as_tables,
+                )
+            )
 
         # Create "ON" statement
         on_condition = "\nON "
@@ -275,10 +323,15 @@ def make_sql(dataset):
             on_common_stmt = []
             if to_join["common_field"]:
                 for item_field in to_join["common_field"]:
-                    on_common_stmt += ["{table_i}.{common_name}={table_j}.{common_name}".format(
-                        table_i=as_processed_table[dataset.main_file["path"]]['name'],
-                        table_j=as_processed_table[table2join["table"]]['name'],
-                        common_name=str(item_field))]
+                    on_common_stmt += [
+                        "{table_i}.{common_name}={table_j}.{common_name}".format(
+                            table_i=as_processed_table[dataset.main_file["path"]][
+                                "name"
+                            ],
+                            table_j=as_processed_table[table2join["table"]]["name"],
+                            common_name=str(item_field),
+                        )
+                    ]
 
             # process non common fields
             temp_dict = to_join
@@ -291,11 +344,12 @@ def make_sql(dataset):
             on_diff_stmt = []
             for num, items in enumerate(temp_dict[tab_field_index[0]]):
                 new_on = "{tab_i}.{field_i}={tab_j}.{field_j}".format(
-                    tab_i=as_processed_table[str(tab_field_index[0])]['name'],
+                    tab_i=as_processed_table[str(tab_field_index[0])]["name"],
                     # field_i=items,
                     field_i=temp_dict[tab_field_index[0]][num].lower(),
-                    tab_j=as_processed_table[str(tab_field_index[1])]['name'],
-                    field_j=temp_dict[tab_field_index[1]][num].lower())
+                    tab_j=as_processed_table[str(tab_field_index[1])]["name"],
+                    field_j=temp_dict[tab_field_index[1]][num].lower(),
+                )
                 on_diff_stmt.append(new_on)
 
             all_on_stmts = on_diff_stmt + on_common_stmt
@@ -312,32 +366,41 @@ def make_sql(dataset):
                 # ["latitude", "longitude"] [y,x]
                 y = dataset.main_file["lat_long"][0]
                 x = dataset.main_file["lat_long"][1]
-                where_clause = "WHERE CAST({latitude} AS TEXT) NOT LIKE '%NULL%' " \
-                               "AND {latitude} IS NOT NULL " \
-                               "AND CAST({longitude} AS TEXT) NOT LIKE '%NULL%' " \
-                               "AND {longitude} IS NOT NULL " \
-                               "".format(latitude=y,
-                                                                           longitude=x)
+                where_clause = (
+                    "WHERE CAST({latitude} AS TEXT) NOT LIKE '%NULL%' "
+                    "AND {latitude} IS NOT NULL "
+                    "AND CAST({longitude} AS TEXT) NOT LIKE '%NULL%' "
+                    "AND {longitude} IS NOT NULL "
+                    "".format(latitude=y, longitude=x)
+                )
                 temp_fields = dataset.main_file["fields"]
-                temp_fields_string = ', '.join(str(e) for e in temp_fields)
-                pivot_query = "\nSELECT {all_flds} " \
-                              "\nINTO {res} " \
-                              "\nFROM (SELECT  {temp_fields_s}  " \
-                              "\nFROM {main_table}  " \
-                              "\n{where_stm} ) " \
-                              "{table_m} ".format(all_flds=', '.join(str(e) for e in all_fields),
-                                                  temp_fields_s=temp_fields_string,
-                                                  main_table=dataset.main_file["path"],
-                                                  res="{result_dbi}.{result_tablei}",
-                                                  table_m=as_processed_table[main_table_path]["name"],
-                                                  where_stm=where_clause)
+                temp_fields_string = ", ".join(str(e) for e in temp_fields)
+                pivot_query = (
+                    "\nSELECT {all_flds} "
+                    "\nINTO {res} "
+                    "\nFROM (SELECT  {temp_fields_s}  "
+                    "\nFROM {main_table}  "
+                    "\n{where_stm} ) "
+                    "{table_m} ".format(
+                        all_flds=", ".join(str(e) for e in all_fields),
+                        temp_fields_s=temp_fields_string,
+                        main_table=dataset.main_file["path"],
+                        res="{result_dbi}.{result_tablei}",
+                        table_m=as_processed_table[main_table_path]["name"],
+                        where_stm=where_clause,
+                    )
+                )
             else:
-                pivot_query = "\nSELECT {all_fls} \ninto {res} " \
-                              "\nFROM {main_table} {where_stm} AS {table_m} " \
-                              "".format(all_fls=', '.join(str(e) for e in all_fields),
-                                        main_table=dataset.main_file["path"],
-                                        res="{result_dbi}.{result_tablei}",
-                                        where_stm=where_clause,
-                                        table_m=as_processed_table[main_table_path]["name"])
+                pivot_query = (
+                    "\nSELECT {all_fls} \ninto {res} "
+                    "\nFROM {main_table} {where_stm} AS {table_m} "
+                    "".format(
+                        all_fls=", ".join(str(e) for e in all_fields),
+                        main_table=dataset.main_file["path"],
+                        res="{result_dbi}.{result_tablei}",
+                        where_stm=where_clause,
+                        table_m=as_processed_table[main_table_path]["name"],
+                    )
+                )
 
     return pivot_query + query_statement

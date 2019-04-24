@@ -22,36 +22,41 @@ def main():
     """This function launches the weaver."""
     if len(sys.argv) == 1:
         # If no command line Args are passed, show the help options
-        parser.parse_args(['-h'])
+        parser.parse_args(["-h"])
     else:
         args = parser.parse_args()
 
-        if args.command not in ['reset', 'update'] \
-                and not os.path.isdir(SCRIPT_SEARCH_PATHS[1]) \
-                and not [f for f in os.listdir(SCRIPT_SEARCH_PATHS[-1])
-                         if os.path.exists(SCRIPT_SEARCH_PATHS[-1])]:
+        if (
+            args.command not in ["reset", "update"]
+            and not os.path.isdir(SCRIPT_SEARCH_PATHS[1])
+            and not [
+                f
+                for f in os.listdir(SCRIPT_SEARCH_PATHS[-1])
+                if os.path.exists(SCRIPT_SEARCH_PATHS[-1])
+            ]
+        ):
             check_for_updates()
             reload_scripts()
         script_list = SCRIPT_LIST()
 
         if args.command == "join" and not args.engine:
-            parser.parse_args(['join', '-h'])
+            parser.parse_args(["join", "-h"])
 
         if args.quiet:
-            sys.stdout = open(os.devnull, 'w')
+            sys.stdout = open(os.devnull, "w")
 
-        if args.command == 'help':
-            parser.parse_args(['-h'])
+        if args.command == "help":
+            parser.parse_args(["-h"])
 
-        if args.command == 'update':
+        if args.command == "update":
             check_for_updates()
             reload_scripts()
             return
 
-        if args.command == 'reset':
+        if args.command == "reset":
             reset_weaver(args.scope)
             return
-        if args.command == 'citation':
+        if args.command == "citation":
             if args.dataset is None:
                 # get the citation of weaver
                 print(CITATION)
@@ -66,7 +71,7 @@ def main():
                         for key, value in cite.items():
                             print("{k}:    {v}".format(k=key, v=value))
             return
-        if args.command == 'license':
+        if args.command == "license":
             data_set_license = license(args.dataset)
             if data_set_license:
                 print(data_set_license)
@@ -75,11 +80,12 @@ def main():
             return
 
         # list the data sets available
-        if args.command == 'ls':
+        if args.command == "ls":
             if not (args.l or args.k or isinstance(args.v, list)):
                 all_scripts = dataset_names()
                 print("Available datasets : {}\n".format(len(all_scripts)))
                 from weaver import lscolumns
+
                 lscolumns.printls(all_scripts)
 
             # If weaver ls  -v  has a list of scripts, i.e item1, item2,
@@ -108,10 +114,10 @@ def main():
                     print_info(searched_scripts, keywords_license=True)
 
             return
-        if args.command == 'join':
+        if args.command == "join":
             engine = choose_engine(args.__dict__)
 
-            if hasattr(args, 'debug') and args.debug:
+            if hasattr(args, "debug") and args.debug:
                 debug = True
             else:
                 debug = False
@@ -138,15 +144,26 @@ def print_info(all_scripts, keywords_license=False):
     for script in all_scripts:
         # Include a description if keywords_license are not used
         if not keywords_license:
-            out_stm = "{count}. {title}\n{name}\n{keywords}\n{description}\n{licenses}\n" \
-                      "{citation}\n".format(count=count, title=script.title, name=script.name,
-                                            keywords=script.keywords, description=script.description,
-                                            licenses=str(script.licenses), citation=script.citation)
+            out_stm = (
+                "{count}. {title}\n{name}\n{keywords}\n{description}\n{licenses}\n"
+                "{citation}\n".format(
+                    count=count,
+                    title=script.title,
+                    name=script.name,
+                    keywords=script.keywords,
+                    description=script.description,
+                    licenses=str(script.licenses),
+                    citation=script.citation,
+                )
+            )
         else:
-            out_stm = "{count}. {title}\n{name}\n{keywords}\n{licenses}\n" \
-                      "".format(count=count, title=script.title, name=script.name,
-                                keywords=script.keywords,
-                                licenses=str(script.licenses))
+            out_stm = "{count}. {title}\n{name}\n{keywords}\n{licenses}\n" "".format(
+                count=count,
+                title=script.title,
+                name=script.name,
+                keywords=script.keywords,
+                licenses=str(script.licenses),
+            )
         print(out_stm)
         count += 1
 

@@ -77,8 +77,10 @@ class Engine(object):
                     self.connection.rollback()
                 except:
                     pass
-                print("Couldn't create database (%s). "
-                      "\nTrying to continue the integration..." % e)
+                print(
+                    "Couldn't create database (%s). "
+                    "\nTrying to continue the integration..." % e
+                )
 
     def create_db_statement(self):
         """Return SQL statement to create a database."""
@@ -96,7 +98,7 @@ class Engine(object):
             db_name = self.opts["database_name"].format(db=name)
         except KeyError:
             db_name = name
-        return db_name.replace('-', '_')
+        return db_name.replace("-", "_")
 
     def drop_statement(self, objecttype, objectname):
         """Return drop table or database SQL statement."""
@@ -117,8 +119,13 @@ class Engine(object):
 
     def exists(self, script):
         """Check to see if the given table exists."""
-        return all([self.table_exists(script.name, key)
-                    for key in list(script.urls.keys()) if key])
+        return all(
+            [
+                self.table_exists(script.name, key)
+                for key in list(script.urls.keys())
+                if key
+            ]
+        )
 
     def exists(self, database, table_name):
         """Check to see if the given table exists."""
@@ -127,7 +134,7 @@ class Engine(object):
     def final_cleanup(self):
         """Close the database connection."""
         if self.warnings:
-            print('\n'.join(str(w) for w in self.warnings))
+            print("\n".join(str(w) for w in self.warnings))
 
         self.disconnect()
 
@@ -151,7 +158,7 @@ class Engine(object):
                     prompt = opt[1]
                     if opt[2]:
                         prompt += " or press Enter for the default, %s" % opt[2]
-                    prompt += ': '
+                    prompt += ": "
                     self.opts[opt[0]] = input(prompt)
             if self.opts[opt[0]] in ["", "default"]:
                 self.opts[opt[0]] = opt[2]
@@ -176,7 +183,7 @@ class Engine(object):
         if not dbname:
             dbname = self.database_name()
             if not dbname:
-                dbname = ''
+                dbname = ""
         return self.opts["table_name"].format(db=dbname, table=name)
 
     def to_csv(self, sort=True, path=os.getcwd(), table_name=None):
@@ -186,15 +193,14 @@ class Engine(object):
                 table_name = self.script.db_table_name
                 print("no table specified")
             # return
-        csv_file_output = os.path.normpath(os.path.join(path, table_name + '.csv'))
+        csv_file_output = os.path.normpath(os.path.join(path, table_name + ".csv"))
         csv_file = open_fw(csv_file_output)
         csv_writer = open_csvw(csv_file)
         self.get_cursor()
         self.set_engine_encoding()
         self.cursor.execute("SELECT * FROM  {};".format(table_name))
         row = self.cursor.fetchone()
-        column_names = [u'{}'.format(tuple_i[0])
-                        for tuple_i in self.cursor.description]
+        column_names = [u"{}".format(tuple_i[0]) for tuple_i in self.cursor.description]
         csv_writer.writerow(column_names)
         while row is not None:
             csv_writer.writerow(row)
@@ -207,7 +213,7 @@ class Engine(object):
         return csv_file_output
 
     def warning(self, warning):
-        new_warning = Warning('%s:%s' % (self.script.name, self.table.name), warning)
+        new_warning = Warning("%s:%s" % (self.script.name, self.table.name), warning)
         self.warnings.append(new_warning)
 
     def gis_import(self, table):
@@ -230,7 +236,7 @@ def file_exists(path):
 
 def filename_from_url(url):
     """Extract and returns the filename from the url."""
-    return url.split('/')[-1].split('?')[0]
+    return url.split("/")[-1].split("?")[0]
 
 
 def gen_from_source(source):

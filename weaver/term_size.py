@@ -9,8 +9,8 @@ def get_terminal_size():
             import fcntl
             import termios
             import struct
-            cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
-                                                 '1234'))
+
+            cr = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
         except:
             return
         return cr
@@ -24,6 +24,6 @@ def get_terminal_size():
         except:
             pass
     if not cr:
-        cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
+        cr = (env.get("LINES", 25), env.get("COLUMNS", 80))
 
     return int(cr[1]), int(cr[0])

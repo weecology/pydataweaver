@@ -19,7 +19,7 @@ def _join(args, use_cache, debug, compile):
     if not (script_list or os.listdir(SCRIPT_WRITE_PATH)):
         check_for_updates()
         script_list = SCRIPT_LIST()
-    scripts = name_matches(script_list, args['dataset'])
+    scripts = name_matches(script_list, args["dataset"])
     if scripts:
         for dataset_script in scripts:
             try:
@@ -30,58 +30,77 @@ def _join(args, use_cache, debug, compile):
                 if debug:
                     raise
     else:
-        message = "The dataset \"{}\" isn't available in the weaver. " \
-                  "Run weaver.datasets()to list the currently available " \
-                  "datasets".format(args['dataset'])
+        message = (
+            'The dataset "{}" isn\'t available in the weaver. '
+            "Run weaver.datasets()to list the currently available "
+            "datasets".format(args["dataset"])
+        )
         raise ValueError(message)
     return engine
 
 
-def join_postgres(dataset, user='postgres', password='',
-                  host='localhost', port=5432, database='postgres',
-                  database_name=None, table_name=None,
-                  compile=False, debug=False, quiet=False, use_cache=True):
+def join_postgres(
+    dataset,
+    user="postgres",
+    password="",
+    host="localhost",
+    port=5432,
+    database="postgres",
+    database_name=None,
+    table_name=None,
+    compile=False,
+    debug=False,
+    quiet=False,
+    use_cache=True,
+):
     """Install scripts in postgres."""
     if not table_name:
-        table_name = '{db}.{table}'
+        table_name = "{db}.{table}"
     if not database_name:
-        database_name = '{db}'
+        database_name = "{db}"
 
     args = {
-        'command': 'install',
-        'database': database,
-        'database_name': database_name,
-        'engine': 'postgres',
-        'dataset': dataset,
-        'debug': debug,
-        'host': host,
-        'port': port,
-        'password': password,
-        'quiet': quiet,
-        'table_name': table_name,
-        'user': user,
-        'use_cache': use_cache
+        "command": "install",
+        "database": database,
+        "database_name": database_name,
+        "engine": "postgres",
+        "dataset": dataset,
+        "debug": debug,
+        "host": host,
+        "port": port,
+        "password": password,
+        "quiet": quiet,
+        "table_name": table_name,
+        "user": user,
+        "use_cache": use_cache,
     }
 
     return _join(args, use_cache, debug, compile)
 
 
-def join_sqlite(dataset, file=None, table_name=None,
-                compile=False, debug=False, quiet=False, use_cache=True):
+def join_sqlite(
+    dataset,
+    file=None,
+    table_name=None,
+    compile=False,
+    debug=False,
+    quiet=False,
+    use_cache=True,
+):
     """Install scripts in sqlite."""
     if not table_name:
-        table_name = '{db}_table'
+        table_name = "{db}_table"
     if not file:
-        file = os.path.join(DATA_DIR, 'sqlite.db')
+        file = os.path.join(DATA_DIR, "sqlite.db")
 
     args = {
-        'command': 'install',
-        'dataset': dataset,
-        'engine': 'sqlite',
-        'file': file,
-        'quiet': quiet,
-        'table_name': table_name,
-        'use_cache': use_cache
+        "command": "install",
+        "dataset": dataset,
+        "engine": "sqlite",
+        "file": file,
+        "quiet": quiet,
+        "table_name": table_name,
+        "use_cache": use_cache,
     }
 
     return _join(args, use_cache, debug, compile)

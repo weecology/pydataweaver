@@ -8,17 +8,17 @@ from weaver.lib.engine_tools import name_matches
 script_list = SCRIPT_LIST()
 
 
-def download(dataset, path='./', quiet=False, subdir=False, debug=False):
+def download(dataset, path="./", quiet=False, subdir=False, debug=False):
     """Download scripts for weaver."""
     args = {
-        'dataset': dataset,
-        'command': 'download',
-        'path': path,
-        'subdir': subdir,
-        'quiet': quiet
+        "dataset": dataset,
+        "command": "download",
+        "path": path,
+        "subdir": subdir,
+        "quiet": quiet,
     }
     engine = choose_engine(args)
-    scripts = name_matches(script_list, args['dataset'])
+    scripts = name_matches(script_list, args["dataset"])
     if scripts:
         for dataset in scripts:
             print("=> Download csv Integrated data", dataset.name)
