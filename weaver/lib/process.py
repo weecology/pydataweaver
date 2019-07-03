@@ -34,6 +34,7 @@ def make_sql(dataset):
 
     query_statement = ""
     all_fields = []  # Remove the geom or rast fields used to calculate feature value.
+    gis_all_fields = []
     unique_f = set()
     rast_values = []
 
@@ -183,7 +184,7 @@ def make_sql(dataset):
                     as_processed_table[table2join["table"]]["longitude"] = long_alias
 
                     # add alias
-                    all_fields += [
+                    gis_all_fields += [
                         as_tables_dot + lat_alias,
                         as_tables_dot + long_alias,
                     ]
@@ -263,7 +264,7 @@ def make_sql(dataset):
                 )
                 # Add the value to final select statement
                 rast_values.append(rast_value)
-                all_fields += [rast_value]
+                gis_all_fields += [rast_value]
             if vector_table:
                 geovalue = (
                     "ST_PointFromText(FORMAT('POINT(%s %s)', "
@@ -283,7 +284,8 @@ def make_sql(dataset):
                 )
                 # change the name of field to match the table
                 new_geom_value = geovalue + " as feature_{geo}".format(geo=geom_alias)
-                all_fields += [new_geom_value]
+                gis_all_fields += [new_geom_value]
+
         if tabular_table and make_local_temp:
             # Create `LEFT JOIN` statements from non pivot tables
             _all_fields = ", ".join(str(e) for e in local_fields_used)
@@ -376,13 +378,14 @@ def make_sql(dataset):
                 temp_fields = dataset.main_file["fields"]
                 temp_fields_string = ", ".join(str(e) for e in temp_fields)
                 pivot_query = (
-                    "\nSELECT {all_flds} "
-                    "\nINTO {res} "
+                    "\nSELECT {all_flds} {local_spatials} "
+                    "\nINTO {res} \n\n"
                     "\nFROM (SELECT  {temp_fields_s}  "
                     "\nFROM {main_table}  "
                     "\n{where_stm} ) "
                     "{table_m} ".format(
-                        all_flds=", ".join(str(e) for e in all_fields),
+                        all_flds=", ".join(str(e) + " AS " + e.replace(".", "_") for e in all_fields),
+                        local_spatials="," + ", ".join(str(e) for e in gis_all_fields) if gis_all_fields else "",
                         temp_fields_s=temp_fields_string,
                         main_table=dataset.main_file["path"],
                         res="{result_dbi}.{result_tablei}",
@@ -392,10 +395,12 @@ def make_sql(dataset):
                 )
             else:
                 pivot_query = (
-                    "\nSELECT {all_fls} \ninto {res} "
+                    "\nSELECT {all_fls} {local_spatials} "
+                    "\ninto {res} \n\n"
                     "\nFROM {main_table} {where_stm} AS {table_m} "
                     "".format(
-                        all_fls=", ".join(str(e) for e in all_fields),
+                        all_fls=", ".join(str(e) + " AS " + e.replace(".", "_") for e in all_fields),
+                        local_spatials="," + ", ".join(str(e) for e in gis_all_fields) if gis_all_fields else "",
                         main_table=dataset.main_file["path"],
                         res="{result_dbi}.{result_tablei}",
                         where_stm=where_clause,
