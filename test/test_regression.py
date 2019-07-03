@@ -142,8 +142,8 @@ survey_scripts = [test_scr["script"]["name"] for test_scr in RETRIEVER_TESTS_DAT
 all_script_names = survey_scripts + RETRIEVER_SPATIAL_DATA
 
 WEAVER_TEST_SCRIPTS = [
-    # ("test-multi-vector-raster", "csvfile_name", "dd"),
     # ("test-vector-multi-raster", "csvfile_name", "dd"),
+    ("test-multi-vector", "csvfile_name", "dd"),
     ("test-raster", "csvfile_name", "dd"),
     ("test-vector", "csvfile_name", "dd"),
     ("test-multi-raster", "csvfile_name", "dd"),
