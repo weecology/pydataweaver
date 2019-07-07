@@ -9,17 +9,17 @@ from __future__ import print_function
 import os
 import sys
 
-from weaver.engines import choose_engine
-from weaver.lib.datasets import datasets, dataset_names, license
-from weaver.lib.defaults import CITATION, SCRIPT_SEARCH_PATHS
-from weaver.lib.engine_tools import name_matches, reset_weaver
-from weaver.lib.get_opts import parser
-from weaver.lib.repository import check_for_updates
-from weaver.lib.scripts import SCRIPT_LIST, reload_scripts, get_script
+from pydataweaver.engines import choose_engine
+from pydataweaver.lib.datasets import datasets, dataset_names, license
+from pydataweaver.lib.defaults import CITATION, SCRIPT_SEARCH_PATHS
+from pydataweaver.lib.engine_tools import name_matches, reset_weaver
+from pydataweaver.lib.get_opts import parser
+from pydataweaver.lib.repository import check_for_updates
+from pydataweaver.lib.scripts import SCRIPT_LIST, reload_scripts, get_script
 
 
 def main():
-    """This function launches the weaver."""
+    """This function launches the pydataweaver."""
     if len(sys.argv) == 1:
         # If no command line Args are passed, show the help options
         parser.parse_args(["-h"])
@@ -58,7 +58,7 @@ def main():
             return
         if args.command == "citation":
             if args.dataset is None:
-                # get the citation of weaver
+                # get the citation of pydataweaver
                 print(CITATION)
                 return
             else:
@@ -84,11 +84,11 @@ def main():
             if not (args.l or args.k or isinstance(args.v, list)):
                 all_scripts = dataset_names()
                 print("Available datasets : {}\n".format(len(all_scripts)))
-                from weaver import lscolumns
+                from pydataweaver import lscolumns
 
                 lscolumns.printls(all_scripts)
 
-            # If weaver ls  -v  has a list of scripts, i.e item1, item2,
+            # If pydataweaver ls  -v  has a list of scripts, i.e item1, item2,
             # print the items' information, else consider all scripts"
             elif isinstance(args.v, list):
                 if args.v:

@@ -6,7 +6,7 @@ improvements to the documentation, bug reports, or anything else you can think
 of. We strive to be supportive of anyone who wants to contribute, so don't be
 shy, give it a go, and we'll do our best to help.  
 
-The [Documentaion](https://weaver.readthedocs.io/en/latest/?badge=latest) is a another good place to start.
+The [Documentaion](https://pydataweaver.readthedocs.io/en/latest/?badge=latest) is a another good place to start.
 
 ## Process for contributing changes
 

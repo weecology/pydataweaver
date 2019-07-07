@@ -3,15 +3,15 @@ from __future__ import print_function
 
 import os
 
-from weaver.engines import choose_engine
-from weaver.lib.defaults import DATA_DIR, SCRIPT_WRITE_PATH
-from weaver.lib.engine_tools import name_matches
-from weaver.lib.repository import check_for_updates
-from weaver.lib.scripts import SCRIPT_LIST
+from pydataweaver.engines import choose_engine
+from pydataweaver.lib.defaults import DATA_DIR, SCRIPT_WRITE_PATH
+from pydataweaver.lib.engine_tools import name_matches
+from pydataweaver.lib.repository import check_for_updates
+from pydataweaver.lib.scripts import SCRIPT_LIST
 
 
 def _join(args, use_cache, debug, compile):
-    """Install scripts for weaver."""
+    """Install scripts for pydataweaver."""
     engine = choose_engine(args)
     engine.use_cache = use_cache
 
@@ -31,8 +31,8 @@ def _join(args, use_cache, debug, compile):
                     raise
     else:
         message = (
-            'The dataset "{}" isn\'t available in the weaver. '
-            "Run weaver.datasets()to list the currently available "
+            'The dataset "{}" isn\'t available in the pydataweaver. '
+            "Run pydataweaver.datasets()to list the currently available "
             "datasets".format(args["dataset"])
         )
         raise ValueError(message)

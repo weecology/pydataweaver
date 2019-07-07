@@ -18,9 +18,9 @@ import warnings
 
 from hashlib import md5
 from io import StringIO as newfile
-from weaver.lib.defaults import HOME_DIR, ENCODING
+from pydataweaver.lib.defaults import HOME_DIR, ENCODING
 
-from weaver.lib.models import *
+from pydataweaver.lib.models import *
 import xml.etree.ElementTree as ET
 
 warnings.filterwarnings("ignore")
@@ -29,13 +29,13 @@ TEST_ENGINES = dict()
 
 
 def create_home_dir():
-    """Create Directory for weaver."""
+    """Create Directory for pydataweaver."""
     current_platform = platform.system().lower()
     if current_platform != "windows":
         import pwd
 
     # create the necessary directory structure for storing scripts/raw_data
-    # in the ~/.weaver directory
+    # in the ~/.pydataweaver directory
     for dir in (
         HOME_DIR,
         os.path.join(HOME_DIR, "raw_data"),
@@ -45,13 +45,13 @@ def create_home_dir():
             try:
                 os.makedirs(dir)
                 if (current_platform != "windows") and os.getenv("SUDO_USER"):
-                    # owner of .weaver should be user even when installing
+                    # owner of .pydataweaver should be user even when installing
                     # w/sudo
                     pw = pwd.getpwnam(os.getenv("SUDO_USER"))
                     os.chown(dir, pw.pw_uid, pw.pw_gid)
             except OSError:
                 print(
-                    "The Retriever lacks permission to access the ~/.weaver/ directory."
+                    "The Retriever lacks permission to access the ~/.pydataweaver/ directory."
                 )
                 raise
 
@@ -84,7 +84,7 @@ def name_matches(scripts, arg):
 
     matches.sort(key=lambda x: -x[1])
 
-    print('\nThe dataset "{}" ' "isn't currently available in the weaver.".format(arg))
+    print('\nThe dataset "{}" ' "isn't currently available in the pydataweaver.".format(arg))
     if matches:
         print("Did you mean:" " \n\t{}".format("\n\t".join([i[0] for i in matches])))
 
@@ -297,7 +297,7 @@ def file_2list(input_file):
 
 def get_script_version():
     """This function gets the version number of the scripts and returns them in array form."""
-    from weaver.lib.scripts import SCRIPT_LIST
+    from pydataweaver.lib.scripts import SCRIPT_LIST
 
     modules = SCRIPT_LIST()
     scripts = []

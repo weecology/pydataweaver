@@ -6,7 +6,7 @@ import sys
 from builtins import range
 from builtins import zip
 
-from weaver.term_size import get_terminal_size
+from pydataweaver.term_size import get_terminal_size
 
 
 def get_columns(values, cols):

@@ -1,7 +1,7 @@
-Weaver API
-==========
+Pydataweaver API
+================
 
 .. toctree::
    :maxdepth: 4
 
-   weaver
+   pydataweaver

@@ -2,7 +2,7 @@
 # Integrations tests for Data Weaver.
 # The tests use the Data retriever platform to install
 # all the required datasets.
-# After the datasets are installed, the weaver integrates
+# After the datasets are installed, the pydataweaver integrates
 # the datasets using the test scripts.
 from __future__ import print_function
 
@@ -19,10 +19,10 @@ from urllib.request import urlretrieve
 import pytest
 
 import retriever as rt
-import weaver as wt
-from weaver.engines import engine_list
-from weaver.lib.defaults import ENCODING
-from weaver.lib.engine_tools import create_file
+import pydataweaver as wt
+from pydataweaver.engines import engine_list
+from pydataweaver.lib.defaults import ENCODING
+from pydataweaver.lib.engine_tools import create_file
 
 encoding = ENCODING.lower()
 
@@ -34,8 +34,8 @@ FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.retriever/"))
 RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser("~/.retriever/raw_data/"))
 RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.retriever/scripts/"))
-WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.weaver/"))
-WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.weaver/scripts/"))
+WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/"))
+WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/scripts/"))
 WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
     os.path.join(FILE_LOCATION, "test_data_packages")
 )
@@ -154,11 +154,11 @@ WEAVER_TEST_DATA_PACKAGE_FILES = [
 
 
 def set_weaver_data_packages(resources_up=True):
-    """Setup or tear down weaver test scripts
+    """Setup or tear down pydataweaver test scripts
 
-    Copy or delete weaver test scripts from test_data directory,
+    Copy or delete pydataweaver test scripts from test_data directory,
     WEAVER_TEST_DATA_PACKAEGES_DIR
-    to ~/.weaver script directory WEAVER_SCRIPT_DIR
+    to ~/.pydataweaver script directory WEAVER_SCRIPT_DIR
     """
     if resources_up:
         if not WEAVER_SCRIPT_DIR:

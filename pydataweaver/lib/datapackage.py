@@ -7,8 +7,8 @@ import re
 from builtins import input
 from time import sleep
 
-from weaver.lib.defaults import HOME_DIR, ENCODING
-from weaver.lib.scripts import SCRIPT_LIST
+from pydataweaver.lib.defaults import HOME_DIR, ENCODING
+from pydataweaver.lib.scripts import SCRIPT_LIST
 
 short_names = [script.name.lower() for script in SCRIPT_LIST()]
 
@@ -142,7 +142,7 @@ def create_json():
     http://specs.frictionlessdata.io/data-packages/#descriptor-datapackagejson
     Takes input from user via command line.
 
-    Usage: weaver new_json
+    Usage: pydataweaver new_json
     """
     contents = {}
     tableurls = {}
@@ -171,7 +171,7 @@ def create_json():
         "keywords (separated by ';'): ", split_char=";", ignore_empty=True
     )
     contents["resources"] = []
-    contents["weaver"] = "True"
+    contents["pydataweaver"] = "True"
     contents["retriever_minimum_version"] = "2.0.dev"
     contents["encoding"] = clean_input("encoding: ", ignore_empty=True)
     if is_empty(clean_input("encoding: ", ignore_empty=True)):
@@ -194,7 +194,7 @@ def create_json():
             tableurls[table["name"]] = table["url"]
 
             # get table properties (dialect)
-            # refer weaver.lib.table.Table
+            # refer pydataweaver.lib.table.Table
             get_replace_columns(table["dialect"])
             get_nulls(table["dialect"])
             get_delimiter(table["dialect"])
@@ -433,7 +433,7 @@ def edit_json(json_file):
     """
     Edit existing datapackage.JSON script.
 
-    Usage: weaver edit_json <script_name>
+    Usage: pydataweaver edit_json <script_name>
     Note: Name of script is the dataset name.
     """
     try:

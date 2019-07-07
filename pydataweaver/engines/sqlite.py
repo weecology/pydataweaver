@@ -1,7 +1,7 @@
 import os
 
-from weaver.lib.defaults import DATA_DIR
-from weaver.lib.models import Engine
+from pydataweaver.lib.defaults import DATA_DIR
+from pydataweaver.lib.models import Engine
 
 
 class engine(Engine):

@@ -5,10 +5,9 @@ Developer's guide
 Required Modules
 ================
 
-Python 3.3+ installation and the following modules:
+Python 3.5+ installation and the following modules:
 
 ::
-
   setuptools
   xlrd
   retriever

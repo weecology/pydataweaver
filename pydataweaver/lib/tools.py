@@ -4,7 +4,7 @@ import io
 import os
 import sys
 
-from weaver.lib.defaults import ENCODING
+from pydataweaver.lib.defaults import ENCODING
 
 
 def open_fr(file_name, encoding=ENCODING, encode=True):
