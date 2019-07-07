@@ -9,8 +9,8 @@ import requests
 import imp
 from tqdm import tqdm
 from pkg_resources import parse_version
-from weaver.lib.defaults import REPOSITORY, SCRIPT_WRITE_PATH, HOME_DIR
-from weaver.lib.models import file_exists
+from dataweaver.lib.defaults import REPOSITORY, SCRIPT_WRITE_PATH, HOME_DIR
+from dataweaver.lib.models import file_exists
 
 
 def _download_from_repository(filepath, newpath, repo=REPOSITORY):

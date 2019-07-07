@@ -1,13 +1,13 @@
-weaver package
-==============
+dataweaver package
+==================
 
 Subpackages
 -----------
 
 .. toctree::
 
-    weaver.engines
-    weaver.lib
+    dataweaver.engines
+    dataweaver.lib
 
 
 
@@ -17,7 +17,7 @@ Submodules
 Module contents
 ---------------
 
-.. automodule:: weaver
+.. automodule:: dataweaver
     :members:
     :undoc-members:
     :show-inheritance:

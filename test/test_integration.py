@@ -9,7 +9,6 @@ import shutil
 import subprocess
 import sys
 from collections import OrderedDict
-from imp import reload
 
 import pandas
 import pytest
@@ -18,24 +17,21 @@ from retriever import dataset_names
 from retriever import install_postgres
 from retriever import install_sqlite
 from retriever import reload_scripts as retriever_reload_scripts
-from weaver import reload_scripts as weaver_reload_scripts
-from weaver.engines import engine_list
-from weaver.lib.defaults import ENCODING
-from weaver.lib.engine_tools import create_file
-from weaver.lib.load_json import read_json
+from dataweaver import reload_scripts as weaver_reload_scripts
+from dataweaver.engines import engine_list
+from dataweaver.lib.defaults import ENCODING
+from dataweaver.lib.engine_tools import create_file
+from dataweaver.lib.load_json import read_json
 
 encoding = ENCODING.lower()
 
-reload(sys)
-if hasattr(sys, "setdefaultencoding"):
-    sys.setdefaultencoding(encoding)
 
 FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.retriever/"))
 RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser("~/.retriever/raw_data/"))
 RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.retriever/scripts/"))
-WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.weaver/"))
-WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.weaver/scripts/"))
+WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.dataweaver/"))
+WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.dataweaver/scripts/"))
 WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
     os.path.join(FILE_LOCATION, "test_data_packages")
 )
@@ -303,11 +299,11 @@ def file_exists(path):
 
 
 def set_weaver_data_packages(resources_up=True):
-    """Setup or tear down weaver test scripts
+    """Setup or tear down dataweaver test scripts
 
-    Copy or delete weaver test scripts from test_data directory,
+    Copy or delete dataweaver test scripts from test_data directory,
     WEAVER_TEST_DATA_PACKAEGES_DIR
-    to ~/.weaver script directory WEAVER_SCRIPT_DIR
+    to ~/.dataweaver script directory WEAVER_SCRIPT_DIR
     """
     if resources_up:
         if not WEAVER_SCRIPT_DIR:
@@ -435,7 +431,7 @@ def test_restiever_test_scripts():
 
 
 def test_weaver_test_data_packages():
-    """Test available weaver test scripts"""
+    """Test available dataweaver test scripts"""
     data_packages_exists = True
     for weaver_script in WEAVER_TEST_DATA_PACKAGE_FILES:
         file_paths = os.path.join(WEAVER_SCRIPT_DIR, weaver_script + ".json")
@@ -453,10 +449,10 @@ def get_script_module(script_name):
 
 def get_output_as_csv(dataset, engines, db):
     """integrate datasets and return the output as a csv."""
-    import weaver
+    import dataweaver
 
     weaver_reload_scripts()
-    eng = weaver.join_postgres(
+    eng = dataweaver.join_postgres(
         dataset, database=testdb, host=pgdb_host, password=os_password
     )
     csv_file = eng.to_csv()

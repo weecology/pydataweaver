@@ -5,22 +5,16 @@ from __future__ import print_function
 
 import sys
 from builtins import str
-from imp import reload
 
 import sphinx_rtd_theme
 
-from weaver.lib.defaults import ENCODING
+from dataweaver.lib.defaults import ENCODING
 
 encoding = ENCODING.lower()
 
-from weaver.lib.scripts import SCRIPT_LIST as WEAVER_ALL_SCRIPTS
-from weaver.lib.tools import open_fw
-from weaver.lib.defaults import VERSION, COPYRIGHT
-
-reload(sys)
-if hasattr(sys, "setdefaultencoding"):
-    # set default encoding to latin-1 to decode source text
-    sys.setdefaultencoding("latin-1")
+from dataweaver.lib.scripts import SCRIPT_LIST as WEAVER_ALL_SCRIPTS
+from dataweaver.lib.tools import open_fw
+from dataweaver.lib.defaults import VERSION, COPYRIGHT
 
 
 def to_str(object, object_encoding=encoding):

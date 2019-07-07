@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Weecology "https://github.com/weecology/weaver"
+MAINTAINER Weecology "https://github.com/weecology/dataweaver"
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get install -y --force-yes build-essential wget git locales locales-all > /dev/null
@@ -21,7 +21,6 @@ RUN echo "export PYTHONPATH="/usr/bin/python:$PYTHONPATH"" >> ~/.profile
 RUN echo "export PGPASSFILE="~/.pgpass"" >> ~/.profile
 
 # Add permissions to config files
-# TODO:Test if line is needed
 RUN chmod 0644 ~/.profile
 
 # Install retriever dev  version, python core package
@@ -37,14 +36,14 @@ RUN pip install pytest
 # Install Postgis after Python is setup
 RUN apt-get install -y --force-yes postgis
 
-COPY . ./weaver
+COPY . ./dataweaver
 # Use entrypoint to run more configurations.
 # Set permissions.
 # entrypoint.sh will set out config files
-RUN chmod 0755 /weaver/cli_tools/entrypoint.sh
-ENTRYPOINT ["/weaver/cli_tools/entrypoint.sh"]
+RUN chmod 0755 /dataweaver/cli_tools/entrypoint.sh
+ENTRYPOINT ["/dataweaver/cli_tools/entrypoint.sh"]
 
-WORKDIR ./weaver
+WORKDIR ./dataweaver
 
 # Change permissions to config files
 # Do not run these CMDS before Entrypoint.

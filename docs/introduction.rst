@@ -3,13 +3,13 @@ User Guide
 ==========
 
 
-The Data Weaver Project
+The DataWeaver Project
 =======================
 
-The Data weaver is a Python tool that offers a simple to use, clean and
+The Dataweaver is a Python tool that offers a simple to use, clean and
 a robust data integration platform.
 
-The Data Weaver supports data integration of spatial datasets (Raster
+The Pydataeaver supports data integration of spatial datasets (Raster
 and Vector data), as well as tabular datasets.
 
 Problem solving in science involves and requires studying entities using
@@ -21,9 +21,9 @@ Since these heterogenous datasets are collected by various scientists,
 the datasets are domain based or centered around a unique subset of
 problems.
 
-The data weaver bridges the gap scientist’s face of not having readily
+The Dataweaver bridges the gap scientist’s face of not having readily
 unified datasets that can be used for multi dimension feature analysis.
-The data weaver handles the finding and integration of heterogeneous
+The Dataweaver handles the finding and integration of heterogeneous
 datasets forming a new dataset.
 
 Dependencies
@@ -64,7 +64,7 @@ Either use pip to install directly from GitHub:
 
 .. code:: shell
 
-   pip install git+https://git@github.com/weecology/weaver.git
+   pip install git+https://git@github.com/weecology/dataweaver.git
 
 or:
 
@@ -79,14 +79,14 @@ Using the Command Line
 ----------------------
 
 
-After installing the package, run `weaver` update to download the latest available dataset scripts.
-To see the full list of command line options and datasets run `weaver --help`.
+After installing the package, run `dataweaver` update to download the latest available dataset scripts.
+To see the full list of command line options and datasets run `dataweaver --help`.
 
-$ ``weaver --help``
+$ ``dataweaver --help``
 
 ::
 
-    usage: weaver [-h] [-v] [-q] {help,ls,citation,license,join,update} ...
+    usage: dataweaver [-h] [-v] [-q] {help,ls,citation,license,join,update} ...
 
     positional arguments:
       {help,ls,citation,license,join,update}
@@ -103,9 +103,9 @@ $ ``weaver --help``
       -v, --version         show program's version number and exit
       -q, --quiet           suppress command-line output
 
-To get a list of available dataset use `weaver ls`
+To get a list of available dataset use `dataweaver ls`
 
-$ ``weaver ls``
+$ ``dataweaver ls``
 
 ::
 
@@ -123,11 +123,11 @@ $ ``weaver ls``
     mammal-sites-bioclim-1-2
     portal-plot-species
 
-To view the citaion of the datasets use `weaver citation [dataset-name]`
+To view the citaion of the datasets use `dataweaver citation [dataset-name]`
 Running weaver with no citation will provide the citation for the tool.
 
 
-$ ``weaver citation mammal-diet-mammal-life-history``
+$ ``dataweaver citation mammal-diet-mammal-life-history``
 
 
 ::
@@ -142,12 +142,12 @@ Integrating Data
 ----------------
 
 **Examples Integrating Data with the join command**
-To integrate data, run weaver join [data package name] and provide the connection configurations.
+To integrate data, run dataweaver join [data package name] and provide the connection configurations.
 
 ::
 
-    weaver join postgres -h
-    usage: weaver join postgres [-h] [--user [USER]] [--password [PASSWORD]]
+    dataweaver join postgres -h
+    usage: dataweaver join postgres [-h] [--user [USER]] [--password [PASSWORD]]
                                 [--host [HOST]] [--port [PORT]]
                                 [--database [DATABASE]]
                                 [--database_name [DATABASE_NAME]]
@@ -174,13 +174,13 @@ To integrate data, run weaver join [data package name] and provide the connectio
       --table_name [TABLE_NAME], -t [TABLE_NAME]
                             Format of table name
 
-To use the weaver with postges .pgpass file set
+To use the dataweaver with postges .pgpass file set
 
-$ ``weaver join postgres``
+$ ``dataweaver join postgres``
 
 or with command line configurations supplied
 
-$ ``weaver join postgres -u name-of-user -h host-name -d database-to-use``
+$ ``dataweaver join postgres -u name-of-user -h host-name -d database-to-use``
 
 
 Contribution
@@ -203,4 +203,4 @@ Foundation’s Data-Driven Discovery Initiative`_ to Ethan White.
 
 
 .. _the Gordon and Betty Moore Foundation’s Data-Driven Discovery Initiative: http://www.moore.org/programs/science/data-driven-discovery
-.. _Code of Conduct: https://github.com/weecology/weaver/blob/master/docs/code_of_conduct.rst
+.. _Code of Conduct: https://github.com/weecology/dataweaver/blob/master/docs/code_of_conduct.rst

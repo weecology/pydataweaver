@@ -1,5 +1,5 @@
-from weaver.lib.defaults import ENCODING
-from weaver.lib.models import Engine
+from dataweaver.lib.defaults import ENCODING
+from dataweaver.lib.models import Engine
 
 
 class engine(Engine):

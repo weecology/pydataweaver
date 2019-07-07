@@ -3,8 +3,8 @@ from __future__ import absolute_import
 
 import os
 
-from weaver.lib.defaults import VERSION
-from weaver.lib.engine_tools import get_script_version
+from dataweaver.lib.defaults import VERSION
+from dataweaver.lib.engine_tools import get_script_version
 
 
 def write_version_file(scripts):

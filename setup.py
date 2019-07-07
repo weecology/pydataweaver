@@ -11,8 +11,8 @@ from setuptools import setup, find_packages
 current_platform = platform.system().lower()
 extra_includes = []
 
-__version__ = "v1.0.dev"
-with open(os.path.join("weaver", "_version.py"), "w") as version_file:
+__version__ = "v0.0.dev"
+with open(os.path.join("dataweaver", "_version.py"), "w") as version_file:
     version_file.write("__version__ = " + "'" + __version__ + "'\n")
     version_file.close()
 
@@ -30,7 +30,7 @@ extra_includes = []
 if current_platform == "windows":
     extra_includes += ["pypyodbc", "inspect"]
 
-packages = ["weaver.lib", "weaver.engines", "weaver"]
+packages = ["dataweaver.lib", "dataweaver.engines", "dataweaver"]
 
 includes = [
     "xlrd",
@@ -58,16 +58,16 @@ excludes = [
 ]
 
 setup(
-    name="weaver",
+    name="dataweaver",
     version=clean_version(__version__),
-    description="Data weaver",
+    description="Data dataweaver",
     long_description="{a}\n{b}".format(
         a=read("README.md"),
         b=re.sub(":[a-z]+:`~?(.*?)`", r"``\1``", read("CHANGES.md")),
     ),
     author="Henry Senyondo, Ethan White",
     author_email="ethan@weecology.org",
-    url="https://github.com/weecology/weaver",
+    url="https://github.com/weecology/dataweaver",
     classifiers=[
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License"
@@ -91,7 +91,7 @@ setup(
     packages=find_packages(
         exclude=["hooks", "docs", "tests", "scripts", "docker", ".cache"]
     ),
-    entry_points={"console_scripts": ["weaver = weaver.__main__:main"]},
+    entry_points={"console_scripts": ["dataweaver = dataweaver.__main__:main"]},
     install_requires=["xlrd", "future", "argcomplete"],
     # py2app flags
     app=["__main__.py"],
@@ -111,10 +111,10 @@ if current_platform != "windows":
     else:
         bash_file = "/dev/null"
 
-    argcomplete_command = 'eval "$(register-python-argcomplete weaver)"'
+    argcomplete_command = 'eval "$(register-python-argcomplete dataweaver)"'
     with open(os.path.expanduser(bash_file), "a+") as bashrc:
         bashrc.seek(0)
-        # register weaver for arg-completion if not already registered
+        # register dataweaver for arg-completion if not already registered
         # when a new shell is spawned
         if argcomplete_command not in bashrc.read():
             bashrc.write(argcomplete_command + "\n")
@@ -124,8 +124,8 @@ if current_platform != "windows":
     os.system(argcomplete_command)
 
 try:
-    from weaver.compile import compile
-    from weaver.lib.repository import check_for_updates
+    from dataweaver.compile import compile
+    from dataweaver.lib.repository import check_for_updates
 
     check_for_updates()
     compile()

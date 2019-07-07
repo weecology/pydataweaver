@@ -2,7 +2,7 @@
 dist/
 build/
 sqlite.db*
-weaver.egg-info
+dataweaver.egg-info
 *.DS_Store*
 .cache/*
 *__pycache__*

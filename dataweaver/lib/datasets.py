@@ -1,4 +1,4 @@
-from weaver.lib.scripts import SCRIPT_LIST, get_script
+from dataweaver.lib.scripts import SCRIPT_LIST, get_script
 
 
 def datasets(keywords=None, licenses=None):

@@ -1,7 +1,7 @@
-Weaver API
-==========
+Dataweaver API
+==============
 
 .. toctree::
    :maxdepth: 4
 
-   weaver
+   dataweaver

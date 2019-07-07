@@ -16,8 +16,8 @@ import csv
 import re
 import time
 from urllib.request import urlretrieve
-from weaver.lib.tools import open_fr, open_fw, open_csvw
-from weaver.lib.warning import Warning
+from dataweaver.lib.tools import open_fr, open_fw, open_csvw
+from dataweaver.lib.warning import Warning
 
 
 class Engine(object):

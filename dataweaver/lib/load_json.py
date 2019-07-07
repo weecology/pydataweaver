@@ -10,9 +10,9 @@ import json
 import sys
 import pprint
 from collections import OrderedDict
-from weaver.lib.templates import TEMPLATES
-from weaver.lib.models import myTables
-from weaver.lib.tools import open_fr
+from dataweaver.lib.templates import TEMPLATES
+from dataweaver.lib.models import myTables
+from dataweaver.lib.tools import open_fr
 
 if sys.version_info[0] < 3:
     from codecs import open

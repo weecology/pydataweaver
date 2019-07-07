@@ -3,7 +3,7 @@ dist/
 build/
 docs\_build
 sqlite.db*
-weaver.egg-info
+dataweaver.egg-info
 apidocs
 .DS_Store
 .cache/*
