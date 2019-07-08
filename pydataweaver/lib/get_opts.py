@@ -1,10 +1,10 @@
 import argparse
 
-from weaver.engines import engine_list
-from weaver.lib.defaults import VERSION
+from pydataweaver.engines import engine_list
+from pydataweaver.lib.defaults import VERSION
 
 # Create the parser
-parser = argparse.ArgumentParser(prog="weaver")
+parser = argparse.ArgumentParser(prog="pydataweaver")
 
 # Add first level arguments
 parser.add_argument("-v", "--version", action="version", version=VERSION)
@@ -28,17 +28,17 @@ join_parser = subparsers.add_parser(
 update_parser = subparsers.add_parser(
     "update", help="download updated versions of data package scripts"
 )
-reset_parser = subparsers.add_parser("reset", help="reset weaver: deletes scripts")
+reset_parser = subparsers.add_parser("reset", help="reset pydataweaver: deletes scripts")
 
 #  ..............................................................
 # subparsers with Arguments
 # ...............................................................
 
 citation_parser.add_argument(
-    "dataset", help="weaver citation or dataset citation", nargs="?", default=None
+    "dataset", help="pydataweaver citation or dataset citation", nargs="?", default=None
 )
 license_parser.add_argument(
-    "dataset", help="weaver license or dataset licenses", nargs="?", default=None
+    "dataset", help="pydataweaver license or dataset licenses", nargs="?", default=None
 )
 
 ls_parser.add_argument(

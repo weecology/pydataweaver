@@ -9,8 +9,8 @@ import os
 import sys
 from os.path import join, exists
 
-from weaver.lib.defaults import SCRIPT_SEARCH_PATHS, ENCODING, SCRIPT_WRITE_PATH
-from weaver.lib.load_json import read_json
+from pydataweaver.lib.defaults import SCRIPT_SEARCH_PATHS, ENCODING, SCRIPT_WRITE_PATH
+from pydataweaver.lib.load_json import read_json
 
 global_script_list = None
 

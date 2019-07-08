@@ -1,12 +1,12 @@
 """Contains DBMS-specific Engine implementations."""
 import os
 
-from weaver.lib.engine import Engine
+from pydataweaver.lib.engine import Engine
 
 engines = ["postgres", "sqlite"]
 
 engine_module_list = [
-    __import__("weaver.engines." + module, fromlist="engines") for module in engines
+    __import__("pydataweaver.engines." + module, fromlist="engines") for module in engines
 ]
 
 engine_list = [module.engine() for module in engine_module_list]

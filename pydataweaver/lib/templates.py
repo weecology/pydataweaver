@@ -4,9 +4,9 @@ functions available for inheritance by the scripts or datasets.
 """
 from __future__ import print_function
 
-from weaver.engines import choose_engine
-from weaver.lib.models import *
-from weaver.lib.process import make_sql
+from pydataweaver.engines import choose_engine
+from pydataweaver.lib.models import *
+from pydataweaver.lib.process import make_sql
 
 
 class Script(object):

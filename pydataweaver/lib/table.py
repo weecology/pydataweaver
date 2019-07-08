@@ -7,7 +7,7 @@ import io
 import sys
 from functools import reduce
 
-from weaver.lib.cleanup import *
+from pydataweaver.lib.cleanup import *
 
 
 class Dataset(object):

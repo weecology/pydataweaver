@@ -1,15 +1,15 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from weaver.engines import choose_engine
-from weaver.lib.scripts import SCRIPT_LIST
-from weaver.lib.engine_tools import name_matches
+from pydataweaver.engines import choose_engine
+from pydataweaver.lib.scripts import SCRIPT_LIST
+from pydataweaver.lib.engine_tools import name_matches
 
 script_list = SCRIPT_LIST()
 
 
 def download(dataset, path="./", quiet=False, subdir=False, debug=False):
-    """Download scripts for weaver."""
+    """Download scripts for pydataweaver."""
     args = {
         "dataset": dataset,
         "command": "download",
