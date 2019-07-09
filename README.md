@@ -45,6 +45,13 @@ The package supports the following database management systems (DBMS):
 | PostgreSQL |              Yes |              Yes |
 | SQLite     |               No |              Yes |
 
+Installing
+----------
+
+```shell
+  pip install pydataweaver
+```
+
 Installing From Source
 ----------------------
 
