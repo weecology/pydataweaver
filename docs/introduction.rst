@@ -3,8 +3,8 @@ User Guide
 ==========
 
 
-The PyDataWeaver Project
-========================
+The Pydata Weaver Project
+=========================
 
 The Pydataweaver is a Python tool that offers a simple to use, clean and
 a robust data integration platform.
@@ -36,7 +36,7 @@ the following packages:
 
     retriever
     PyMySQL>=0.4
-    psycopg2>=2.0
+    psycopg2-binary
     gdal
     future
     numpydoc
