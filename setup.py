@@ -68,7 +68,7 @@ setup(
     url="https://github.com/weecology/pydataweaver",
     classifiers=[
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License"
+        "License :: OSI Approved :: MIT License",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX",
         "Operating System :: Unix",
