@@ -3,8 +3,8 @@ User Guide
 ==========
 
 
-The PyDataWeaver Project
-========================
+The Pydata Weaver Project
+=========================
 
 The Pydataweaver is a Python tool that offers a simple to use, clean and
 a robust data integration platform.

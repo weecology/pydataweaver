@@ -1,4 +1,4 @@
-v0.0.dev
+v1.0.0
 breeding_bird_survey_routes_bioclim.json,1.0.0
 mammal-sites-bioclim-1-2.json,1.0.0
 mammal_community_bioclim.json,1.0.0
