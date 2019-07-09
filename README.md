@@ -25,7 +25,7 @@ This package requires Python 3.5+, recommends Python 3.6+ and depends on the fol
 
      retriever
      PyMySQL>=0.4
-     psycopg2>=2.0
+     psycopg2-binary
      gdal
      future
      numpydoc

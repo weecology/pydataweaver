@@ -36,7 +36,7 @@ the following packages:
 
     retriever
     PyMySQL>=0.4
-    psycopg2>=2.0
+    psycopg2-binary
     gdal
     future
     numpydoc
