@@ -1,0 +1,99 @@
+{
+  "name": "fia-oregon-plot-cond",
+  "version": "1.0.0",
+  "description": "Integrated data for fia-oregon using tables, plots, cond and tree tables",
+  "citation": [
+    {
+      "fia-oregon": "June 20, 2019. Forest Inventory and Analysis Database, St. Paul, MN: U.S. Department of Agriculture, Forest Service, Northern Research Station"
+    }
+  ],
+  "keywords": ["Tree","fia", "trends in forest", "forest species"],
+  "retriever-datasets": [
+    "fia-oregon"
+  ],
+  "licenses":
+    {
+      "fia-oregon": [""]
+    },
+  "result": {
+    "dataset": "fia_oregon_plot_cond",
+    "table": "tree_plot_cond",
+    "fields": []
+  },
+  "main_file": {
+    "path": "fia_oregon.tree",
+    "database_name": "fia_oregon",
+    "table_name": "tree",
+    "table_type": "tabular",
+    "fields": [
+      "cn",
+      "plt_cn",
+      "prev_tre_cn"
+    ]
+  },
+  "tables": [
+    {
+      "database_name": "fia_oregon",
+      "table_name": "plot",
+      "table_type": "tabular",
+      "fields": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday"
+      ]
+    },
+    {
+      "database_name": "fia_oregon",
+      "table_name": "cond",
+      "table_type": "tabular",
+      "fields": [
+        "cn",
+        "plt_cn",
+        "fortypcd",
+        "stdage",
+        "siteclcd"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "fia_oregon.plot",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday"
+      ],
+      "join_ocn": {
+        "common_field": [],
+        "fia_oregon.plot": ["cn"],
+        "fia_oregon.tree": ["plt_cn"]
+      }
+
+    },
+    {
+      "table": "fia_oregon.cond",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "cn",
+        "plt_cn",
+        "fortypcd",
+        "stdage",
+        "siteclcd"
+      ],
+      "remove_duplicate": ["plt_cn"],
+      "join_ocn": {
+        "common_field": [],
+        "fia_oregon.cond": ["cn"],
+        "fia_oregon.tree": ["cn"]
+      }
+
+    }
+  ]
+}
