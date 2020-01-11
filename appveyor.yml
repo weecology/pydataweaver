@@ -60,4 +60,4 @@ build_script:
 #  - echo "Installed pydataweaver:"
 
 test_script:
-  - pydataweaver ls
+  - ls

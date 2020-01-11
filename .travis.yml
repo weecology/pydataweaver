@@ -3,11 +3,7 @@ warnings_are_errors: false
 services:
   - docker
 before_install:
-
-# Set up the environment and create required images
-# If there is no error do not print output
--  docker-compose run weav /bin/sh -c 'pip install --upgrade pip'
+  - docker-compose ps
+# command to run tests using py.test
 script:
-# Load packages and install the required packages
-# Install weaver from source and run tests
--  docker-compose  run weav bash -c "pip install -r requirements.txt .  && py.test -v -W  ignore::UserWarning" || exit 1
+  - docker-compose  run --service-ports weav py.test -v --cov=retriever

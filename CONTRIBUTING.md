@@ -1,7 +1,7 @@
-# Contributing to the Pydata Weaver
+# Contributing to the Data Weaver
 
 We welcome contributions of all kinds including improvements to the core code,
-addition of new dataset scripts to add new datasets to the pydataWeaver,
+addition of new dataset scripts to add new datasets to the Weaver,
 improvements to the documentation, bug reports, or anything else you can think
 of. We strive to be supportive of anyone who wants to contribute, so don't be
 shy, give it a go, and we'll do our best to help.  
