@@ -30,11 +30,9 @@ def _join(args, use_cache, debug, compile):
                 if debug:
                     raise
     else:
-        message = (
-            'The dataset "{}" isn\'t available in the pydataweaver. '
-            "Run pydataweaver.datasets()to list the currently available "
-            "datasets".format(args["dataset"])
-        )
+        message = ('The dataset "{}" isn\'t available in the pydataweaver. '
+                   "Run pydataweaver.datasets()to list the currently available "
+                   "datasets".format(args["dataset"]))
         raise ValueError(message)
     return engine
 

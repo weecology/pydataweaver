@@ -16,24 +16,24 @@ class Script(object):
     it's Unique functionality.
     """
 
-    def __init__(
-        self,
-        title="",
-        description="",
-        name="",
-        urls=dict(),
-        tables=dict(),
-        ref="",
-        public=True,
-        addendum=None,
-        citation="Not currently available",
-        licenses=[{"name": None}],
-        retriever_minimum_version="",
-        version="",
-        encoding="",
-        message="",
-        **kwargs
-    ):
+    def __init__(self,
+                 title="",
+                 description="",
+                 name="",
+                 urls=dict(),
+                 tables=dict(),
+                 ref="",
+                 public=True,
+                 addendum=None,
+                 citation="Not currently available",
+                 licenses=[{
+                     "name": None
+                 }],
+                 retriever_minimum_version="",
+                 version="",
+                 encoding="",
+                 message="",
+                 **kwargs):
 
         self.title = title
         self.name = name
@@ -93,9 +93,8 @@ class Script(object):
 
     def matches_terms(self, terms):
         try:
-            search_string = " ".join(
-                [self.name, self.description, self.name] + self.keywords
-            ).upper()
+            search_string = " ".join([self.name, self.description, self.name] +
+                                     self.keywords).upper()
 
             for term in terms:
                 if not term.upper() in search_string:
@@ -129,17 +128,15 @@ class BasicTextTemplate(Script):
         sql_statement = make_sql(self)
         result_db = engine.database_name()
         result_table = self.result["table"]
-        db_table_name = "{db_name}.{table_name}".format(
-            db_name=result_db, table_name=result_table
-        )
+        db_table_name = "{db_name}.{table_name}".format(db_name=result_db,
+                                                        table_name=result_table)
 
         self.db_table_name = db_table_name
         Script.db_table_name = db_table_name
 
         drop_query = self.engine.drop_statement("TABLE", db_table_name)
-        join_query = sql_statement.format(
-            result_dbi=result_db, result_tablei=result_table
-        )
+        join_query = sql_statement.format(result_dbi=result_db,
+                                          result_tablei=result_table)
         try:
             if self.engine.debug:
                 print(drop_query)

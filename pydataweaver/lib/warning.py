@@ -2,6 +2,7 @@ from builtins import object
 
 
 class Warning(object):
+    """Pydataweaver custom warning"""
     def __init__(self, location, warning):
         self.location = location
         self.warning = warning

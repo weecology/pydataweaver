@@ -127,9 +127,9 @@ def get_fixed_width(dialect):
 
 def get_header_rows(dialect):
     """Get number of rows considered as the header."""
-    val = clean_input(
-        "header_rows (int) (press return to skip): ", ignore_empty=True, dtype=int
-    )
+    val = clean_input("header_rows (int) (press return to skip): ",
+                      ignore_empty=True,
+                      dtype=int)
     if val == "" or val == []:
         # return and dont add key to dialect dict if empty val
         return
@@ -151,8 +151,7 @@ def create_json():
     script_exists = True
     while script_exists or invalid_name:
         contents["name"] = clean_input(
-            "name (a short unique identifier; only lowercase letters and - allowed): "
-        )
+            "name (a short unique identifier; only lowercase letters and - allowed): ")
         invalid_name = re.compile(r"[^a-z-]").search(contents["name"])
         if invalid_name:
             print("name can only contain lowercase letters and -")
@@ -164,12 +163,11 @@ def create_json():
     contents["title"] = clean_input("title: ", ignore_empty=True)
     contents["description"] = clean_input("description: ", ignore_empty=True)
     contents["citation"] = clean_input("citation: ", ignore_empty=True)
-    contents["homepage"] = clean_input(
-        "homepage (for the entire dataset): ", ignore_empty=True
-    )
-    contents["keywords"] = clean_input(
-        "keywords (separated by ';'): ", split_char=";", ignore_empty=True
-    )
+    contents["homepage"] = clean_input("homepage (for the entire dataset): ",
+                                       ignore_empty=True)
+    contents["keywords"] = clean_input("keywords (separated by ';'): ",
+                                       split_char=";",
+                                       ignore_empty=True)
     contents["resources"] = []
     contents["pydataweaver"] = "True"
     contents["retriever_minimum_version"] = "2.0.dev"
@@ -248,18 +246,19 @@ def create_json():
                 table["schema"]["ct_names"] = ct_names
 
             contents["resources"].append(table)
-    give_message = clean_input(
-        "Would you like to add a Message? (y,N): ", ignore_empty=True
-    )
+    give_message = clean_input("Would you like to add a Message? (y,N): ",
+                               ignore_empty=True)
     if give_message.lower() in ["y", "yes"]:
         contents["message"] = clean_input("Provide your Message: ", ignore_empty=True)
     contents["urls"] = tableurls
     file_name = contents["name"] + ".json"
     file_name = file_name.replace("-", "_")
     with open(os.path.join(HOME_DIR, "scripts", file_name), "w") as output_file:
-        json_str = json.dumps(
-            contents, output_file, sort_keys=True, indent=4, separators=(",", ": ")
-        )
+        json_str = json.dumps(contents,
+                              output_file,
+                              sort_keys=True,
+                              indent=4,
+                              separators=(",", ": "))
         output_file.write(json_str + "\n")
         print("\nScript written to " + file_name)
         output_file.close()
@@ -284,16 +283,10 @@ def edit_dict(obj, tabwidth=0):
             try:
                 if isinstance(val, dict):
                     if val != {}:
-                        print(
-                            "    '"
-                            + key
-                            + "' has the following keys:\n"
-                            + str(obj[key].keys())
-                            + "\n"
-                        )
-                        do_edit = clean_input(
-                            "Edit the values for these sub-keys of " + key + "? (y/N): "
-                        )
+                        print("    '" + key + "' has the following keys:\n" +
+                              str(obj[key].keys()) + "\n")
+                        do_edit = clean_input("Edit the values for these sub-keys of " +
+                                              key + "? (y/N): ")
 
                         if do_edit.lower() in ["y", "yes"]:
                             edit_dict(obj[key], tabwidth + 1)
@@ -325,17 +318,12 @@ def edit_dict(obj, tabwidth=0):
                         if del_key not in val:
                             print("Invalid key: Not found")
                             continue
-                        print(
-                            "Removed "
-                            + str(del_key)
-                            + " : "
-                            + str(obj[key].pop(del_key))
-                        )
+                        print("Removed " + str(del_key) + " : " +
+                              str(obj[key].pop(del_key)))
 
                     elif selection == "4":
                         do_remove = clean_input(
-                            "Are you sure (completely remove this entry)? (y/n): "
-                        )
+                            "Are you sure (completely remove this entry)? (y/n): ")
 
                         if do_remove.lower() in ["y", "yes"]:
                             obj.pop(key)
@@ -353,9 +341,8 @@ def edit_dict(obj, tabwidth=0):
                     for i in range(len(val)):
                         print(i + 1, ". ", str(val[i]))
                         if isinstance(val[i], dict):
-                            do_edit = clean_input(
-                                "\nEdit this dict in '" + key + "'? (y/N): "
-                            )
+                            do_edit = clean_input("\nEdit this dict in '" + key +
+                                                  "'? (y/N): ")
 
                             if do_edit.lower() in ["y", "yes"]:
                                 edit_dict(obj[key][i], tabwidth + 2)
@@ -382,8 +369,7 @@ def edit_dict(obj, tabwidth=0):
 
                     elif selection == "3":
                         do_remove = clean_input(
-                            "Are you sure (completely remove this entry)? (y/n): "
-                        )
+                            "Are you sure (completely remove this entry)? (y/n): ")
 
                         if do_remove.lower() in ["y", "yes"]:
                             obj.pop(key)
@@ -411,8 +397,7 @@ def edit_dict(obj, tabwidth=0):
 
                     elif selection == "2":
                         do_remove = clean_input(
-                            "Are you sure (completely remove this entry)? (y/n): "
-                        )
+                            "Are you sure (completely remove this entry)? (y/n): ")
 
                         if do_remove.lower() in ["y", "yes"]:
                             obj.pop(key)
@@ -447,9 +432,11 @@ def edit_json(json_file):
     file_name = contents["name"] + ".json"
     file_name = file_name.replace("-", "_")
     with open(os.path.join(HOME_DIR, "scripts", file_name), "w") as output_file:
-        json_str = json.dumps(
-            contents, output_file, sort_keys=True, indent=4, separators=(",", ": ")
-        )
+        json_str = json.dumps(contents,
+                              output_file,
+                              sort_keys=True,
+                              indent=4,
+                              separators=(",", ": "))
         output_file.write(json_str + "\n")
         print("\nScript written to " + os.path.join(HOME_DIR, "scripts", file_name))
         output_file.close()
@@ -463,9 +450,7 @@ def delete_json(json_file):
 
         [
             os.remove(x)
-            for x in glob.glob(
-                os.path.join(HOME_DIR, "scripts", json_file[:-4] + "py*")
-            )
+            for x in glob.glob(os.path.join(HOME_DIR, "scripts", json_file[:-4] + "py*"))
         ]
 
         # delete scripts from current directory if exists
@@ -473,10 +458,8 @@ def delete_json(json_file):
             os.remove(os.path.join(os.getcwd(), "scripts", json_file))
 
         [
-            os.remove(x)
-            for x in glob.glob(
-                os.path.join(os.getcwd(), "scripts", json_file[:-4] + "py*")
-            )
+            os.remove(x) for x in glob.glob(
+                os.path.join(os.getcwd(), "scripts", json_file[:-4] + "py*"))
         ]
     except OSError:
         print("Couldn't delete Script.")

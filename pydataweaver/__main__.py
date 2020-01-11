@@ -26,15 +26,11 @@ def main():
     else:
         args = parser.parse_args()
 
-        if (
-            args.command not in ["reset", "update"]
-            and not os.path.isdir(SCRIPT_SEARCH_PATHS[1])
-            and not [
-                f
-                for f in os.listdir(SCRIPT_SEARCH_PATHS[-1])
-                if os.path.exists(SCRIPT_SEARCH_PATHS[-1])
-            ]
-        ):
+        if (args.command not in ["reset", "update"] and
+                not os.path.isdir(SCRIPT_SEARCH_PATHS[1]) and not [
+                    f for f in os.listdir(SCRIPT_SEARCH_PATHS[-1])
+                    if os.path.exists(SCRIPT_SEARCH_PATHS[-1])
+                ]):
             check_for_updates()
             reload_scripts()
         script_list = SCRIPT_LIST()
@@ -144,18 +140,16 @@ def print_info(all_scripts, keywords_license=False):
     for script in all_scripts:
         # Include a description if keywords_license are not used
         if not keywords_license:
-            out_stm = (
-                "{count}. {title}\n{name}\n{keywords}\n{description}\n{licenses}\n"
-                "{citation}\n".format(
-                    count=count,
-                    title=script.title,
-                    name=script.name,
-                    keywords=script.keywords,
-                    description=script.description,
-                    licenses=str(script.licenses),
-                    citation=script.citation,
-                )
-            )
+            out_stm = ("{count}. {title}\n{name}\n{keywords}\n{description}\n{licenses}\n"
+                       "{citation}\n".format(
+                           count=count,
+                           title=script.title,
+                           name=script.name,
+                           keywords=script.keywords,
+                           description=script.description,
+                           licenses=str(script.licenses),
+                           citation=script.citation,
+                       ))
         else:
             out_stm = "{count}. {title}\n{name}\n{keywords}\n{licenses}\n" "".format(
                 count=count,

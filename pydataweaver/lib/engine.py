@@ -77,10 +77,8 @@ class Engine(object):
                     self.connection.rollback()
                 except:
                     pass
-                print(
-                    "Couldn't create database (%s). "
-                    "\nTrying to continue the integration..." % e
-                )
+                print("Couldn't create database (%s). "
+                      "\nTrying to continue the integration..." % e)
 
     def create_db_statement(self):
         """Return SQL statement to create a database."""
@@ -119,13 +117,9 @@ class Engine(object):
 
     def exists(self, script):
         """Check to see if the given table exists."""
-        return all(
-            [
-                self.table_exists(script.name, key)
-                for key in list(script.urls.keys())
-                if key
-            ]
-        )
+        return all([
+            self.table_exists(script.name, key) for key in list(script.urls.keys()) if key
+        ])
 
     def exists(self, database, table_name):
         """Check to see if the given table exists."""

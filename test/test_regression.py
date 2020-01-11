@@ -37,13 +37,10 @@ RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.retriever/scripts
 WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/"))
 WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/scripts/"))
 WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
-    os.path.join(FILE_LOCATION, "test_data_packages")
-)
+    os.path.join(FILE_LOCATION, "test_data_packages"))
 
-RETRIEVER_GIS_REPO = (
-    "https://raw.githubusercontent.com/weecology"
-    "/retriever/master/test/raw_data_gis/scripts/{script_names}.json"
-)
+RETRIEVER_GIS_REPO = ("https://raw.githubusercontent.com/weecology"
+                      "/retriever/master/test/raw_data_gis/scripts/{script_names}.json")
 
 postgres_engine, _ = engine_list
 
@@ -77,22 +74,39 @@ test_sample_wgs84 = {
     ],
     "script": {
         "name": "testsurveryone",
-        "resources": [
-            {
-                "dialect": {"do_not_bulk_insert": "True"},
-                "name": "sites",
-                "schema": {
-                    "fields": [
-                        {"name": "site_id", "type": "int"},
-                        {"name": "state", "size": "4", "type": "char"},
-                        {"name": "longitude", "type": "double"},
-                        {"name": "latitude", "type": "double"},
-                        {"name": "habitat_code", "size": "4", "type": "char"},
-                    ]
-                },
-                "url": "http://example.com/testsurveryone.txt",
-            }
-        ],
+        "resources": [{
+            "dialect": {
+                "do_not_bulk_insert": "True"
+            },
+            "name": "sites",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "site_id",
+                        "type": "int"
+                    },
+                    {
+                        "name": "state",
+                        "size": "4",
+                        "type": "char"
+                    },
+                    {
+                        "name": "longitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "latitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "habitat_code",
+                        "size": "4",
+                        "type": "char"
+                    },
+                ]
+            },
+            "url": "http://example.com/testsurveryone.txt",
+        }],
         "retriever": "True",
         "version": "1.0.0",
     },
@@ -110,22 +124,39 @@ test_sample_nad83 = {
     ],
     "script": {
         "name": "testsurverytwo",
-        "resources": [
-            {
-                "dialect": {"do_not_bulk_insert": "True"},
-                "name": "sites",
-                "schema": {
-                    "fields": [
-                        {"name": "site_id", "type": "int"},
-                        {"name": "state", "size": "4", "type": "char"},
-                        {"name": "longitude", "type": "double"},
-                        {"name": "latitude", "type": "double"},
-                        {"name": "habitat_code", "size": "4", "type": "char"},
-                    ]
-                },
-                "url": "http://example.com/testsurverytwo.txt",
-            }
-        ],
+        "resources": [{
+            "dialect": {
+                "do_not_bulk_insert": "True"
+            },
+            "name": "sites",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "site_id",
+                        "type": "int"
+                    },
+                    {
+                        "name": "state",
+                        "size": "4",
+                        "type": "char"
+                    },
+                    {
+                        "name": "longitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "latitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "habitat_code",
+                        "size": "4",
+                        "type": "char"
+                    },
+                ]
+            },
+            "url": "http://example.com/testsurverytwo.txt",
+        }],
         "retriever": "True",
         "version": "1.0.0",
     },
@@ -165,9 +196,8 @@ def set_weaver_data_packages(resources_up=True):
             os.makedirs(WEAVER_SCRIPT_DIR)
     for file_name in WEAVER_TEST_DATA_PACKAGE_FILES:
         if resources_up:
-            scr_pack_path = os.path.join(
-                WEAVER_TEST_DATA_PACKAEGES_DIR, file_name + ".json"
-            )
+            scr_pack_path = os.path.join(WEAVER_TEST_DATA_PACKAEGES_DIR,
+                                         file_name + ".json")
             pack_path = os.path.normpath(scr_pack_path)
             shutil.copy(pack_path, WEAVER_SCRIPT_DIR)
         else:
@@ -195,8 +225,7 @@ def set_retriever_res(resource_up=True):
         data_file_path = os.path.normpath(os.path.join(data_dir_path, data_file_name))
         script_name = file_names["script"]["name"] + ".json"
         script_file_path = os.path.normpath(
-            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_"))
-        )
+            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_")))
 
         # Set or tear down raw data files
         # in '~/.retriever/raw_data/data_dir_path/data_file_name'
@@ -212,8 +241,8 @@ def set_retriever_res(resource_up=True):
     for script_name in RETRIEVER_SPATIAL_DATA:
         file_name = script_name.replace("-", "_")
         script_file_path = os.path.normpath(
-            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_") + ".json")
-        )
+            os.path.join(RETRIEVER_SCRIPT_DIR,
+                         script_name.replace("-", "_") + ".json"))
         if resource_up:
             url = RETRIEVER_GIS_REPO.format(script_names=file_name)
             urlretrieve(url, script_file_path)
@@ -267,23 +296,15 @@ def setup_postgres_retriever_db():
 
 def teardown_postgres_db():
     # Retriever database
-    cmd = (
-        "psql -U postgres -d "
-        + testdb
-        + " -h "
-        + pgdb_host
-        + ' -w -c "DROP SCHEMA IF EXISTS '
-        + testschema
-        + ' CASCADE"'
-    )
+    cmd = ("psql -U postgres -d " + testdb + " -h " + pgdb_host +
+           ' -w -c "DROP SCHEMA IF EXISTS ' + testschema + ' CASCADE"')
     subprocess.call(shlex.split(cmd))
 
     # Weaver database
     for dataset in all_script_names:
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
-        cmd = (
-            "psql -U postgres -d " + testdb + " -h " + pgdb_host + " -w -c '{sql_stm}'"
-        )
+        cmd = ("psql -U postgres -d " + testdb + " -h " + pgdb_host +
+               " -w -c '{sql_stm}'")
         dfd = cmd.format(sql_stm=sql_stm)
         subprocess.call(shlex.split(dfd))
 
@@ -338,8 +359,8 @@ def test_postgres(dataset, csv_file, expected):
         "database_name": postgres_engine.opts["database_name"],
         "table_name": postgres_engine.opts["table_name"],
     }
-    res_csv = get_output_as_csv(
-        dataset, postgres_engine, db=postgres_engine.opts["database_name"]
-    )
+    res_csv = get_output_as_csv(dataset,
+                                postgres_engine,
+                                db=postgres_engine.opts["database_name"])
     assert file_exists(res_csv)
     os.remove(res_csv)

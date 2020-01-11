@@ -24,7 +24,7 @@ def reload_scripts():
         os.makedirs(SCRIPT_WRITE_PATH)
 
     for search_path in [
-        search_path for search_path in SCRIPT_SEARCH_PATHS if exists(search_path)
+            search_path for search_path in SCRIPT_SEARCH_PATHS if exists(search_path)
     ]:
         data_packages = [
             file_i for file_i in os.listdir(search_path) if file_i.endswith(".json")
@@ -106,9 +106,10 @@ def open_csvw(csv_file, encode=True):
     Also sets dialect to 'excel' and escape characters to '\\'
     """
     if os.name == "nt":
-        csv_writer = csv.writer(
-            csv_file, dialect="excel", escapechar="\\", lineterminator="\n"
-        )
+        csv_writer = csv.writer(csv_file,
+                                dialect="excel",
+                                escapechar="\\",
+                                lineterminator="\n")
     else:
         csv_writer = csv.writer(csv_file, dialect="excel", escapechar="\\")
     return csv_writer
@@ -126,6 +127,7 @@ def to_str(object, object_encoding=sys.stdout):
 
 
 class StoredScripts:
+    """Register scripts"""
     def __init__(self):
         self._shared_scripts = SCRIPT_LIST()
 

@@ -37,9 +37,9 @@ def create_home_dir():
     # create the necessary directory structure for storing scripts/raw_data
     # in the ~/.pydataweaver directory
     for dir in (
-        HOME_DIR,
-        os.path.join(HOME_DIR, "raw_data"),
-        os.path.join(HOME_DIR, "scripts"),
+            HOME_DIR,
+            os.path.join(HOME_DIR, "raw_data"),
+            os.path.join(HOME_DIR, "scripts"),
     ):
         if not os.path.exists(dir):
             try:
@@ -84,7 +84,8 @@ def name_matches(scripts, arg):
 
     matches.sort(key=lambda x: -x[1])
 
-    print('\nThe dataset "{}" ' "isn't currently available in the pydataweaver.".format(arg))
+    print('\nThe dataset "{}" '
+          "isn't currently available in the pydataweaver.".format(arg))
     if matches:
         print("Did you mean:" " \n\t{}".format("\n\t".join([i[0] for i in matches])))
 
@@ -100,9 +101,10 @@ config_path = os.path.join(HOME_DIR, "connections.config")
 def reset_weaver(scope="scripts", ask_permission=True):
     """Remove stored information on scripts, data, and connections."""
     warning_messages = {
-        "scripts": "\nThis will remove existing scripts."
-        + "\nSpecifically it will remove the scripts folder in {}."
-        + "\nDo you want to proceed? (y/N)\n"
+        "scripts":
+            "\nThis will remove existing scripts." +
+            "\nSpecifically it will remove the scripts folder in {}." +
+            "\nDo you want to proceed? (y/N)\n"
     }
     path = os.path.normpath(HOME_DIR)
     warn_msg = warning_messages[scope].format(path)
@@ -138,9 +140,10 @@ def json2csv(input_file, output_file=None, header_values=None):
             fieldnames=header_values,
         )
     else:
-        outfile = csv.DictWriter(
-            csv_out, dialect="excel", escapechar="\\", fieldnames=header_values
-        )
+        outfile = csv.DictWriter(csv_out,
+                                 dialect="excel",
+                                 escapechar="\\",
+                                 fieldnames=header_values)
     raw_data = json.loads(file_out.read())
     outfile.writeheader()
 
@@ -162,9 +165,10 @@ def xml2csv(input_file, outputfile=None, header_values=None, row_tag="row"):
         outputfile = os.path.splitext(os.path.basename(input_file))[0] + ".csv"
     csv_out = open_fw(outputfile)
     if os.name == "nt":
-        csv_writer = csv.writer(
-            csv_out, dialect="excel", escapechar="\\", lineterminator="\n"
-        )
+        csv_writer = csv.writer(csv_out,
+                                dialect="excel",
+                                escapechar="\\",
+                                lineterminator="\n")
     else:
         csv_writer = csv.writer(csv_out, dialect="excel", escapechar="\\")
 
@@ -303,15 +307,13 @@ def get_script_version():
     scripts = []
     for module in modules:
         if module.public:
-            if (
-                os.path.isfile(".".join(module._file.split(".")[:-1]) + ".json")
-                and module.version
-            ):
+            if (os.path.isfile(".".join(module._file.split(".")[:-1]) + ".json") and
+                    module.version):
                 module_name = module._name + ".json"
                 scripts.append(",".join([module_name, str(module.version)]))
-            elif os.path.isfile(
-                ".".join(module._file.split(".")[:-1]) + ".py"
-            ) and not os.path.isfile(".".join(module._file.split(".")[:-1]) + ".json"):
+            elif os.path.isfile(".".join(module._file.split(".")[:-1]) +
+                                ".py") and not os.path.isfile(
+                                    ".".join(module._file.split(".")[:-1]) + ".json"):
                 module_name = module._name + ".py"
                 scripts.append(",".join([module_name, str(module.version)]))
 
