@@ -1,28 +1,28 @@
 {
-  "name": "fia-oregon-plot-cond",
+  "name": "fia-colorado-plot-cond",
   "version": "1.0.0",
-  "description": "Integrated data for fia-oregon using tables, plots, cond and tree tables",
+  "description": "Integrated data for fia-colorado using tables, plots, cond and tree tables",
   "citation": [
     {
-      "fia-oregon": "June 20, 2019. Forest Inventory and Analysis Database, St. Paul, MN: U.S. Department of Agriculture, Forest Service, Northern Research Station"
+      "fia-colorado": "June 20, 2019. Forest Inventory and Analysis Database, St. Paul, MN: U.S. Department of Agriculture, Forest Service, Northern Research Station"
     }
   ],
   "keywords": ["Tree","fia", "trends in forest", "forest species"],
   "retriever-datasets": [
-    "fia-oregon"
+    "fia-colorado"
   ],
   "licenses":
     {
-      "fia-oregon": [""]
+      "fia-colorado": [""]
     },
   "result": {
-    "dataset": "fia_oregon_plot_cond",
+    "dataset": "fia_colorado_plot_cond",
     "table": "tree_plot_cond",
     "fields": []
   },
   "main_file": {
-    "path": "fia_oregon.tree",
-    "database_name": "fia_oregon",
+    "path": "fia_colorado.tree",
+    "database_name": "fia_colorado",
     "table_name": "tree",
     "table_type": "tabular",
     "fields": [
@@ -33,7 +33,7 @@
   },
   "tables": [
     {
-      "database_name": "fia_oregon",
+      "database_name": "fia_colorado",
       "table_name": "plot",
       "table_type": "tabular",
       "fields": [
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "database_name": "fia_oregon",
+      "database_name": "fia_colorado",
       "table_name": "cond",
       "table_type": "tabular",
       "fields": [
@@ -60,7 +60,7 @@
   ],
   "join": [
     {
-      "table": "fia_oregon.plot",
+      "table": "fia_colorado.plot",
       "table_type": "tabular",
       "fields_to_use": [
         "cn",
@@ -72,13 +72,13 @@
       ],
       "join_ocn": {
         "common_field": [],
-        "fia_oregon.plot": ["cn"],
-        "fia_oregon.tree": ["plt_cn"]
+        "fia_colorado.plot": ["cn"],
+        "fia_colorado.tree": ["plt_cn"]
       }
 
     },
     {
-      "table": "fia_oregon.cond",
+      "table": "fia_colorado.cond",
       "table_type": "tabular",
       "fields_to_use": [
         "cn",
@@ -90,8 +90,8 @@
       "remove_duplicate": ["plt_cn"],
       "join_ocn": {
         "common_field": [],
-        "fia_oregon.cond": ["plt_cn"],
-        "fia_oregon.tree": ["plt_cn"]
+        "fia_colorado.cond": ["plt_cn"],
+        "fia_colorado.tree": ["plt_cn"]
       }
 
     }
