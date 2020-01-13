@@ -1,5 +1,5 @@
 # -*- coding: latin-1  -*-
-# """Integrations tests for Data Weaver"""
+"""Integrations tests for Data Weaver"""
 from __future__ import print_function
 
 import json
@@ -7,16 +7,15 @@ import os
 import shlex
 import shutil
 import subprocess
-import sys
 from collections import OrderedDict
 
 import pandas
 import pytest
-
 from retriever import dataset_names
 from retriever import install_postgres
 from retriever import install_sqlite
 from retriever import reload_scripts as retriever_reload_scripts
+
 from pydataweaver import reload_scripts as weaver_reload_scripts
 from pydataweaver.engines import engine_list
 from pydataweaver.lib.defaults import ENCODING
@@ -416,6 +415,14 @@ def teardown_sqlite_db():
     subprocess.call(["rm", "-r", dbfile])
 
 
+def teardown_weaver_scripts():
+    set_weaver_data_packages(resources_up=False)
+
+
+def teardown_retriever_scripts():
+    set_retriever_resources(resource_up=False)
+
+
 def install_dataset_postgres(dataset):
     postgres_engine.opts = {
         "engine": "postgres",
@@ -485,14 +492,14 @@ def test_retriever_test_resources():
 
 
 def test_restiever_test_scripts():
-    """Test retriever test scripts"""
+    """Test Retriever test scripts"""
     datasets_list = dataset_names()
     assert set(TESTS_SCRIPTS).issubset(
         set(datasets_list['online'] + datasets_list['offline']))
 
 
 def test_weaver_test_data_packages():
-    """Test available pydataweaver test scripts"""
+    """Test available Pydataweaver test scripts"""
     data_packages_exists = True
     for weaver_script in WEAVER_TEST_DATA_PACKAGE_FILES:
         file_paths = os.path.join(WEAVER_SCRIPT_DIR, weaver_script + ".json")
@@ -501,15 +508,14 @@ def test_weaver_test_data_packages():
     assert data_packages_exists is True
 
 
-# Weaver integration
 def get_script_module(script_name):
-    """Load a script module."""
+    """Load script modules."""
     print(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
     return read_json(os.path.join(WEAVER_HOME_DIR, "scripts", script_name))
 
 
 def get_output_as_csv(dataset, engines, db):
-    """integrate datasets and return the output as a csv."""
+    """Integrate datasets and return the output as a csv."""
     import pydataweaver
 
     weaver_reload_scripts()
@@ -524,11 +530,12 @@ def get_output_as_csv(dataset, engines, db):
 def teardown_module():
     teardown_postgres_db()
     teardown_sqlite_db()
+    teardown_weaver_scripts()
+    teardown_retriever_scripts()
 
 
 def setup_module():
-
-    # Set up test data and scripts
+    """Set up resources used for testing."""
     set_retriever_resources(resource_up=True)
     set_weaver_data_packages(resources_up=True)
 

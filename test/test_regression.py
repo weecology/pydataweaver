@@ -1,9 +1,8 @@
 # -*- coding: latin-1  -*-
 # Integrations tests for Data Weaver.
-# The tests use the Data retriever platform to install
-# all the required datasets.
-# After the datasets are installed, the pydataweaver integrates
-# the datasets using the test scripts.
+# The tests use the Data Retriever platform to install
+# all the required datasets and the Pydataweaver integrates
+# the datasets.
 from __future__ import print_function
 
 import json
@@ -11,25 +10,18 @@ import os
 import shlex
 import shutil
 import subprocess
-import sys
 import time
-from imp import reload
 from urllib.request import urlretrieve
 
 import pytest
-
 import retriever as rt
+
 import pydataweaver as wt
 from pydataweaver.engines import engine_list
 from pydataweaver.lib.defaults import ENCODING
 from pydataweaver.lib.engine_tools import create_file
 
 encoding = ENCODING.lower()
-
-reload(sys)
-if hasattr(sys, "setdefaultencoding"):
-    sys.setdefaultencoding(encoding)
-
 FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.retriever/"))
 RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser("~/.retriever/raw_data/"))
@@ -256,8 +248,8 @@ def file_exists(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
 
 
-# Install RETRIEVER_SPATIAL_DATA using default db and schema names:
 def install_to_database(dataset, install_function, config):
+    """Install RETRIEVER_SPATIAL_DATA using default db and schema names"""
     install_function(dataset, **config)
     return
 
@@ -300,7 +292,7 @@ def teardown_postgres_db():
            ' -w -c "DROP SCHEMA IF EXISTS ' + testschema + ' CASCADE"')
     subprocess.call(shlex.split(cmd))
 
-    # Weaver database
+    # Pydataweaver database
     for dataset in all_script_names:
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
         cmd = ("psql -U postgres -d " + testdb + " -h " + pgdb_host +
@@ -311,7 +303,7 @@ def teardown_postgres_db():
 
 # Weaver integration
 def get_output_as_csv(dataset, engines, db):
-    """integrate datasets and return the output as a csv."""
+    """Integrate datasets and return the output as a csv."""
     wt.reload_scripts()
     eng = wt.join_postgres(
         dataset,
@@ -327,7 +319,7 @@ def get_output_as_csv(dataset, engines, db):
 
 
 def setup_module():
-    # set up postgres database
+    # Set up postgres database
     teardown_postgres_db()
     set_weaver_data_packages(resources_up=True)
     set_retriever_res(resource_up=True)
@@ -335,7 +327,10 @@ def setup_module():
 
 
 def teardown_module():
+    """Tear down databases, and delete data package test scripts"""
     teardown_postgres_db()
+    set_weaver_data_packages(resources_up=False)
+    set_retriever_res(resource_up=False)
 
 
 @pytest.mark.parametrize("dataset, csv_file, expected", WEAVER_TEST_SCRIPTS)

@@ -1,6 +1,7 @@
 import pytest
-from pydataweaver.lib.scripts import SCRIPT_LIST
+
 from pydataweaver.lib.process import make_sql
+from pydataweaver.lib.scripts import SCRIPT_LIST
 
 expected_query = {
     "mammal-community-sites-bioclim": (

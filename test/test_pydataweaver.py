@@ -1,11 +1,11 @@
 import pytest
 
+from pydataweaver.lib.process import create_inner_join
 from pydataweaver.lib.process import create_sqlcolumn_string
 from pydataweaver.lib.process import create_uniquevalue_query
-from pydataweaver.lib.process import process_duplicate_fields
 from pydataweaver.lib.process import excel_column_name
-from pydataweaver.lib.process import create_inner_join
 from pydataweaver.lib.process import get_trimmed_columns
+from pydataweaver.lib.process import process_duplicate_fields
 
 process_duplicate_parameters = {
     # Fields used for create sample sql and expected query
