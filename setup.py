@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 current_platform = platform.system().lower()
 extra_includes = []
 
-__version__ = "v0.0.dev"
+__version__ = "v1.0.1.dev"
 with open(os.path.join("pydataweaver", "_version.py"), "w") as version_file:
     version_file.write("__version__ = " + "'" + __version__ + "'\n")
     version_file.close()
