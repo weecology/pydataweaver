@@ -1,0 +1,99 @@
+{
+  "name": "fia-colorado-plot-cond",
+  "version": "1.0.0",
+  "description": "Integrated data for fia-colorado using tables, plots, cond and tree tables",
+  "citation": [
+    {
+      "fia-colorado": "June 20, 2019. Forest Inventory and Analysis Database, St. Paul, MN: U.S. Department of Agriculture, Forest Service, Northern Research Station"
+    }
+  ],
+  "keywords": ["Tree","fia", "trends in forest", "forest species"],
+  "retriever-datasets": [
+    "fia-colorado"
+  ],
+  "licenses":
+    {
+      "fia-colorado": [""]
+    },
+  "result": {
+    "dataset": "fia_colorado_plot_cond",
+    "table": "tree_plot_cond",
+    "fields": []
+  },
+  "main_file": {
+    "path": "fia_colorado.tree",
+    "database_name": "fia_colorado",
+    "table_name": "tree",
+    "table_type": "tabular",
+    "fields": [
+      "cn",
+      "plt_cn",
+      "prev_tre_cn"
+    ]
+  },
+  "tables": [
+    {
+      "database_name": "fia_colorado",
+      "table_name": "plot",
+      "table_type": "tabular",
+      "fields": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday"
+      ]
+    },
+    {
+      "database_name": "fia_colorado",
+      "table_name": "cond",
+      "table_type": "tabular",
+      "fields": [
+        "cn",
+        "plt_cn",
+        "fortypcd",
+        "stdage",
+        "siteclcd"
+      ]
+    }
+  ],
+  "join": [
+    {
+      "table": "fia_colorado.plot",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday"
+      ],
+      "join_ocn": {
+        "common_field": [],
+        "fia_colorado.plot": ["cn"],
+        "fia_colorado.tree": ["plt_cn"]
+      }
+
+    },
+    {
+      "table": "fia_colorado.cond",
+      "table_type": "tabular",
+      "fields_to_use": [
+        "cn",
+        "plt_cn",
+        "fortypcd",
+        "stdage",
+        "siteclcd"
+      ],
+      "remove_duplicate": ["plt_cn"],
+      "join_ocn": {
+        "common_field": [],
+        "fia_colorado.cond": ["plt_cn"],
+        "fia_colorado.tree": ["plt_cn"]
+      }
+
+    }
+  ]
+}

@@ -1,8 +1,13 @@
-FROM ubuntu:16.04
+# Download base image ubuntu 18.04
+FROM ubuntu:18.04
 
 MAINTAINER Weecology "https://github.com/weecology/pydataweaver"
 
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+
+# Manually install tzdata to allow for non-interactive install
+RUN apt-get install -y --force-yes tzdata
+
 RUN apt-get install -y --force-yes build-essential wget git locales locales-all > /dev/null
 RUN apt-get install -y --force-yes postgresql-client mysql-client > /dev/null
 
@@ -25,10 +30,9 @@ RUN chmod 0644 ~/.profile
 
 # Install retriever dev  version, python core package
 RUN pip install git+https://git@github.com/weecology/retriever.git
-RUN retriever ls > /dev/null
 RUN pip install pymysql
 RUN pip install psycopg2-binary -U
-RUN pip  install codecov
+RUN pip  install codecov -U
 RUN pip install pytest-cov -U
 RUN pip install pytest-xdist -U
 RUN pip install pytest
@@ -45,8 +49,10 @@ ENTRYPOINT ["/pydataweaver/cli_tools/entrypoint.sh"]
 
 WORKDIR ./pydataweaver
 
+RUN pip install -e .
 # Change permissions to config files
 # Do not run these CMDS before Entrypoint.
+RUN export PGPASSFILE="~/.pgpass"
 RUN chmod 600 cli_tools/.pgpass
 RUN chmod 600 cli_tools/.my.cnf
 

@@ -19,6 +19,9 @@ services:
     image: weaver_image
     command: bash -c "Python --version"
     environment:
+      # Handle tzdata install see: https://serverfault.com/a/975084
+      TZ: America/New_York
+      DEBIAN_FRONTEND: noninteractive
       # If IN_DOCKER is set, use service names as hosts names(travis)
       # otherwise use localhost (local tests)
       "IN_DOCKER" : "true"
@@ -29,9 +32,9 @@ services:
       "PGHOST" : "pgdb_weaver"
     restart: on-failure
     build: .
-    
+
     depends_on:
       - pgdb_weaver
-    
+
     ports:
       - 5001:80

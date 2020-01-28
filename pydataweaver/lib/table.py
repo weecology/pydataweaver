@@ -23,9 +23,12 @@ class Dataset(object):
 class TabularDataset(Dataset):
     """Information about a database table."""
 
-    def __init__(
-        self, name=None, fields=[], table_type="tabular", database_name=None, **kwargs
-    ):
+    def __init__(self,
+                 name=None,
+                 fields=[],
+                 table_type="tabular",
+                 database_name=None,
+                 **kwargs):
 
         self.name = name
         self.fields = fields
@@ -44,10 +47,13 @@ class TabularDataset(Dataset):
 class RasterDataset(Dataset):
     """Raster table implementation"""
 
-    def __init__(
-        self, name=None, fields=[], table_type="raster", database_name=None, **kwargs
-    ):
-        self.name = None
+    def __init__(self,
+                 name=None,
+                 fields=[],
+                 table_type="raster",
+                 database_name=None,
+                 **kwargs):
+        self.name = name
         self.table_type = table_type
         self.group = None
         self.relative_path = 0
@@ -72,9 +78,12 @@ class RasterDataset(Dataset):
 class VectorDataset(Dataset):
     """Vector table implementation"""
 
-    def __init__(
-        self, name=None, fields=[], table_type="vector", database_name=None, **kwargs
-    ):
+    def __init__(self,
+                 name=None,
+                 fields=[],
+                 table_type="vector",
+                 database_name=None,
+                 **kwargs):
         self.name = name
         self.table_type = table_type
         self.feature_count = None

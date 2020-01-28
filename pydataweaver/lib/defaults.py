@@ -4,8 +4,7 @@ from pydataweaver._version import __version__
 
 VERSION = __version__
 COPYRIGHT = (
-    "Copyright (C) 2015 The Pydata Weaver contributors and the University of Florida"
-)
+    "Copyright (C) 2015 The Data Weaver contributors and the University of Florida")
 REPO_URL = "https://raw.github.com/weecology/pydataweaver/"
 MASTER_BRANCH = REPO_URL + "master/"
 REPOSITORY = MASTER_BRANCH

@@ -52,8 +52,7 @@ def check_for_updates():
                 script_version = None
 
             path_script_name = os.path.normpath(
-                os.path.join(HOME_DIR, "scripts", script_name)
-            )
+                os.path.join(HOME_DIR, "scripts", script_name))
             if not file_exists(path_script_name):
                 _download_from_repository(
                     "scripts/" + script_name,
@@ -63,8 +62,7 @@ def check_for_updates():
             need_to_download = False
             try:
                 file_object, pathname, desc = imp.find_module(
-                    "".join(script_name.split(".")[:-1]), [SCRIPT_WRITE_PATH]
-                )
+                    "".join(script_name.split(".")[:-1]), [SCRIPT_WRITE_PATH])
                 new_module = imp.load_module(script_name, file_object, pathname, desc)
                 m = str(new_module.SCRIPT.version)
                 need_to_download = parse_version(str(script_version)) > parse_version(m)
@@ -73,8 +71,7 @@ def check_for_updates():
             if need_to_download:
                 try:
                     os.remove(
-                        os.path.normpath(os.path.join(HOME_DIR, "scripts", script_name))
-                    )
+                        os.path.normpath(os.path.join(HOME_DIR, "scripts", script_name)))
                     _download_from_repository(
                         "scripts/" + script_name,
                         os.path.normpath(os.path.join(SCRIPT_WRITE_PATH, script_name)),

@@ -1,5 +1,7 @@
-v1.0.0
+v1.0.1.dev
 breeding_bird_survey_routes_bioclim.json,1.0.0
+fia_colorado_plot_cond.json,1.0.0
+fia_oregon_plot_cond.json,1.0.0
 mammal-sites-bioclim-1-2.json,1.0.0
 mammal_community_bioclim.json,1.0.0
 mammal_community_masses.json,1.0.0
@@ -9,10 +11,4 @@ mammal_community_sites_harvard_linear_features.json,1.0.0
 mammal_community_sites_harvard_linear_features_soils.json,1.0.0
 mammal_community_sites_harvard_soil.json,1.0.0
 mammal_diet_mammal_life_history.json,1.0.0
-multi_columns_multi_tables.json,1.0.0
-multi_columns_multi_tables_caps.json,1.0.0
-one_column_multi_tables.json,1.0.0
 portal_plot_species.json,1.0.0
-simple_join_one_column.json,1.0.0
-simple_join_one_column_custom.json,1.0.0
-simple_join_two_column.json,1.0.0

@@ -8,6 +8,7 @@ Required Modules
 Python 3.5+ installation and the following modules:
 
 ::
+
   setuptools
   xlrd
   retriever

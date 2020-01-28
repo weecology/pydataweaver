@@ -1,9 +1,8 @@
 # -*- coding: latin-1  -*-
 # Integrations tests for Data Weaver.
-# The tests use the Data retriever platform to install
-# all the required datasets.
-# After the datasets are installed, the pydataweaver integrates
-# the datasets using the test scripts.
+# The tests use the Data Retriever platform to install
+# all the required datasets and the Pydataweaver integrates
+# the datasets.
 from __future__ import print_function
 
 import json
@@ -11,25 +10,18 @@ import os
 import shlex
 import shutil
 import subprocess
-import sys
 import time
-from imp import reload
 from urllib.request import urlretrieve
 
 import pytest
-
 import retriever as rt
+
 import pydataweaver as wt
 from pydataweaver.engines import engine_list
 from pydataweaver.lib.defaults import ENCODING
 from pydataweaver.lib.engine_tools import create_file
 
 encoding = ENCODING.lower()
-
-reload(sys)
-if hasattr(sys, "setdefaultencoding"):
-    sys.setdefaultencoding(encoding)
-
 FILE_LOCATION = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 RETRIEVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.retriever/"))
 RETRIEVER_DATA_DIR = os.path.normpath(os.path.expanduser("~/.retriever/raw_data/"))
@@ -37,13 +29,10 @@ RETRIEVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.retriever/scripts
 WEAVER_HOME_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/"))
 WEAVER_SCRIPT_DIR = os.path.normpath(os.path.expanduser("~/.pydataweaver/scripts/"))
 WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
-    os.path.join(FILE_LOCATION, "test_data_packages")
-)
+    os.path.join(FILE_LOCATION, "test_data_packages"))
 
-RETRIEVER_GIS_REPO = (
-    "https://raw.githubusercontent.com/weecology"
-    "/retriever/master/test/raw_data_gis/scripts/{script_names}.json"
-)
+RETRIEVER_GIS_REPO = ("https://raw.githubusercontent.com/weecology"
+                      "/retriever/master/test/raw_data_gis/scripts/{script_names}.json")
 
 postgres_engine, _ = engine_list
 
@@ -77,22 +66,39 @@ test_sample_wgs84 = {
     ],
     "script": {
         "name": "testsurveryone",
-        "resources": [
-            {
-                "dialect": {"do_not_bulk_insert": "True"},
-                "name": "sites",
-                "schema": {
-                    "fields": [
-                        {"name": "site_id", "type": "int"},
-                        {"name": "state", "size": "4", "type": "char"},
-                        {"name": "longitude", "type": "double"},
-                        {"name": "latitude", "type": "double"},
-                        {"name": "habitat_code", "size": "4", "type": "char"},
-                    ]
-                },
-                "url": "http://example.com/testsurveryone.txt",
-            }
-        ],
+        "resources": [{
+            "dialect": {
+                "do_not_bulk_insert": "True"
+            },
+            "name": "sites",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "site_id",
+                        "type": "int"
+                    },
+                    {
+                        "name": "state",
+                        "size": "4",
+                        "type": "char"
+                    },
+                    {
+                        "name": "longitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "latitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "habitat_code",
+                        "size": "4",
+                        "type": "char"
+                    },
+                ]
+            },
+            "url": "http://example.com/testsurveryone.txt",
+        }],
         "retriever": "True",
         "version": "1.0.0",
     },
@@ -110,22 +116,39 @@ test_sample_nad83 = {
     ],
     "script": {
         "name": "testsurverytwo",
-        "resources": [
-            {
-                "dialect": {"do_not_bulk_insert": "True"},
-                "name": "sites",
-                "schema": {
-                    "fields": [
-                        {"name": "site_id", "type": "int"},
-                        {"name": "state", "size": "4", "type": "char"},
-                        {"name": "longitude", "type": "double"},
-                        {"name": "latitude", "type": "double"},
-                        {"name": "habitat_code", "size": "4", "type": "char"},
-                    ]
-                },
-                "url": "http://example.com/testsurverytwo.txt",
-            }
-        ],
+        "resources": [{
+            "dialect": {
+                "do_not_bulk_insert": "True"
+            },
+            "name": "sites",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "site_id",
+                        "type": "int"
+                    },
+                    {
+                        "name": "state",
+                        "size": "4",
+                        "type": "char"
+                    },
+                    {
+                        "name": "longitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "latitude",
+                        "type": "double"
+                    },
+                    {
+                        "name": "habitat_code",
+                        "size": "4",
+                        "type": "char"
+                    },
+                ]
+            },
+            "url": "http://example.com/testsurverytwo.txt",
+        }],
         "retriever": "True",
         "version": "1.0.0",
     },
@@ -165,9 +188,8 @@ def set_weaver_data_packages(resources_up=True):
             os.makedirs(WEAVER_SCRIPT_DIR)
     for file_name in WEAVER_TEST_DATA_PACKAGE_FILES:
         if resources_up:
-            scr_pack_path = os.path.join(
-                WEAVER_TEST_DATA_PACKAEGES_DIR, file_name + ".json"
-            )
+            scr_pack_path = os.path.join(WEAVER_TEST_DATA_PACKAEGES_DIR,
+                                         file_name + ".json")
             pack_path = os.path.normpath(scr_pack_path)
             shutil.copy(pack_path, WEAVER_SCRIPT_DIR)
         else:
@@ -195,8 +217,7 @@ def set_retriever_res(resource_up=True):
         data_file_path = os.path.normpath(os.path.join(data_dir_path, data_file_name))
         script_name = file_names["script"]["name"] + ".json"
         script_file_path = os.path.normpath(
-            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_"))
-        )
+            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_")))
 
         # Set or tear down raw data files
         # in '~/.retriever/raw_data/data_dir_path/data_file_name'
@@ -212,8 +233,8 @@ def set_retriever_res(resource_up=True):
     for script_name in RETRIEVER_SPATIAL_DATA:
         file_name = script_name.replace("-", "_")
         script_file_path = os.path.normpath(
-            os.path.join(RETRIEVER_SCRIPT_DIR, script_name.replace("-", "_") + ".json")
-        )
+            os.path.join(RETRIEVER_SCRIPT_DIR,
+                         script_name.replace("-", "_") + ".json"))
         if resource_up:
             url = RETRIEVER_GIS_REPO.format(script_names=file_name)
             urlretrieve(url, script_file_path)
@@ -227,8 +248,8 @@ def file_exists(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
 
 
-# Install RETRIEVER_SPATIAL_DATA using default db and schema names:
 def install_to_database(dataset, install_function, config):
+    """Install RETRIEVER_SPATIAL_DATA using default db and schema names"""
     install_function(dataset, **config)
     return
 
@@ -267,30 +288,22 @@ def setup_postgres_retriever_db():
 
 def teardown_postgres_db():
     # Retriever database
-    cmd = (
-        "psql -U postgres -d "
-        + testdb
-        + " -h "
-        + pgdb_host
-        + ' -w -c "DROP SCHEMA IF EXISTS '
-        + testschema
-        + ' CASCADE"'
-    )
+    cmd = ("psql -U postgres -d " + testdb + " -h " + pgdb_host +
+           ' -w -c "DROP SCHEMA IF EXISTS ' + testschema + ' CASCADE"')
     subprocess.call(shlex.split(cmd))
 
-    # Weaver database
+    # Pydataweaver database
     for dataset in all_script_names:
         sql_stm = "DROP SCHEMA IF EXISTS " + dataset.replace("-", "_") + " CASCADE"
-        cmd = (
-            "psql -U postgres -d " + testdb + " -h " + pgdb_host + " -w -c '{sql_stm}'"
-        )
+        cmd = ("psql -U postgres -d " + testdb + " -h " + pgdb_host +
+               " -w -c '{sql_stm}'")
         dfd = cmd.format(sql_stm=sql_stm)
         subprocess.call(shlex.split(dfd))
 
 
 # Weaver integration
 def get_output_as_csv(dataset, engines, db):
-    """integrate datasets and return the output as a csv."""
+    """Integrate datasets and return the output as a csv."""
     wt.reload_scripts()
     eng = wt.join_postgres(
         dataset,
@@ -306,7 +319,7 @@ def get_output_as_csv(dataset, engines, db):
 
 
 def setup_module():
-    # set up postgres database
+    # Set up postgres database
     teardown_postgres_db()
     set_weaver_data_packages(resources_up=True)
     set_retriever_res(resource_up=True)
@@ -314,7 +327,10 @@ def setup_module():
 
 
 def teardown_module():
+    """Tear down databases, and delete data package test scripts"""
     teardown_postgres_db()
+    set_weaver_data_packages(resources_up=False)
+    set_retriever_res(resource_up=False)
 
 
 @pytest.mark.parametrize("dataset, csv_file, expected", WEAVER_TEST_SCRIPTS)
@@ -338,8 +354,8 @@ def test_postgres(dataset, csv_file, expected):
         "database_name": postgres_engine.opts["database_name"],
         "table_name": postgres_engine.opts["table_name"],
     }
-    res_csv = get_output_as_csv(
-        dataset, postgres_engine, db=postgres_engine.opts["database_name"]
-    )
+    res_csv = get_output_as_csv(dataset,
+                                postgres_engine,
+                                db=postgres_engine.opts["database_name"])
     assert file_exists(res_csv)
     os.remove(res_csv)
