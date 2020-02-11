@@ -29,11 +29,13 @@
 ###   3.2 save "tree_plot" to a csv file
 ###   3.3 if the user needs more detailed info of plot and/condition, (s)he can use PLT_CN and/or COND_CN to link raw plot and condition tables
 
-plt <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/PLOT.csv',stringsAsFactors=F)
+#plt <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/PLOT.csv',stringsAsFactors=F)
+plt <- read.csv('plot.csv',stringsAsFactors=F)
 for(fld in c('CN','PREV_PLT_CN')) plt[,fld] <- as.character(plt[,fld])
 plt <- plt[,c('CN','PREV_PLT_CN')]   # keep CN, PREV_PLT_CN + others
 
-cond <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/COND.csv',stringsAsFactors=F)
+#cond <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/COND.csv',stringsAsFactors=F)
+cond <- read.csv('cond.csv',stringsAsFactors=F)
 for(fld in c('CN','PLT_CN')) cond[,fld] <- as.character(cond[,fld])
 cond <- cond[,c('CN','PLT_CN','CONDID')]     # keep CN, PLT_CN, CONDID + others
 plt_cond_num <- with(cond,aggregate(CONDID,by=list(PLT_CN=PLT_CN),length))  # get number of condition information
