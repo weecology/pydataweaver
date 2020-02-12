@@ -32,12 +32,12 @@
 #plt <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/PLOT.csv',stringsAsFactors=F)
 plt <- read.csv('plot.csv',stringsAsFactors=F)
 for(fld in c('CN','PREV_PLT_CN')) plt[,fld] <- as.character(plt[,fld])
-plt <- plt[,c('CN','PREV_PLT_CN')]   # keep CN, PREV_PLT_CN + others
+#plt <- plt[,c('CN','PREV_PLT_CN')]   # keep CN, PREV_PLT_CN + others
 
 #cond <- read.csv('~/ufrc_hpc/FIA_1.6.1_20180110/COND.csv',stringsAsFactors=F)
 cond <- read.csv('cond.csv',stringsAsFactors=F)
 for(fld in c('CN','PLT_CN')) cond[,fld] <- as.character(cond[,fld])
-cond <- cond[,c('CN','PLT_CN','CONDID')]     # keep CN, PLT_CN, CONDID + others
+#cond <- cond[,c('CN','PLT_CN','CONDID')]     # keep CN, PLT_CN, CONDID + others
 plt_cond_num <- with(cond,aggregate(CONDID,by=list(PLT_CN=PLT_CN),length))  # get number of condition information
 names(plt_cond_num)[2] <- 'ncond'
 plt <- merge(plt,plt_cond_num,by.x='CN',by.y='PLT_CN',all.x=T)    # add number of condition info to plt
@@ -45,8 +45,9 @@ plt_cond <- merge(plt,cond,by.x='CN',by.y='PLT_CN',all.x=T)       # plot + condi
 names(plt_cond)[which(names(plt_cond)=='CN.y')] <- 'COND_CN'      # make field name meaningful
 names(plt_cond)[which(names(plt_cond)=='CN')] <- 'PLT_CN'         # make field name meaningful
 
-state <- 'OR'   # choose state
-tree <- read.csv(sprintf('~/ufrc_hpc/FIA_1.6.1_20180110/%s_TREE.csv',state),stringsAsFactors=F)
+#state <- 'OR'   # choose state
+#tree <- read.csv(sprintf('~/ufrc_hpc/FIA_1.6.1_20180110/%s_TREE.csv',state),stringsAsFactors=F)
+tree <- read.csv('tree.csv',stringsAsFactors=F)
 for(fld in c('CN','PLT_CN','PREV_TRE_CN')) tree[,fld] <- as.character(tree[,fld])
 
 tree_CN <- tree[,c('CN','PREV_TRE_CN')]
@@ -68,4 +69,4 @@ cp <- cp[order(cp$ID0),c('ID0','ID1')]      # at this stage, cp contains the inf
 tree <- cbind(ID=tree_CN$CN[cp$ID1],tree)   # use the earliest (first-survey) CN as tree's ID
 library(plyr)
 tree_plot <- join(tree,plt_cond,type='left',by=c('PLT_CN','CONDID'))  # put tree, plot, and condition info together
-write.csv(tree_plot,row.names=F,file=sprintf('~/ufrc_hpc/FIA_1.6.1_20180110/%s_TREE_PLOT.csv',state))
+#write.csv(tree_plot,row.names=F,file=sprintf('~/ufrc_hpc/FIA_1.6.1_20180110/%s_TREE_PLOT.csv',state))
