@@ -1,0 +1,100 @@
+{
+  "name": "fia-colorado-plot-worldclim-five",
+  "version": "1.0.0",
+  "description": "Integrated data for fia-colorado using tables, plots, cond and tree tables",
+  "citation": [
+    {
+      "fia-colorado": "June 20, 2019. Forest Inventory and Analysis Database, St. Paul, MN: U.S. Department of Agriculture, Forest Service, Northern Research Station"
+    }
+  ],
+  "keywords": ["Tree","fia", "trends in forest", "forest species"],
+  "retriever-datasets": [
+    "fia-colorado"
+  ],
+  "licenses":
+    {
+      "fia-colorado": [""]
+    },
+  "result": {
+    "dataset": "fia_colorado_plot_worldclim_five",
+    "table": "tree_plot_clim_five",
+    "fields": []
+  },
+  "main_file": {
+    "path": "fia_colorado.plot",
+    "database_name": "fia_colorado",
+    "table_name": "plot",
+    "table_type": "tabular",
+    "lat_long": ["lat","lon"],
+    "fields": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday",
+        "lat",
+        "lon"
+    ]
+  },
+  "tables": [
+    {
+    "database_name": "fia_colorado",
+    "table_name": "plot",
+    "table_type": "tabular",
+    "fields": [
+        "cn",
+        "prev_plt_cn",
+        "invyr",
+        "measyear",
+        "measmon",
+        "measday",
+        "lat",
+        "lon"
+    ]
+    },
+    {
+      "database_name": "worldclim_five",
+      "table_name": "wc2_0_5m_srad_01",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    },
+    {
+      "database_name": "worldclim_five",
+      "table_name": "wc2_0_5m_srad_02",
+      "table_type": "raster",
+      "fields": [
+        "rast"
+      ]
+    }
+  ],
+  "join": [
+     {
+      "table": "worldclim_five.wc2_0_5m_srad_01",
+      "database_name": "worldclim_five",
+      "table_name": "wc2_0_5m_srad_01",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "fia_colorado.plot": ["lat", "lon"],
+        "worldclim_five.wc2_0_5m_srad_01": ["rast"]
+      }
+    },
+    {
+      "table": "worldclim_five.wc2_0_5m_srad_02",
+      "database_name": "worldclim_five",
+      "table_name": "wc2_0_5m_srad_02",
+      "table_type": "raster",
+      "fields_to_use": [],
+      "join_ocn": {
+        "common_field": [],
+        "fia_colorado.plot": ["lat", "lon"],
+        "worldclim_five.wc2_0_5m_srad_02": ["rast"]
+      }
+    }
+ 
+  ]
+}
