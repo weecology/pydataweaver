@@ -203,4 +203,4 @@ Foundation’s Data-Driven Discovery Initiative`_ to Ethan White.
 
 
 .. _the Gordon and Betty Moore Foundation’s Data-Driven Discovery Initiative: http://www.moore.org/programs/science/data-driven-discovery
-.. _Code of Conduct: https://github.com/weecology/pydataweaver/blob/master/docs/code_of_conduct.rst
+.. _Code of Conduct: https://github.com/weecology/pydataweaver/blob/main/docs/code_of_conduct.rst

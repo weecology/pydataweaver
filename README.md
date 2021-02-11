@@ -1,9 +1,9 @@
-<img src="https://github.com/henrykironde/Logos/blob/master/resource/Weaver_logo.png?raw=true" alt="logo" width="320">
+<img src="https://github.com/henrykironde/Logos/blob/main/resource/Weaver_logo.png?raw=true" alt="logo" width="320">
 
-[![Build Status](https://api.travis-ci.org/weecology/pydataweaver.svg?branch=master)](https://travis-ci.org/weecology/pydataweaver)
-[![Build status (windows)](https://ci.appveyor.com/api/projects/status/x9a6ol3dl5mf2wr7/branch/master?svg=true)](https://ci.appveyor.com/project/ethanwhite/pydataweaver/branch/master)
+[![Build Status](https://api.travis-ci.org/weecology/pydataweaver.svg?branch=main)](https://travis-ci.org/weecology/pydataweaver)
+[![Build status (windows)](https://ci.appveyor.com/api/projects/status/x9a6ol3dl5mf2wr7/branch/main?svg=true)](https://ci.appveyor.com/project/ethanwhite/pydataweaver/branch/main)
 [![Documentation Status](https://readthedocs.org/projects/pydataweaver/badge/?version=latest)](https://pydataweaver.readthedocs.io/?badge=latest)
-[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/pydataweaver/master/LICENSE)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/weecology/pydataweaver/main/LICENSE)
 [![Join the chat at https://gitter.im/weecology/pydataweaver](https://badges.gitter.im/weecology/pydataweaver.svg)](https://gitter.im/weecology/retriever?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # The PyDataweaver Project
@@ -190,7 +190,7 @@ If you find any operation that is not supported by this package, feel
 free to create a Github issue. Additionaly you are more than welcome to submit
 a pull request for a bug fix or additional feature.
 
-Please take a look at the [Code of Conduct](https://github.com/weecology/pydataweaver/blob/master/docs/code_of_conduct.rst) governing contributions to this project.
+Please take a look at the [Code of Conduct](https://github.com/weecology/pydataweaver/blob/main/docs/code_of_conduct.rst) governing contributions to this project.
 
 Acknowledgments
 ---------------
