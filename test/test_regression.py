@@ -32,7 +32,7 @@ WEAVER_TEST_DATA_PACKAEGES_DIR = os.path.normpath(
     os.path.join(FILE_LOCATION, "test_data_packages"))
 
 RETRIEVER_GIS_REPO = ("https://raw.githubusercontent.com/weecology"
-                      "/retriever/master/test/raw_data_gis/scripts/{script_names}.json")
+                      "/retriever/main/test/raw_data_gis/scripts/{script_names}.json")
 
 postgres_engine, _ = engine_list
 
