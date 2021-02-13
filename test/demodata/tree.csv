@@ -1,0 +1,8 @@
+﻿CN,PLT_CN,PREV_TRE_CN,CONDID,TT
+101,A,NA,a,t1
+102,A,NA,a,t2
+103,A,NA,b,t3
+104,B,101,a,t4
+105,B,103,a,t5
+106,C,NA,a,t6
+107,D,105,a,t7
