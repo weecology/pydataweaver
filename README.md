@@ -190,7 +190,7 @@ If you find any operation that is not supported by this package, feel
 free to create a Github issue. Additionaly you are more than welcome to submit
 a pull request for a bug fix or additional feature.
 
-Please take a look at the [Code of Conduct](https://github.com/weecology/pydataweaver/blob/main/docs/code_of_conduct.rst) governing contributions to this project.
+Please take a look at the [Code of Conduct](https://github.com/weecology/pydataweaver/blob/main/docs/code_of_conduct.rst) governing contributions to this project
 
 Acknowledgments
 ---------------
