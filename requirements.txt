@@ -9,4 +9,4 @@ requests
 sphinx_py3doc_enhanced_theme
 sphinxcontrib-napoleon
 sphinx_rtd_theme
-tqdm==4.30.0
+tqdm==4.66.3
